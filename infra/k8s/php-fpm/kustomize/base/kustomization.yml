@@ -1,0 +1,7 @@
+---
+resources:
+  - php-fpm-namespace.yml
+  - php-fpm-persistent-volume.yml
+  - php-fpm-nginx-config.yml
+  - php-fpm-deployment.yml
+  - php-fpm-service.yml
