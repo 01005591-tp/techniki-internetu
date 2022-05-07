@@ -1,0 +1,7 @@
+---
+resources:
+  - my-sql-namespace.yml
+  - my-sql-secret.yml
+  - my-sql-persistent-volume.yml
+  - my-sql.yml
+  - my-sql-service.yml

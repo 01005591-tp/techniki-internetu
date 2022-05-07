@@ -1,0 +1,7 @@
+---
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - my-sql-secret.yml
+transformers:
+  - local-labels.yml
