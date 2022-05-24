@@ -3,10 +3,9 @@ php-fpm-build:
 
 p1-app-deploy:
 	./infra/k8s/php-fpm/deploy-app.sh p1
-p2-app-deploy:
-	./infra/k8s/php-fpm/deploy-app.sh p2
-p3-app-deploy:
-	./infra/k8s/php-fpm/deploy-app.sh p3
+
+#p1-app-ksync-deploy:
+#	./infra/k8s/php-fpm/deploy-app-ksync.sh p1
 
 check-delete:
 	if [ -n "${DELETE}" ]; then \

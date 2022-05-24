@@ -1,0 +1,59 @@
+= PHP Projects
+
+== Overview
+
+Projects in this repository use link:https://kubernetes.io/[kubernetes] for development.
+link:https://www.mysql.com/[MySQL] and link:https://www.php.net/manual/en/install.fpm.php[PHP-FPM] (with Nginx) deployments are described using link:https://kustomize.io/[Kustomize]
+
+=== Project structure
+
+Worth noting files and directories are listed above:
+
+[source,text]
+----
+├── apps
+│   └── p1
+│   └── p2
+│   └── p3
+├── infra
+│   └── k8s
+│       ├── my-sql
+│       └── php-fpm
+├── Makefile
+----
+
+==== apps
+
+This directory contains PHP source code which is later deployed (copied) to the php-fpm pod.
+
+==== infra
+
+This directory contains infrastructure description for MySQL and PHP-FPM deployments.
+When code is being written, it is being copied to php-fpm pod.
+
+Kubernetes infrastructure code is written using Kustomize overlay engine.
+
+==== Makefile
+
+This file contains targets which help to create local infrastructure and deploying application to local Kubernetes cluster.
+
+== Running locally
+
+To run the project locally one has to:
+
+1. Provide MySQL database (or create one on local instance using `make mysql-install-local` Makefile target)
+2. Provide MySQL database properties
+3. Deploy the application using one of the makefile targets `make pN-app-deploy` (where N is 1,2, or 3).
+
+
+=== Deploying the application
+
+For now, deploying an application is available manually.
+To deploy a project, simply run one of the make targets:
+
+1. `make p1-app-deploy` - to deploy application *p1*.
+2. `make p2-app-deploy` - to deploy application *p2*.
+3. `make p3-app-deploy` - to deploy application *p3*.
+
+There is a plan to use link:https://github.com/ksync/ksync[Ksync] in the future, to enable project directory monitoring and live synchronisation with the web server.
+

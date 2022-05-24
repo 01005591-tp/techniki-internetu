@@ -9,13 +9,7 @@
 </head>
 <body>
 
-<?php
-require_once 'routing.php';
-
-use p1\routing\Router;
-
-Router::navigate();
-?>
+<p>404 Not found</p>
 
 <!-- Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

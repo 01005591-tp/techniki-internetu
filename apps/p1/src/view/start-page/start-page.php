@@ -10,11 +10,13 @@
 <body>
 
 <?php
-require_once 'routing.php';
 
-use p1\routing\Router;
+require_once 'start-page-controller.php';
 
-Router::navigate();
+use p1\view\startpage\StartPageController;
+
+$pageController = new StartPageController();
+$pageController->loadComponents();
 ?>
 
 <!-- Bootstrap JS -->
