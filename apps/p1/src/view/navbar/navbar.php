@@ -1,29 +1,26 @@
 <?php
 
-use p1\view\navbar\NavbarController;
+use p1\configuration\Configuration;
 use p1\view\navbar\NavbarItem;
 
-require_once "view/navbar/navbar-controller.php";
-
-$navbarController = new NavbarController();
-
+$navbarController = Configuration::instance()->navbarController();
 $toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarController) {
     return $navbarController->isActiveItem($navbarItem) ? 'active' : 'inactive';
 };
 
 echo '
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
         <img src="/assets/book-icon.png" alt="Library"/>
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item ' . ($toNavbarItemActiveClass(NavbarItem::Home)) . '">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item ' . ($toNavbarItemActiveClass(NavbarItem::About)) . '">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="/about">About</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -34,5 +31,3 @@ echo '
     </div>
 </nav>
     ';
-
-?>

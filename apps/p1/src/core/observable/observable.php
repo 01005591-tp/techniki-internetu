@@ -75,7 +75,7 @@ abstract class SimpleTypedObservable implements TypedObservable
     {
         $this->subscribers[self::KEY_ALL] = [];
     }
-    
+
     function subscribe(TypedSubscriber $subscriber): TypedObservable
     {
         $type = $subscriber->type();
@@ -97,7 +97,6 @@ abstract class SimpleTypedObservable implements TypedObservable
 
     function next(string $type, $item = null): TypedObservable
     {
-        echo "Publishing next value '$type': '$item'\n";
         foreach ($this->getTypeSubscribers($type) as $subscriber) {
             $subscriber->onNext($item);
         }

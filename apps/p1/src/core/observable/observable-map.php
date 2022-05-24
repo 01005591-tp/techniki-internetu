@@ -18,7 +18,12 @@ class ObservableMap
         $this->map = array();
     }
 
-    public function put(string $key, $value): ObservableMap
+    public function get(string $key)
+    {
+        return $this->map[$key];
+    }
+
+    public function put(string $key, mixed $value): ObservableMap
     {
         $this->map[$key] = $value;
         $this->entryPutObservables->next($key, $value);

@@ -2,6 +2,15 @@
 
 namespace p1\routing;
 
+use p1\config\Config;
+use p1\state\State;
+use p1\view\navbar\NavbarController;
+use p1\view\navbar\NavbarItem;
+
+require_once "config.php";
+require_once "state.php";
+require_once "view/navbar/navbar-controller.php";
+
 class Router
 {
     public static function navigate(): void
@@ -10,11 +19,14 @@ class Router
         switch ($request) {
             case '':
             case '/':
-                require __DIR__ . '/view/start-page/start-page.php';
+                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::Home);
+                break;
+            case '/about':
+                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::About);
                 break;
             default:
                 http_response_code(404);
-                require __DIR__ . '/view/errors/404.php';
+                require Config::instance()->rootDir() . '/view/errors/404.php';
                 break;
         }
     }

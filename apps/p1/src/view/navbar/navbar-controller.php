@@ -46,6 +46,14 @@ class NavbarController
     public function setActiveItem(NavbarItem $item): void
     {
         $this->activeItem = $item;
+        require "view/navbar/navbar.php";
+        switch ($this->activeItem) {
+            case NavbarItem::About:
+                require "view/about/about.php";
+                break;
+            default:
+                require "view/home/home.php";
+        }
     }
 }
 

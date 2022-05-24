@@ -10,10 +10,13 @@
 <body>
 
 <?php
-require_once 'routing.php';
+require_once "routing.php";
+require_once "configuration.php";
 
+use p1\configuration\Configuration;
 use p1\routing\Router;
 
+$configuration = Configuration::instance();
 Router::navigate();
 ?>
 
