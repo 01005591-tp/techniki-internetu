@@ -9,10 +9,14 @@ $toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarControl
 };
 
 echo '
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">
         <img src="/assets/book-icon_small.png" alt="Library"/>
     </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -23,11 +27,11 @@ echo '
                 <a class="nav-link" href="/about">About</a>
             </li>
         </ul>
-        <div class="d-flex flex-md-row-reverse">
-            <input class="form-control p-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success p-2" type="submit">Search</button>
-            <button class="btn btn-outline-primary p-2" type="submit">Log In</button>
-        </div>
+        <form class="form-inline">
+            <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success mx-1 my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-outline-primary ml-2 my-2 my-sm-0" type="submit">Log In</button>
+        </form>
     </div>
 </nav>
     ';
