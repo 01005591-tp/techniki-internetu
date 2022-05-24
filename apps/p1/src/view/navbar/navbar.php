@@ -11,7 +11,7 @@ $toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarControl
 echo '
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">
-        <img src="/assets/book-icon.png" alt="Library"/>
+        <img src="/assets/book-icon_small.png" alt="Library"/>
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -23,11 +23,11 @@ echo '
                 <a class="nav-link" href="/about">About</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Log In</button>
-        </form>
+        <div class="d-flex flex-md-row-reverse">
+            <input class="form-control p-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success p-2" type="submit">Search</button>
+            <button class="btn btn-outline-primary p-2" type="submit">Log In</button>
+        </div>
     </div>
 </nav>
     ';
