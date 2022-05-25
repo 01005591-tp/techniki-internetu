@@ -6,5 +6,5 @@ metadata:
   labels:
     app: php-fpm
 data:
-  databaseUrl: "192.168.49.2:32306"
+  databaseUrl: "mysql-service.mysql.svc.cluster.local:3306"
   databaseName: "BOOK_LIB"
