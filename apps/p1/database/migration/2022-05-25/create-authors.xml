@@ -1,0 +1,49 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-25/create-authors.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-05-25/create-authors:create-authors-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="AUTHORS">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Author ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="AUTHORS_PK"/>
+            </column>
+            <column name="FIRST_NAME" type="VARCHAR(255)" remarks="First name">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR(255)" remarks="Last name">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BIOGRAPHY_NOTE" type="CLOB" remarks="Biography note in HTML format"/>
+            <column name="BIRTH_DATE" type="DATE" remarks="Birth date in ISO 8601 local date format"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-authors:create-book-authors-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" type="BIGINT" remarks="Book ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AUTHOR_ID" type="BIGINT" remarks="Author ID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-authors:create-book-authors-foreign-keys"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addForeignKeyConstraint constraintName="BOOK_AUTHORS_BOOK_ID_FK"
+                                 baseTableName="BOOK_AUTHORS"
+                                 baseColumnNames="BOOK_ID"
+                                 referencedTableName="BOOKS"
+                                 referencedColumnNames="ID"/>
+        <addForeignKeyConstraint constraintName="BOOK_AUTHORS_AUTHOR_ID_FK"
+                                 baseTableName="BOOK_AUTHORS"
+                                 baseColumnNames="AUTHOR_ID"
+                                 referencedTableName="AUTHORS"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+</databaseChangeLog>

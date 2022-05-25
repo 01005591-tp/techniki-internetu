@@ -1,7 +1,8 @@
 ---
 resources:
   - ../../base
-#patchesStrategicMerge:
-#  - php-fpm-secret.yml
+patchesStrategicMerge:
+  - php-fpm-db-config.yml
+  - php-fpm-db-secret.yml
 transformers:
   - local-labels.yml

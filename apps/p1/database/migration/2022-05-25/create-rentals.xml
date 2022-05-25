@@ -1,0 +1,77 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-25/create-rentals.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-05-25/create-bookings:create-rentals-table"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="RENTALS">
+            <column name="BOOK_PIECE_ID" type="BIGINT" remarks="Book piece ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT" remarks="User ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RENTED_AT" type="DATETIME"
+                    remarks="Rental start date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RENTED_UNTIL" type="DATETIME"
+                    remarks="Rental expiration date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-rentals-primary-key"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addPrimaryKey tableName="RENTALS" columnNames="BOOK_PIECE_ID,USER_ID"
+                       constraintName="RENTALS_PK"/>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-rentals-foreign-keys"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addForeignKeyConstraint constraintName="RENTALS_BOOK_PIECE_ID_FK"
+                                 baseTableName="RENTALS"
+                                 baseColumnNames="BOOK_PIECE_ID"
+                                 referencedTableName="BOOK_PIECES"
+                                 referencedColumnNames="ID"/>
+        <addForeignKeyConstraint constraintName="RENTALS_USER_ID_FK"
+                                 baseTableName="RENTALS"
+                                 baseColumnNames="USER_ID"
+                                 referencedTableName="USERS"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-rentals-history-table"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="RENTALS_HISTORY">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Rental history entry ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="RENTALS_HISTORY_PK"/>
+            </column>
+            <column name="BOOK_PIECE_ID" type="BIGINT" remarks="Book piece ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT" remarks="User ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RENTED_AT" type="DATETIME"
+                    remarks="Rental start date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RENTED_UNTIL" type="DATETIME"
+                    remarks="Rental expiration date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RETURNED_AT" type="DATETIME"
+                    remarks="Return date in ISO 8601 local date time format"/>
+            <column name="ARCHIVED_AT" type="DATETIME"
+                    remarks="Archived date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

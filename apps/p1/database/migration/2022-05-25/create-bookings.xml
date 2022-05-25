@@ -1,0 +1,67 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-25/create-bookings.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-05-25/create-bookings:create-bookings-table"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOKINGS">
+            <column name="BOOK_PIECE_ID" type="BIGINT" remarks="Book piece ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT" remarks="User ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BOOKED_UNTIL" type="DATETIME"
+                    remarks="Booking expiration date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-bookings-primary-key"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addPrimaryKey tableName="BOOKINGS" columnNames="BOOK_PIECE_ID,USER_ID"
+                       constraintName="BOOKINGS_PK"/>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-bookings-foreign-keys"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addForeignKeyConstraint constraintName="BOOKINGS_BOOK_PIECE_ID_FK"
+                                 baseTableName="BOOKINGS"
+                                 baseColumnNames="BOOK_PIECE_ID"
+                                 referencedTableName="BOOK_PIECES"
+                                 referencedColumnNames="ID"/>
+        <addForeignKeyConstraint constraintName="BOOKINGS_USER_ID_FK"
+                                 baseTableName="BOOKINGS"
+                                 baseColumnNames="USER_ID"
+                                 referencedTableName="USERS"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-bookings:create-bookings-history-table"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOKINGS_HISTORY">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Booking history entry ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="BOOKINGS_HISTORY_PK"/>
+            </column>
+            <column name="BOOK_PIECE_ID" type="BIGINT" remarks="Book piece ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT" remarks="User ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BOOKED_UNTIL" type="DATETIME"
+                    remarks="Booking expiration date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ARCHIVED_AT" type="DATETIME"
+                    remarks="Archived date in ISO 8601 local date time format">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

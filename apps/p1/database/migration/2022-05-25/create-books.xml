@@ -1,0 +1,99 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-25/create-books.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-05-25/create-books:create-books-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOKS">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Book ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="BOOKS_PK"/>
+            </column>
+            <column name="ISBN_13" type="VARCHAR(14)" remarks="Book ISBN 13">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITLE" type="VARCHAR(1000)" remarks="Book title">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="CLOB" remarks="Book description in HTML format"/>
+            <column name="LANGUAGE" type="VARCHAR(5)"
+                    remarks="ISO 639-1 language format e.g. 'en', 'pl'"/>
+            <column name="PUBLISHED_AT" type="DATE" remarks="Date published in ISO 8601 local date format"/>
+            <column name="PUBLISHER_ID" type="BIGINT" remarks="Publisher ID"/>
+            <column name="PAGES" type="INT" remarks="Number of pages"/>
+            <column name="STATE" type="VARCHAR(40)" remarks="Book state (AVAILABLE, UNAVAILABLE)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-publishers-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="PUBLISHERS">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Publisher ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PUBLISHERS_PK"/>
+            </column>
+            <column name="NAME" type="VARCHAR(400)" remarks="Publisher name">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-book-pieces-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOK_PIECES">
+            <column name="ID" type="BIGINT" autoIncrement="true" remarks="Book piece ID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="BOOK_PIECES_PK"/>
+            </column>
+            <column name="BOOK_ID" type="BIGINT" remarks="Book ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATE" type="VARCHAR(40)" remarks="Book piece state (AVAILABLE, UNAVAILABLE, BOOKED, RENTED)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-book-pieces-foreign-keys" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addForeignKeyConstraint constraintName="BOOK_PIECES_BOOK_ID_FK"
+                                 baseTableName="BOOK_PIECES"
+                                 baseColumnNames="BOOK_ID"
+                                 referencedTableName="BOOKS"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-books-tags-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOKS_TAGS">
+            <column name="CODE" type="VARCHAR(255)" remarks="Tag code">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="BOOKS_TAGS_PK"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)" remarks="Tag name">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-book-tags-table" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <createTable tableName="BOOK_TAGS">
+            <column name="TAG_CODE" type="VARCHAR(255)" remarks="Tag code">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BOOK_ID" type="BIGINT" remarks="Book ID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-05-25/create-books:create-book-tags-foreign-keys" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addForeignKeyConstraint constraintName="BOOK_TAGS_TAG_CODE_FK"
+                                 baseTableName="BOOK_TAGS"
+                                 baseColumnNames="TAG_CODE"
+                                 referencedTableName="BOOKS_TAGS"
+                                 referencedColumnNames="CODE"/>
+        <addForeignKeyConstraint constraintName="BOOK_TAGS_BOOK_ID_FK"
+                                 baseTableName="BOOK_TAGS"
+                                 baseColumnNames="BOOK_ID"
+                                 referencedTableName="BOOKS"
+                                 referencedColumnNames="ID"/>
+    </changeSet>
+
+</databaseChangeLog>

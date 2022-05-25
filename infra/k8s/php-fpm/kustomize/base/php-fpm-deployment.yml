@@ -21,6 +21,27 @@ spec:
         - name: php-fpm-php-fpm
           image: php-fpm:latest
           imagePullPolicy: Never
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: php-fpm-db-config
+                  key: databaseUrl
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: php-fpm-db-config
+                  key: databaseName
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: php-fpm-db-secret
+                  key: username
+            - name: DATABASE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: php-fpm-db-secret
+                  key: password
           ports:
             - containerPort: 9000
               name: http

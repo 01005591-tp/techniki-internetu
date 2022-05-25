@@ -4,8 +4,9 @@ php-fpm-build:
 p1-app-deploy:
 	./infra/k8s/php-fpm/deploy-app.sh p1
 
-#p1-app-ksync-deploy:
-#	./infra/k8s/php-fpm/deploy-app-ksync.sh p1
+p1-app-db-liquibase-local:
+	apps/p1/database/liquibase/liquibase update \
+		--defaults-file=apps/p1/database/migration/liquibase.properties
 
 check-delete:
 	if [ -n "${DELETE}" ]; then \

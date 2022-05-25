@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <include file="2022-05-25/create-users.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-25/create-roles.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-25/create-books.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-25/create-authors.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-25/create-bookings.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-25/create-rentals.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
