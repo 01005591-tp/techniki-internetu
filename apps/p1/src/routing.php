@@ -24,6 +24,12 @@ class Router
             case '/about':
                 State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::About);
                 break;
+            case '/login':
+                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::Login);
+                break;
+            case '/sign-up':
+                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::SignUp);
+                break;
             default:
                 http_response_code(404);
                 require Config::instance()->rootDir() . '/view/errors/404.php';

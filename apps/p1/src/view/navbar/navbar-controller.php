@@ -51,6 +51,12 @@ class NavbarController
             case NavbarItem::About:
                 require "view/about/about.php";
                 break;
+            case NavbarItem::Login:
+                require "view/login/login.php";
+                break;
+            case NavbarItem::SignUp:
+                require "view/login/sign-up.php";
+                break;
             default:
                 require "view/home/home.php";
         }
@@ -61,4 +67,6 @@ enum NavbarItem
 {
     case Home;
     case About;
+    case Login;
+    case SignUp;
 }
