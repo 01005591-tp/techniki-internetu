@@ -11,11 +11,11 @@ $toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarControl
 $loginButtonHtml = function () use ($navbarController): string {
     if ($navbarController->isActiveItem(NavbarItem::Login)) {
         return '<div class="ms-2">
-                    <button class="btn btn-outline-primary disabled" type="button">Sign&nbsp;In</button>
+                    <button class="btn btn-outline-primary disabled" type="button">' . L::main_navbar_sign_in_sign_in_button . '</button>
                 </div>';
     } else {
         return '<a class="ms-2" href="/login">
-                    <button class="btn btn-outline-primary" type="button">Sign&nbsp;In</button>
+                    <button class="btn btn-outline-primary" type="button">' . L::main_navbar_sign_in_sign_in_button . '</button>
                 </a>';
     }
 };
@@ -35,15 +35,16 @@ echo '
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link ' . ($toNavbarItemActiveClass(NavbarItem::Home)) . '" href="/">Home</a>
+                    <a class="nav-link ' . ($toNavbarItemActiveClass(NavbarItem::Home)) . '" href="/">' . L::main_navbar_home . '</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link ' . ($toNavbarItemActiveClass(NavbarItem::About)) . '" href="/about">About</a>
+                    <a class="nav-link ' . ($toNavbarItemActiveClass(NavbarItem::About)) . '" href="/about">' . L::main_navbar_about . '</a>
                 </li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <input class="form-control me-2" type="search" 
+                placeholder="' . L::main_navbar_search_input_placeholder . '" aria-label="' . L::main_navbar_search_input_placeholder . '">
+                <button class="btn btn-outline-success" type="submit">' . L::main_navbar_search_search_button . '</button>
                 ' . $loginButtonHtml() . '
             </form>
         </div>

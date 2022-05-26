@@ -1,0 +1,31 @@
+main:
+  navbar:
+    home: "Start"
+    about: "O nas"
+    search:
+      input_placeholder: "Szukaj"
+      search_button: "Szukaj"
+    sign_in:
+      sign_in_button: "Zaloguj"
+  sign_in:
+    email_address:
+      input_label: "Adres email"
+      input_description: "Adres email jest nazwą użytkownika."
+    password:
+      input_label: "Hasło"
+    log_in:
+      button: "Zaloguj"
+    sign_up:
+      button: "Zrejestruj"
+  sign_up:
+    email_address:
+      input_label: "Adres email"
+      input_description: "Adres email jest nazwą użytkownika."
+    password:
+      input_label: "Hasło"
+      input_description: "Hasło musi mieć min. 6 znaków, zawierać co najmniej jedną cyfrę i znak specjalny"
+    repeat_password:
+      input_label: "Powtórz hasło"
+      input_description: "Powtórz hasło"
+    create_user:
+      button: "Zarejestruj"

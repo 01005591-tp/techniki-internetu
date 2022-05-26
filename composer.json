@@ -1,5 +1,7 @@
 {
   "require": {
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "philipp15b/php-i18n": "*",
+    "mustangostang/spyc": "0.6.2"
   }
 }

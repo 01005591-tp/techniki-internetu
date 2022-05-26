@@ -1,0 +1,31 @@
+main:
+  navbar:
+    home: "Home"
+    about: "About"
+    search:
+      input_placeholder: "Search"
+      search_button: "Search"
+    sign_in:
+      sign_in_button: "Sign&nbsp;In"
+  sign_in:
+    email_address:
+      input_label: "Email address"
+      input_description: "Your email address is your username."
+    password:
+      input_label: "Password"
+    log_in:
+      button: "Log&nbsp;In"
+    sign_up:
+      button: "Sign&nbsp;Up"
+  sign_up:
+    email_address:
+      input_label: "Email address"
+      input_description: "Your email address is your username."
+    password:
+      input_label: "Password"
+      input_description: "Password must be min. 6 characters long and contain at least one digit and a special character"
+    repeat_password:
+      input_label: "Repeat password"
+      input_description: "Repeat your password"
+    create_user:
+      button: "Create&nbsp;user"
