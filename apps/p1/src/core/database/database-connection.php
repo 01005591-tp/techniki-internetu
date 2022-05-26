@@ -2,6 +2,8 @@
 
 namespace p1\core\database;
 
+require_once "core/database/db-connection-properties.php";
+
 use Exception;
 use mysqli;
 
@@ -10,9 +12,9 @@ class DatabaseConnection
     private DbConnectionProperties $dbConnectionProperties;
     private bool|mysqli $connection;
 
-    public function __construct()
+    public function __construct(DbConnectionProperties $dbConnectionProperties)
     {
-        $this->dbConnectionProperties = new DbConnectionProperties();
+        $this->dbConnectionProperties = $dbConnectionProperties;
     }
 
     /**
@@ -43,41 +45,5 @@ class DatabaseConnection
                 . $this->dbConnectionProperties->name());
         }
         return $conn;
-    }
-}
-
-class DbConnectionProperties
-{
-    private string $url;
-    private string $name;
-    private string $user;
-    private string $pass;
-
-    public function __construct()
-    {
-        $this->url = getenv("DATABASE_URL");
-        $this->name = getenv("DATABASE_NAME");
-        $this->user = getenv("DATABASE_USER");
-        $this->pass = getenv("DATABASE_PASS");
-    }
-
-    public function url(): string
-    {
-        return $this->url;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function user(): string
-    {
-        return $this->user;
-    }
-
-    public function pass(): string
-    {
-        return $this->pass;
     }
 }

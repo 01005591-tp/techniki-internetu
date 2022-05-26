@@ -1,27 +1,27 @@
 <?php
 
 namespace p1\configuration;
-require_once "core/database/database-connection.php";
-require_once "../../vendor/philipp15b/php-i18n/i18n.class.php";
-require_once "../../vendor/mustangostang/spyc/Spyc.php";
+
+require_once "state.php";
+require_once "i18n/i18n-configuration.php";
 
 use Exception;
-use i18n;
-use p1\core\database\DatabaseConnection;
+use p1\i18n\I18nConfiguration;
+use p1\state\State;
 use p1\view\navbar\NavbarController;
 
 class Configuration
 {
     private static Configuration $instance;
+    private State $state;
     private NavbarController $navbarController;
-    private DatabaseConnection $databaseConnection;
-    private i18n $i18n;
+    private I18nConfiguration $i18nConfiguration;
 
     private function __construct()
     {
-        $this->navbarController = new NavbarController();
-        $this->databaseConnection = new DatabaseConnection();
-        $this->i18n = $this->initI18n();
+        $this->state = State::instance();
+        $this->navbarController = new NavbarController($this->state);
+        $this->i18nConfiguration = I18nConfiguration::instance();
     }
 
     public function navbarController(): NavbarController
@@ -29,19 +29,7 @@ class Configuration
         return $this->navbarController;
     }
 
-    private function initI18n(): i18n
-    {
-        $i18n = new i18n();
-        $i18n->setFilePath("i18n/bundle_{LANGUAGE}.yml");
-        $i18n->setCachePath("/tmp/cache");
-//        $i18n->setForcedLang("pl");
-        $i18n->setFallbackLang("en");
-        $i18n->setSectionSeparator("_");
-        $i18n->setMergeFallback(true);
-        $i18n->setPrefix("L");
-        $i18n->init();
-        return $i18n;
-    }
+    // SINGLETON SPECIFIC FUNCTIONS 
 
     /**
      * Singleton cloning is forbidden.

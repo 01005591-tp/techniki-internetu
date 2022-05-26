@@ -29,3 +29,9 @@ main:
       input_description: "Powtórz hasło"
     create_user:
       button: "Zarejestruj"
+  errors:
+    sign_in_request:
+      invalid_email: "Nieprawidłowy adres email."
+      password_too_short: "Hasło musi mieć przynajmniej 6 znaków."
+      password_invalid_chars: "Hasło musi zawierać co najmniej jedną cyfrę i znak specjalny."
+      passwords_dont_match: "Hasło i powtórzone hasło nie są takie same."

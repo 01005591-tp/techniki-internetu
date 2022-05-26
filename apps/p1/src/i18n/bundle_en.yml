@@ -29,3 +29,9 @@ main:
       input_description: "Repeat your password"
     create_user:
       button: "Create&nbsp;user"
+  errors:
+    sign_in_request:
+      invalid_email: "Invalid email address."
+      password_too_short: "Password must have at least 6 characters."
+      password_invalid_chars: "Password must contain at least one digit and a special character."
+      passwords_dont_match: "Password and repeat password must be the same."

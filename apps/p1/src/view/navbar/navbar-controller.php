@@ -13,10 +13,12 @@ class NavbarController
 {
     public const ACTIVE_ITEM_KEY = 'View.Navbar.ActiveItem';
     private NavbarItem $activeItem;
+    private State $state;
 
-    public function __construct()
+    public function __construct(State $state)
     {
         $this->activeItem = NavbarItem::Home;
+        $this->state = $state;
         $subscriber = new class($this) implements EntryPutSubscriber {
             private NavbarController $controller;
 
@@ -35,7 +37,7 @@ class NavbarController
                 return NavbarController::ACTIVE_ITEM_KEY;
             }
         };
-        State::instance()->subscribe()->entryPut($subscriber);
+        $this->state->subscribe()->entryPut($subscriber);
     }
 
     public function isActiveItem(NavbarItem $item): bool
