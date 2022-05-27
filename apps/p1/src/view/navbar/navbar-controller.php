@@ -11,7 +11,6 @@ use p1\state\State;
 
 class NavbarController
 {
-    public const ACTIVE_ITEM_KEY = 'View.Navbar.ActiveItem';
     private NavbarItem $activeItem;
     private State $state;
 
@@ -34,7 +33,7 @@ class NavbarController
 
             function type(): string
             {
-                return NavbarController::ACTIVE_ITEM_KEY;
+                return State::ACTIVE_ITEM_KEY;
             }
         };
         $this->state->subscribe()->entryPut($subscriber);

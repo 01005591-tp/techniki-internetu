@@ -9,6 +9,9 @@ use p1\core\observable\ObservableMap;
 
 class State extends ObservableMap
 {
+    public const ACTIVE_ITEM_KEY = 'View.Navbar.ActiveItem';
+    public const SIGN_UP_FORM_PROVIDED_EMAIL = "View.Login.SignUp.EmailInputValue";
+
     private static State $instance;
 
     private function __construct()

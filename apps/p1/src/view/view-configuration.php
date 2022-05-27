@@ -24,7 +24,7 @@ class ViewConfiguration
     public function __construct(State                    $state,
                                 CreateUserCommandHandler $createUserCommandHandler)
     {
-        $this->loginConfiguration = new LoginConfiguration($createUserCommandHandler);
+        $this->loginConfiguration = new LoginConfiguration($state, $createUserCommandHandler);
         $this->navbarConfiguration = new NavbarConfiguration($state);
     }
 

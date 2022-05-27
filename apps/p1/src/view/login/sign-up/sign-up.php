@@ -14,7 +14,8 @@ $signUpController->signIn();
             <label for="signUpEmailInput"
                    class="form-label"><?php echo L::main_sign_up_email_address_input_label ?></label>
             <input type="email" name="signUpEmailInput"
-                   class="form-control" id="signUpEmailInput" aria-describedby="signUpEmailHelp">
+                   class="form-control" id="signUpEmailInput" aria-describedby="signUpEmailHelp"
+                   value="<?php echo $signUpController->currentEmailAddress() ?>">
             <div id="signUpEmailHelp"
                  class="form-text"><?php echo L::main_sign_up_email_address_input_description ?></div>
         </div>

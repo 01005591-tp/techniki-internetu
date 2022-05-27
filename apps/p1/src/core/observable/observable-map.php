@@ -20,7 +20,11 @@ class ObservableMap
 
     public function get(string $key)
     {
-        return $this->map[$key];
+        if (array_key_exists($key, $this->map)) {
+            return $this->map[$key];
+        } else {
+            return null;
+        }
     }
 
     public function put(string $key, mixed $value): ObservableMap

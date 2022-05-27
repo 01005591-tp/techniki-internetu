@@ -4,7 +4,6 @@ namespace p1\routing;
 
 use p1\config\Config;
 use p1\state\State;
-use p1\view\navbar\NavbarController;
 use p1\view\navbar\NavbarItem;
 
 require_once "config.php";
@@ -19,16 +18,16 @@ class Router
         switch ($request) {
             case '':
             case '/':
-                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::Home);
+                State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::Home);
                 break;
             case '/about':
-                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::About);
+                State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::About);
                 break;
             case '/login':
-                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::Login);
+                State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::Login);
                 break;
             case '/sign-up':
-                State::instance()->put(NavbarController::ACTIVE_ITEM_KEY, NavbarItem::SignUp);
+                State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::SignUp);
                 break;
             default:
                 http_response_code(404);

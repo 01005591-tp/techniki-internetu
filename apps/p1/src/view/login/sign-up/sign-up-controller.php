@@ -2,6 +2,7 @@
 
 namespace p1\view\login\signup;
 
+require_once "state.php";
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/create-user-command.php";
 require_once "core/function/function.php";
@@ -13,17 +14,21 @@ use p1\core\domain\user\CreateUserCommandHandler;
 use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
+use p1\state\State;
 
 class SignUpController
 {
     private SignUpRequestValidator $signUpRequestValidator;
     private CreateUserCommandHandler $createUserCommandHandler;
+    private State $state;
 
     public function __construct(SignUpRequestValidator   $signUpRequestValidator,
-                                CreateUserCommandHandler $createUserCommandHandler)
+                                CreateUserCommandHandler $createUserCommandHandler,
+                                State                    $state)
     {
         $this->signUpRequestValidator = $signUpRequestValidator;
         $this->createUserCommandHandler = $createUserCommandHandler;
+        $this->state = $state;
     }
 
     public function signIn(): void
@@ -34,13 +39,22 @@ class SignUpController
                 $_POST['signUpPasswordInput'],
                 $_POST['signUpPasswordRepeatInput']
             );
+            $this->state->put(State::SIGN_UP_FORM_PROVIDED_EMAIL, $request->email());
             $validatedRequest = $this->signUpRequestValidator->validate($request);
             $validatedRequest->mapRight(new CreateCreateUserCommand())
                 ->flatMapRight(new HandleCreateUserCommand($this->createUserCommandHandler))
                 ->peekLeft(new CreateUserCommandFailedConsumer())
-                ->peekRight(new CreateUserCommandSuccessConsumer())
+                ->peekRight(new CreateUserCommandSuccessConsumer($this->state))
                 ->peekRight(new RedirectToHomePageConsumer());
+        } else {
+            $this->state->remove(State::SIGN_UP_FORM_PROVIDED_EMAIL);
         }
+    }
+
+    public function currentEmailAddress(): string
+    {
+        $currentEmail = $this->state->get(State::SIGN_UP_FORM_PROVIDED_EMAIL);
+        return (isset($currentEmail)) ? $currentEmail : '';
     }
 }
 
@@ -75,15 +89,23 @@ class CreateUserCommandFailedConsumer implements Consumer
     function consume($value): void
     {
         $failure = $value;
-        echo "<p>" . $failure->message() . "</p>";
+        // TODO: implement error message printer
+        echo '<script type="text/javascript">alert(\'' . $failure->message() . '\');</script>';
     }
 }
 
 class CreateUserCommandSuccessConsumer implements Consumer
 {
+    private State $state;
+
+    public function __construct(State $state)
+    {
+        $this->state = $state;
+    }
+
     function consume($value): void
     {
-        echo "<p>Success</p>";
+        $this->state->remove(State::SIGN_UP_FORM_PROVIDED_EMAIL);
     }
 }
 
