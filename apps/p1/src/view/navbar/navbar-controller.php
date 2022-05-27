@@ -57,7 +57,7 @@ class NavbarController
                 require "view/login/login.php";
                 break;
             case NavbarItem::SignUp:
-                require "view/login/sign-up.php";
+                require "view/login/sign-up/sign-up.php";
                 break;
             default:
                 require "view/home/home.php";

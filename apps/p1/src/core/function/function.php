@@ -11,3 +11,13 @@ interface Supplier
 {
     function supply();
 }
+
+interface Consumer
+{
+    function consume($value): void;
+}
+
+interface Runnable
+{
+    function run(): void;
+}

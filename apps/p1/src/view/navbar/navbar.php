@@ -3,7 +3,7 @@
 use p1\configuration\Configuration;
 use p1\view\navbar\NavbarItem;
 
-$navbarController = Configuration::instance()->navbarController();
+$navbarController = Configuration::instance()->viewConfiguration()->navbarController();
 $toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarController): string {
     return $navbarController->isActiveItem($navbarItem) ? 'active' : '';
 };

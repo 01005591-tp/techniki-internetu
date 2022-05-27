@@ -1,10 +1,13 @@
 <?php
 
-namespace p1\view\login;
+namespace p1\view\login\signup;
 
+require_once "core/domain/failure.php";
 require_once "core/function/option.php";
 require_once "core/function/either.php";
 
+use L;
+use p1\core\domain\Failure;
 use p1\core\function\Either;
 use p1\core\function\Function2;
 
@@ -22,7 +25,7 @@ class SignUpRequestValidator
     {
         $email = $request->email();
         if (!isset($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return Either::ofLeft(L::main_errors_sign_in_request_invalid_email);
+            return Either::ofLeft(Failure::of(L::main_errors_sign_in_request_invalid_email));
         }
         return Either::ofRight($request);
     }
@@ -35,7 +38,7 @@ class VerifyPasswordSizeFunction implements Function2
         $request = $value;
         $password = $request->password();
         if (!isset($password) || strlen($password) < 6) {
-            return Either::ofLeft(L::main_errors_sign_in_request_password_too_short);
+            return Either::ofLeft(Failure::of(L::main_errors_sign_in_request_password_too_short));
         }
         return Either::ofRight($request);
     }
@@ -50,7 +53,7 @@ class VerifyPasswordCharactersFunction implements Function2
         $request = $value;
         $password = $request->password();
         if (!preg_match(self::PASSWORD_REGEX, $password)) {
-            return Either::ofLeft(L::main_errors_sign_in_request_password_invalid_chars);
+            return Either::ofLeft(Failure::of(L::main_errors_sign_in_request_password_invalid_chars));
         }
         return Either::ofRight($request);
     }
@@ -62,7 +65,7 @@ class VerifyPasswordsMatchFunction implements Function2
     {
         $request = $value;
         if ($request->password() != $request->passwordRepeat()) {
-            return Either::ofLeft(L::main_errors_sign_in_request_passwords_dont_match);
+            return Either::ofLeft(Failure::of(L::main_errors_sign_in_request_passwords_dont_match));
         }
         return Either::ofRight($request);
     }

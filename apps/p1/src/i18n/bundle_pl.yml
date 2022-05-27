@@ -35,3 +35,5 @@ main:
       password_too_short: "Hasło musi mieć przynajmniej 6 znaków."
       password_invalid_chars: "Hasło musi zawierać co najmniej jedną cyfrę i znak specjalny."
       passwords_dont_match: "Hasło i powtórzone hasło nie są takie same."
+      user_with_this_email_already_exists: "Użytkownik o adresie email {email_placeholder} już istnieje."
+      db_insert_user_error: "Nie udało się zarejestrować użytkownika. Spróbuj ponownie."

@@ -1,18 +1,6 @@
 <?php
 
-namespace p1\view\login;
-
-class SignUpController
-{
-    private SignUpRequestValidator $signUpRequestValidator;
-
-    public function __construct(SignUpRequestValidator $signUpRequestValidator)
-    {
-        $this->signUpRequestValidator = $signUpRequestValidator;
-    }
-
-
-}
+namespace p1\view\login\signup;
 
 class SignUpRequest
 {
@@ -42,4 +30,3 @@ class SignUpRequest
         return $this->passwordRepeat;
     }
 }
-

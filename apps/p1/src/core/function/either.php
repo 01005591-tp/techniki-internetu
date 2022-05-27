@@ -52,11 +52,33 @@ abstract class Either
             : $this;
     }
 
+    public function peekRight(Consumer $consumer): Either
+    {
+        if ($this->isRight()) {
+            $consumer->consume($this->right());
+        }
+        return $this;
+    }
+
+    public function peekLeft(Consumer $consumer): Either
+    {
+        if ($this->isLeft()) {
+            $consumer->consume($this->left());
+        }
+        return $this;
+    }
+
     public function fold(Function2 $ifLeft, Function2 $ifRight)
     {
         return $this->isRight()
             ? $ifRight->apply($this->right())
             : $ifLeft->apply($this->left());
+    }
+
+    public function then(Runnable $runnable): Either
+    {
+        $runnable->run();
+        return $this;
     }
 
     public static function ofRight($value): Either

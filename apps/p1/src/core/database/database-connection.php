@@ -10,7 +10,7 @@ use mysqli;
 class DatabaseConnection
 {
     private DbConnectionProperties $dbConnectionProperties;
-    private bool|mysqli $connection;
+    private mysqli $connection;
 
     public function __construct(DbConnectionProperties $dbConnectionProperties)
     {
@@ -20,7 +20,7 @@ class DatabaseConnection
     /**
      * @throws Exception in case connection could not be created or obtained
      */
-    public function connection(): bool|mysqli
+    public function connection(): mysqli
     {
         if (!isset($this->connection)) {
             $this->connection = $this->createConnection();
@@ -31,19 +31,13 @@ class DatabaseConnection
     /**
      * @throws Exception in case connection could not be created
      */
-    private function createConnection(): bool|mysqli
+    private function createConnection(): mysqli
     {
-        $conn = mysqli_connect(
+        return new mysqli(
             $this->dbConnectionProperties->url(),
             $this->dbConnectionProperties->user(),
             $this->dbConnectionProperties->pass(),
             $this->dbConnectionProperties->name()
         );
-        if (!$conn) {
-            throw new Exception('Could not connect to the database '
-                . $this->dbConnectionProperties->url() . ' / '
-                . $this->dbConnectionProperties->name());
-        }
-        return $conn;
     }
 }
