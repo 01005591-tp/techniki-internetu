@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-28/insert-default-roles.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2022-05-28/insert-default-roles" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <insert tableName="ROLES">
+            <column name="NAME" value="USER"/>
+        </insert>
+        <insert tableName="ROLES">
+            <column name="NAME" value="EMPLOYEE"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

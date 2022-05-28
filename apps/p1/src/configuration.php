@@ -8,12 +8,14 @@ require_once "core/database/database-configuration.php";
 require_once "core/app/user-configuration.php";
 require_once "view/view-configuration.php";
 require_once "view/navbar/navbar-controller.php";
+require_once "view/session/session-manager.php";
 
 use Exception;
 use p1\core\app\UserConfiguration;
 use p1\core\database\DatabaseConfiguration;
 use p1\i18n\I18nConfiguration;
 use p1\state\State;
+use p1\view\session\SessionManager;
 use p1\view\ViewConfiguration;
 
 class Configuration
@@ -23,18 +25,22 @@ class Configuration
     private ViewConfiguration $viewConfiguration;
     private DatabaseConfiguration $databaseConfiguration;
     private UserConfiguration $userConfiguration;
+    private SessionManager $sessionManager;
     private I18nConfiguration $i18nConfiguration;
 
     private function __construct()
     {
         $this->state = State::instance();
         $this->i18nConfiguration = I18nConfiguration::instance();
+
         $this->databaseConfiguration = new DatabaseConfiguration();
+        $this->sessionManager = new SessionManager();
         $this->userConfiguration = new UserConfiguration($this->databaseConfiguration);
         $this->viewConfiguration = new ViewConfiguration(
             $this->state,
             $this->userConfiguration->createUserCommandHandler(),
-            $this->userConfiguration->authenticateUserCommandHandler()
+            $this->userConfiguration->authenticateUserCommandHandler(),
+            $this->sessionManager
         );
     }
 

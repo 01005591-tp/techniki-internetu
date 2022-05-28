@@ -114,10 +114,10 @@ class RedirectToHomePageConsumer implements Consumer
     function consume($value): void
     {
         if (headers_sent()) {
-            die('<script type="text/javascript">window.location\'/\';</script>');
+            echo('<script type="text/javascript">window.location\'/\';</script>');
         } else {
             header("Location: /");
-            die();
         }
+        exit();
     }
 }

@@ -11,4 +11,6 @@
     <include file="2022-05-25/create-bookings.xml" relativeToChangelogFile="true"/>
     <include file="2022-05-25/create-rentals.xml" relativeToChangelogFile="true"/>
 
+    <include file="2022-05-28/insert-default-roles.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

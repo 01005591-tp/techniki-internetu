@@ -5,6 +5,9 @@ namespace p1\core\domain\user\auth;
 require_once "core/domain/failure.php";
 require_once "core/domain/user/user-repository.php";
 require_once "core/domain/user/auth/authenticate-user-command.php";
+require_once "core/domain/user/auth/authenticate-user-result.php";
+require_once "core/domain/user/auth/roles.php";
+require_once "core/domain/user/auth/user-auth-repository.php";
 require_once "core/function/either.php";
 require_once "core/function/function.php";
 
@@ -18,10 +21,13 @@ use p1\core\function\Supplier;
 class AuthenticateUserCommandHandler
 {
     private UserRepository $userRepository;
+    private UserAuthRepository $userAuthRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository     $userRepository,
+                                UserAuthRepository $userAuthRepository)
     {
         $this->userRepository = $userRepository;
+        $this->userAuthRepository = $userAuthRepository;
     }
 
     public function handle(AuthenticateUserCommand $command): Either
@@ -30,7 +36,8 @@ class AuthenticateUserCommandHandler
             ->fold(
                 new UserNotFoundFailureSupplier(),
                 new VerifyUserPasswordFunction($command->password())
-            );
+            )
+            ->mapRight(new CreateAuthenticateUserResultFunction($this->userAuthRepository));
     }
 }
 
@@ -56,9 +63,40 @@ class VerifyUserPasswordFunction implements Function2
     {
         $user = $value;
         if (password_verify($this->password, $user->password())) {
-            return Either::ofRight(null);
+            return Either::ofRight($user);
         } else {
             return Either::ofLeft(Failure::of(L::main_errors_login_request_email_or_password_invalid));
         }
+    }
+}
+
+class CreateAuthenticateUserResultFunction implements Function2
+{
+    private UserAuthRepository $userAuthRepository;
+
+    public function __construct(UserAuthRepository $userAuthRepository)
+    {
+        $this->userAuthRepository = $userAuthRepository;
+    }
+
+    function apply($value): AuthenticateUserResult
+    {
+        $user = $value;
+        $userRoles = $this->userAuthRepository->findUserRoles($user->id());
+        return new AuthenticateUserResult(
+            $user->id(),
+            $user->email(),
+            $this->fillInUserRoleIfMissing($userRoles)
+        );
+    }
+
+    private function fillInUserRoleIfMissing(array $userRoles): array
+    {
+        // every authenticated user has a USER role
+        // no need to use storage and populate DB with this information
+        if (!in_array(Roles::USER->name, $userRoles)) {
+            $userRoles[] = Roles::USER->name;
+        }
+        return $userRoles;
     }
 }

@@ -40,3 +40,5 @@ main:
     login_request:
       invalid_email: "Nieprawidłowy adres email."
       email_or_password_invalid: "Nieprawidłowy adres email lub hasło."
+    global:
+      global_error_message: "Coś poszło nie tak. Spróbuj ponownie."

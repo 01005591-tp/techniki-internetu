@@ -6,9 +6,10 @@ require_once "state.php";
 require_once "core/domain/failure.php";
 require_once "core/function/either.php";
 require_once "core/function/function.php";
-require_once "view/login/login-request.php";
 require_once "core/domain/user/auth/authenticate-user-command.php";
 require_once "core/domain/user/auth/authenticate-user-command-handler.php";
+require_once "view/login/login-request.php";
+require_once "view/session/session-manager.php";
 
 use L;
 use p1\core\domain\Failure;
@@ -18,17 +19,22 @@ use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
 use p1\state\State;
+use p1\view\session\SessionManager;
+use p1\view\session\UserContext;
 
 class LoginController
 {
     private AuthenticateUserCommandHandler $authenticateUserCommandHandler;
     private State $state;
+    private SessionManager $sessionManager;
 
     public function __construct(AuthenticateUserCommandHandler $authenticateUserCommandHandler,
-                                State                          $state)
+                                State                          $state,
+                                SessionManager                 $sessionManager)
     {
         $this->authenticateUserCommandHandler = $authenticateUserCommandHandler;
         $this->state = $state;
+        $this->sessionManager = $sessionManager;
     }
 
     public function login(): void
@@ -41,9 +47,14 @@ class LoginController
             $this->state->put(State::LOGIN_FORM_PROVIDED_EMAIL, $request->email());
             $this->verifyEmailAddress($request)
                 ->mapRight(new CreateAuthenticateUserCommandFunction())
-                ->flatMapRight(new HandleAuthenticateUserCommandFunction($this->authenticateUserCommandHandler))
+                ->flatMapRight(new HandleAuthenticateUserCommandFunction(
+                    $this->authenticateUserCommandHandler
+                ))
                 ->peekLeft(new AuthenticateUserFailedConsumer())
-                ->peekRight(new AuthenticateUserSuccessConsumer($this->state));
+                ->peekRight(new AuthenticateUserSuccessConsumer(
+                    $this->state,
+                    $this->sessionManager
+                ));
         } else {
             $this->state->remove(State::LOGIN_FORM_PROVIDED_EMAIL);
         }
@@ -103,21 +114,32 @@ class AuthenticateUserFailedConsumer implements Consumer
 class AuthenticateUserSuccessConsumer implements Consumer
 {
     private State $state;
+    private SessionManager $sessionManager;
 
-    public function __construct(State $state)
+    public function __construct(State          $state,
+                                SessionManager $sessionManager)
     {
         $this->state = $state;
+        $this->sessionManager = $sessionManager;
     }
 
     function consume($value): void
     {
+        $authResult = $value;
         $this->state->remove(State::LOGIN_FORM_PROVIDED_EMAIL);
+        $this->sessionManager->sessionStart(new UserContext(
+            $authResult->userId(),
+            $authResult->userEmail(),
+            // TODO: add language support
+            'en',
+            $authResult->userRoles()
+        ));
         if (headers_sent()) {
-            die('<script type="text/javascript">window.location\'/\';</script>');
+            echo('<script type="text/javascript">window.location\'/\';</script>');
         } else {
             header("Location: /");
-            die();
         }
+        exit();
     }
 
 }
