@@ -18,6 +18,7 @@ use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
+use p1\core\function\Runnable;
 use p1\state\State;
 use p1\view\session\SessionManager;
 use p1\view\session\UserContext;
@@ -39,6 +40,7 @@ class LoginController
 
     public function login(): void
     {
+        $redirectToMainPageRunnable = new RedirectToMainPageRunnable();
         if (isset($_POST['login-login-btn'])) {
             $request = new LoginRequest(
                 $_POST['loginEmailInput'],
@@ -53,8 +55,11 @@ class LoginController
                 ->peekLeft(new AuthenticateUserFailedConsumer())
                 ->peekRight(new AuthenticateUserSuccessConsumer(
                     $this->state,
-                    $this->sessionManager
+                    $this->sessionManager,
+                    $redirectToMainPageRunnable
                 ));
+        } else if (!is_null($this->sessionManager->userContext())) {
+            $redirectToMainPageRunnable->run();
         } else {
             $this->state->remove(State::LOGIN_FORM_PROVIDED_EMAIL);
         }
@@ -115,12 +120,15 @@ class AuthenticateUserSuccessConsumer implements Consumer
 {
     private State $state;
     private SessionManager $sessionManager;
+    private RedirectToMainPageRunnable $redirectToMainPageRunnable;
 
-    public function __construct(State          $state,
-                                SessionManager $sessionManager)
+    public function __construct(State                      $state,
+                                SessionManager             $sessionManager,
+                                RedirectToMainPageRunnable $redirectToMainPageRunnable)
     {
         $this->state = $state;
         $this->sessionManager = $sessionManager;
+        $this->redirectToMainPageRunnable = $redirectToMainPageRunnable;
     }
 
     function consume($value): void
@@ -134,6 +142,14 @@ class AuthenticateUserSuccessConsumer implements Consumer
             'en',
             $authResult->userRoles()
         ));
+        $this->redirectToMainPageRunnable->run();
+    }
+}
+
+class RedirectToMainPageRunnable implements Runnable
+{
+    function run(): void
+    {
         if (headers_sent()) {
             echo('<script type="text/javascript">window.location\'/\';</script>');
         } else {

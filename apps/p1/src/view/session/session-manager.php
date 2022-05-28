@@ -24,6 +24,13 @@ class SessionManager
         }
     }
 
+    public function userContext(): ?UserContext
+    {
+        return PHP_SESSION_ACTIVE === session_status()
+            ? $_SESSION['USER_CONTEXT']
+            : null;
+    }
+
     private function doStartSession(): void
     {
         if (!session_start()) {

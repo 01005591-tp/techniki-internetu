@@ -4,7 +4,8 @@ use p1\configuration\Configuration;
 use p1\view\navbar\NavbarItem;
 
 $navbarController = Configuration::instance()->viewConfiguration()->navbarController();
-$toNavbarItemActiveClass = function (NavbarItem $navbarItem) use ($navbarController): string {
+
+$toNavbarItemActiveCssClass = function (NavbarItem $navbarItem) use ($navbarController): string {
     return $navbarController->isActiveItem($navbarItem) ? 'active' : '';
 };
 
@@ -35,12 +36,12 @@ $loginButtonHtml = function () use ($navbarController): void {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link <?php echo($toNavbarItemActiveClass(NavbarItem::Home)); ?>" href="/">
+                    <a class="nav-link <?php echo($toNavbarItemActiveCssClass(NavbarItem::Home)); ?>" href="/">
                         <?php echo L::main_navbar_home ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo($toNavbarItemActiveClass(NavbarItem::About)); ?>" href="/about">
+                    <a class="nav-link <?php echo($toNavbarItemActiveCssClass(NavbarItem::About)); ?>" href="/about">
                         <?php echo L::main_navbar_about ?>
                     </a>
                 </li>
