@@ -7,6 +7,7 @@ main:
       search_button: "Search"
     sign_in:
       sign_in_button: "Sign&nbsp;In"
+      sign_out_button: "Sign&nbsp;Out"
   sign_in:
     email_address:
       input_label: "Email address"

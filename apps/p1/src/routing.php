@@ -29,6 +29,9 @@ class Router
             case '/sign-up':
                 State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::SignUp);
                 break;
+            case '/sign-out':
+                State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::SignOut);
+                break;
             default:
                 http_response_code(404);
                 require Config::instance()->rootDir() . '/view/errors/404.php';

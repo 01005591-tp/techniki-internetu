@@ -8,6 +8,7 @@ require_once "core/function/either.php";
 require_once "core/function/function.php";
 require_once "core/domain/user/auth/authenticate-user-command.php";
 require_once "core/domain/user/auth/authenticate-user-command-handler.php";
+require_once "view/redirect-manager.php";
 require_once "view/login/login-request.php";
 require_once "view/session/session-manager.php";
 
@@ -18,8 +19,9 @@ use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
-use p1\core\function\Runnable;
 use p1\state\State;
+use p1\view\RedirectManager;
+use p1\view\RedirectToMainPageRunnable;
 use p1\view\session\SessionManager;
 use p1\view\session\UserContext;
 
@@ -28,19 +30,21 @@ class LoginController
     private AuthenticateUserCommandHandler $authenticateUserCommandHandler;
     private State $state;
     private SessionManager $sessionManager;
+    private RedirectManager $redirectManager;
 
     public function __construct(AuthenticateUserCommandHandler $authenticateUserCommandHandler,
                                 State                          $state,
-                                SessionManager                 $sessionManager)
+                                SessionManager                 $sessionManager,
+                                RedirectManager                $redirectManager)
     {
         $this->authenticateUserCommandHandler = $authenticateUserCommandHandler;
         $this->state = $state;
         $this->sessionManager = $sessionManager;
+        $this->redirectManager = $redirectManager;
     }
 
     public function login(): void
     {
-        $redirectToMainPageRunnable = new RedirectToMainPageRunnable();
         if (isset($_POST['login-login-btn'])) {
             $request = new LoginRequest(
                 $_POST['loginEmailInput'],
@@ -56,10 +60,10 @@ class LoginController
                 ->peekRight(new AuthenticateUserSuccessConsumer(
                     $this->state,
                     $this->sessionManager,
-                    $redirectToMainPageRunnable
+                    $this->redirectManager->redirectToMainPage()
                 ));
         } else if (!is_null($this->sessionManager->userContext())) {
-            $redirectToMainPageRunnable->run();
+            $this->redirectManager->redirectToMainPage()->run();
         } else {
             $this->state->remove(State::LOGIN_FORM_PROVIDED_EMAIL);
         }
@@ -146,16 +150,3 @@ class AuthenticateUserSuccessConsumer implements Consumer
     }
 }
 
-class RedirectToMainPageRunnable implements Runnable
-{
-    function run(): void
-    {
-        if (headers_sent()) {
-            echo('<script type="text/javascript">window.location\'/\';</script>');
-        } else {
-            header("Location: /");
-        }
-        exit();
-    }
-
-}

@@ -2,15 +2,23 @@
 
 namespace p1\view\navbar;
 
+require_once "view/navbar/navbar-controller.php";
+require_once "view/session/session-manager.php";
+
 use p1\state\State;
+use p1\view\session\SessionManager;
 
 class NavbarConfiguration
 {
     private NavbarController $navbarController;
 
-    public function __construct(State $state)
+    public function __construct(State          $state,
+                                SessionManager $sessionManager)
     {
-        $this->navbarController = new NavbarController($state);
+        $this->navbarController = new NavbarController(
+            $state,
+            $sessionManager
+        );
     }
 
     public function navbarController(): NavbarController

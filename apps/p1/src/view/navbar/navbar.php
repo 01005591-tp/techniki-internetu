@@ -10,7 +10,11 @@ $toNavbarItemActiveCssClass = function (NavbarItem $navbarItem) use ($navbarCont
 };
 
 $loginButtonHtml = function () use ($navbarController): void {
-    if ($navbarController->isActiveItem(NavbarItem::Login)) {
+    if ($navbarController->isLoggedInUser()) {
+        echo '<a class="ms-2" href="/sign-out">
+                <button class="btn btn-outline-danger" type="button">' . L::main_navbar_sign_in_sign_out_button . '</button>
+              </a>';
+    } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
         echo '<div class="ms-2">
                   <button class="btn btn-outline-primary disabled" type="button">' . L::main_navbar_sign_in_sign_in_button . '</button>
               </div>';

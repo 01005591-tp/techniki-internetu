@@ -5,19 +5,24 @@ namespace p1\view\navbar;
 require_once "state.php";
 require_once "core/observable/observable.php";
 require_once "core/observable/observable-map.php";
+require_once "view/session/session-manager.php";
 
 use p1\core\observable\EntryPutSubscriber;
 use p1\state\State;
+use p1\view\session\SessionManager;
 
 class NavbarController
 {
     private NavbarItem $activeItem;
     private State $state;
+    private SessionManager $sessionManager;
 
-    public function __construct(State $state)
+    public function __construct(State          $state,
+                                SessionManager $sessionManager)
     {
         $this->activeItem = NavbarItem::Home;
         $this->state = $state;
+        $this->sessionManager = $sessionManager;
         $subscriber = new class($this) implements EntryPutSubscriber {
             private NavbarController $controller;
 
@@ -39,6 +44,11 @@ class NavbarController
         $this->state->subscribe()->entryPut($subscriber);
     }
 
+    public function isLoggedInUser(): bool
+    {
+        return !is_null($this->sessionManager->userContext());
+    }
+
     public function isActiveItem(NavbarItem $item): bool
     {
         return $this->activeItem === $item;
@@ -58,6 +68,9 @@ class NavbarController
             case NavbarItem::SignUp:
                 require "view/login/sign-up/sign-up.php";
                 break;
+            case NavbarItem::SignOut:
+                require "view/login/sign-out/sign-out.php";
+                break;
             default:
                 require "view/home/home.php";
         }
@@ -70,4 +83,5 @@ enum NavbarItem
     case About;
     case Login;
     case SignUp;
+    case SignOut;
 }

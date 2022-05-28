@@ -17,6 +17,11 @@ class SessionManager
         $_SESSION['LANG'] = $context->userLang();
     }
 
+    public function sessionDestroy(): void
+    {
+        $this->cleanUpSession();
+    }
+
     public function recoverSession(): void
     {
         if (PHP_SESSION_ACTIVE != session_status()) {
