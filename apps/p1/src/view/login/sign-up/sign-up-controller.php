@@ -40,8 +40,8 @@ class SignUpController
                 $_POST['signUpPasswordRepeatInput']
             );
             $this->state->put(State::SIGN_UP_FORM_PROVIDED_EMAIL, $request->email());
-            $validatedRequest = $this->signUpRequestValidator->validate($request);
-            $validatedRequest->mapRight(new CreateCreateUserCommand())
+            $this->signUpRequestValidator->validate($request)
+                ->mapRight(new CreateCreateUserCommand())
                 ->flatMapRight(new HandleCreateUserCommand($this->createUserCommandHandler))
                 ->peekLeft(new CreateUserCommandFailedConsumer())
                 ->peekRight(new CreateUserCommandSuccessConsumer($this->state))

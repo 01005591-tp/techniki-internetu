@@ -11,6 +11,7 @@ class State extends ObservableMap
 {
     public const ACTIVE_ITEM_KEY = 'View.Navbar.ActiveItem';
     public const SIGN_UP_FORM_PROVIDED_EMAIL = "View.Login.SignUp.EmailInputValue";
+    public const LOGIN_FORM_PROVIDED_EMAIL = "View.Login.EmailInputValue";
 
     private static State $instance;
 

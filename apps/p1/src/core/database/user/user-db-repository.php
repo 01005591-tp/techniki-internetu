@@ -4,6 +4,7 @@ namespace p1\core\database\user;
 
 require_once "core/function/either.php";
 require_once "core/function/function.php";
+require_once "core/function/option.php";
 require_once "core/domain/user/user-repository.php";
 require_once "core/domain/user/create-user-command.php";
 require_once "core/database/user/find-user-by-email-query.php";
@@ -15,6 +16,7 @@ use p1\core\domain\user\CreateUserCommand;
 use p1\core\domain\user\UserRepository;
 use p1\core\function\Either;
 use p1\core\function\Function2;
+use p1\core\function\Option;
 use p1\core\function\Supplier;
 
 class UserDbRepository implements UserRepository
@@ -36,6 +38,11 @@ class UserDbRepository implements UserRepository
                 new CreateUserSupplier($this->insertUserStatement, $command),
                 new CreateUserAlreadyExistsFunction()
             );
+    }
+
+    public function findUserByEmail(string $email): Option
+    {
+        return $this->findUserByEmailQuery->query($email);
     }
 }
 

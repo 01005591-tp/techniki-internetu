@@ -33,7 +33,8 @@ class Configuration
         $this->userConfiguration = new UserConfiguration($this->databaseConfiguration);
         $this->viewConfiguration = new ViewConfiguration(
             $this->state,
-            $this->userConfiguration->createUserCommandHandler()
+            $this->userConfiguration->createUserCommandHandler(),
+            $this->userConfiguration->authenticateUserCommandHandler()
         );
     }
 

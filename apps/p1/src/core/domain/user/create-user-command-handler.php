@@ -2,6 +2,8 @@
 
 namespace p1\core\domain\user;
 
+require_once "core/function/either.php";
+
 use p1\core\function\Either;
 
 class CreateUserCommandHandler
@@ -12,7 +14,7 @@ class CreateUserCommandHandler
     {
         $this->userRepository = $userRepository;
     }
-    
+
     public function handle(CreateUserCommand $command): Either
     {
         $passwordHash = password_hash($command->password(), PASSWORD_DEFAULT);

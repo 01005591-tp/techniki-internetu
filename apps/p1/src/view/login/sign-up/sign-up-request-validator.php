@@ -3,7 +3,6 @@
 namespace p1\view\login\signup;
 
 require_once "core/domain/failure.php";
-require_once "core/function/option.php";
 require_once "core/function/either.php";
 
 use L;

@@ -37,3 +37,6 @@ main:
       passwords_dont_match: "Password and repeat password must be the same."
       user_with_this_email_already_exists: "User with email {email_placeholder} already exists."
       db_insert_user_error: "Could not sign up user. Please, try again."
+    login_request:
+      invalid_email: "Invalid email address."
+      email_or_password_invalid: "Invalid email address or password."
