@@ -10,6 +10,7 @@ require_once "view/session/session-manager.php";
 use p1\core\observable\EntryPutSubscriber;
 use p1\state\State;
 use p1\view\session\SessionManager;
+use p1\view\session\UserContext;
 
 class NavbarController
 {
@@ -47,6 +48,11 @@ class NavbarController
     public function isLoggedInUser(): bool
     {
         return !is_null($this->sessionManager->userContext());
+    }
+
+    public function loggedInUser(): UserContext
+    {
+        return $this->sessionManager->userContext();
     }
 
     public function isActiveItem(NavbarItem $item): bool

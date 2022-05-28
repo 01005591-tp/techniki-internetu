@@ -6,6 +6,7 @@ main:
       input_placeholder: "Search"
       search_button: "Search"
     sign_in:
+      signed_in_user_email_label: "Signed in user email"
       sign_in_button: "Sign&nbsp;In"
       sign_out_button: "Sign&nbsp;Out"
   sign_in:

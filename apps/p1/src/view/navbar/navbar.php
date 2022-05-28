@@ -1,5 +1,7 @@
 <?php
 
+require_once "configuration.php";
+
 use p1\configuration\Configuration;
 use p1\view\navbar\NavbarItem;
 
@@ -9,19 +11,23 @@ $toNavbarItemActiveCssClass = function (NavbarItem $navbarItem) use ($navbarCont
     return $navbarController->isActiveItem($navbarItem) ? 'active' : '';
 };
 
-$loginButtonHtml = function () use ($navbarController): void {
+$loggedInUserComponents = function () use ($navbarController): void {
     if ($navbarController->isLoggedInUser()) {
-        echo '<a class="ms-2" href="/sign-out">
-                <button class="btn btn-outline-danger" type="button">' . L::main_navbar_sign_in_sign_out_button . '</button>
-              </a>';
+        require "view/navbar/form/navbar-form-logged-in-user.php";
     } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
-        echo '<div class="ms-2">
-                  <button class="btn btn-outline-primary disabled" type="button">' . L::main_navbar_sign_in_sign_in_button . '</button>
-              </div>';
+        require "view/navbar/form/navbar-form-sign-in-page.php";
     } else {
-        echo '<a class="ms-2" href="/login">
-                <button class="btn btn-outline-primary" type="button">' . L::main_navbar_sign_in_sign_in_button . '</button>
-              </a>';
+        require "view/navbar/form/navbar-form-default.php";
+    }
+};
+
+$loggedInUserComponentsSmall = function () use ($navbarController): void {
+    if ($navbarController->isLoggedInUser()) {
+        require "view/navbar/form/navbar-form-small-logged-in-user.php";
+    } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
+        require "view/navbar/form/navbar-form-small-sign-in-page.php";
+    } else {
+        require "view/navbar/form/navbar-form-small-default.php";
     }
 };
 ?>
@@ -50,14 +56,12 @@ $loginButtonHtml = function () use ($navbarController): void {
                     </a>
                 </li>
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search"
-                       placeholder="<?php echo L::main_navbar_search_input_placeholder ?>"
-                       aria-label="<?php echo L::main_navbar_search_input_placeholder ?>">
-                <button class="btn btn-outline-success"
-                        type="submit"><?php echo L::main_navbar_search_search_button ?></button>
-                <?php $loginButtonHtml(); ?>
-            </form>
+            <div class="d-none d-lg-block">
+                <?php $loggedInUserComponents(); ?>
+            </div>
+            <div class="d-xxl-none d-xl-none d-lg-none d-block">
+                <?php $loggedInUserComponentsSmall(); ?>
+            </div>
         </div>
     </div>
 </nav>
