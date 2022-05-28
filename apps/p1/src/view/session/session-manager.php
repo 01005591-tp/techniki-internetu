@@ -4,6 +4,7 @@ namespace p1\view\session;
 
 require_once "view/session/user-context.php";
 
+use Exception;
 use L;
 
 class SessionManager
@@ -12,9 +13,9 @@ class SessionManager
     {
         $this->cleanUpSession();
         $this->recoverSession();
-        $_SESSION['USER_CONTEXT'] = $context;
+        $_SESSION[SessionConstants::USER_CONTEXT] = $context;
         // LANG required for i18n
-        $_SESSION['LANG'] = $context->userLang();
+        $_SESSION[SessionConstants::LANG] = $context->userLang();
     }
 
     public function sessionDestroy(): void
@@ -31,8 +32,8 @@ class SessionManager
 
     public function userContext(): ?UserContext
     {
-        return PHP_SESSION_ACTIVE === session_status()
-            ? $_SESSION['USER_CONTEXT']
+        return PHP_SESSION_ACTIVE === session_status() && array_key_exists(SessionConstants::USER_CONTEXT, $_SESSION)
+            ? $_SESSION[SessionConstants::USER_CONTEXT]
             : null;
     }
 
@@ -58,7 +59,7 @@ class SessionManager
                 break;
             case PHP_SESSION_ACTIVE:
                 echo "Session active";
-                $userContext = $_SESSION['USER_CONTEXT'];
+                $userContext = $_SESSION[SessionConstants::USER_CONTEXT];
                 if ($userContext) {
                     echo "<br/>Id: " . $userContext->userId();
                     echo "<br/>Email: " . $userContext->userEmail();
@@ -74,4 +75,38 @@ class SessionManager
                 break;
         }
     }
+}
+
+class SessionConstants
+{
+    public const USER_CONTEXT = 'USER_CONTEXT';
+    public const LANG = 'LANG';
+
+    /**
+     * Utility class instantiation is forbidden.
+     * @throws Exception
+     */
+    private function __construct()
+    {
+        throw new Exception("Cannot instantiate utility class");
+    }
+
+
+    /**
+     * Utility class cloning is forbidden.
+     * @return void
+     */
+    private function __clone()
+    {
+    }
+
+    /**
+     * Utility class deserialization is forbidden.
+     * @throws Exception
+     */
+    public function __wakeup()
+    {
+        throw new Exception("Cannot deserialize utility class");
+    }
+
 }
