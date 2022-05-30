@@ -26,9 +26,10 @@ $loginController->login();
                    class="form-control" id="loginPasswordInput">
         </div>
         <button type="submit" name="login-login-btn"
-                class="btn btn-primary"><?php echo L::main_sign_in_log_in_button ?></button>
+                class="btn btn-primary text-nowrap"><?php echo L::main_sign_in_log_in_button ?></button>
         <a href="/sign-up">
-            <button type="button" class="btn btn-danger"><?php echo L::main_sign_in_sign_up_button ?></button>
+            <button type="button"
+                    class="btn btn-danger text-nowrap"><?php echo L::main_sign_in_sign_up_button ?></button>
         </a>
     </form>
 </div>

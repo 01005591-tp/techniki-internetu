@@ -10,7 +10,7 @@ $navbarController = Configuration::instance()->viewConfiguration()->navbarContro
     <input class="form-control my-1" type="search"
            placeholder="<?php echo L::main_navbar_search_input_placeholder ?>"
            aria-label="<?php echo L::main_navbar_search_input_placeholder ?>">
-    <button class="btn btn-outline-success my-1"
+    <button class="btn btn-outline-success my-1 text-nowrap"
             type="submit">
         <?php echo L::main_navbar_search_search_button ?>
     </button>
@@ -19,7 +19,7 @@ $navbarController = Configuration::instance()->viewConfiguration()->navbarContro
         <img src="/assets/user-24-icon-aqua.png" alt="User icon"/>
         <?php echo $navbarController->loggedInUser()->userEmail(); ?>
     </span>
-    <a class="my-2 btn btn-outline-danger" role="button" href="/sign-out" aria-pressed="true">
+    <a class="my-2 btn btn-outline-danger text-nowrap" role="button" href="/sign-out" aria-pressed="true">
         <?php echo L::main_navbar_sign_in_sign_out_button ?>
     </a>
 </form>

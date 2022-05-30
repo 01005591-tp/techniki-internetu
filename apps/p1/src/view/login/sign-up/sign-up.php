@@ -39,6 +39,6 @@ $signUpController->signIn();
             </div>
         </div>
         <button type="submit" name="sign-up-create-user-btn"
-                class="btn btn-primary"><?php echo L::main_sign_up_create_user_button ?></button>
+                class="btn btn-primary text-nowrap"><?php echo L::main_sign_up_create_user_button ?></button>
     </form>
 </div>
