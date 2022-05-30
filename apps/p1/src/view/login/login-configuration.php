@@ -40,7 +40,9 @@ class LoginConfiguration
             new SignUpRequestValidator(),
             $createUserCommandHandler,
             $state,
-            $alertService
+            $alertService,
+            $sessionManager,
+            $redirectManager
         );
         $this->loginController = new LoginController(
             $authenticateUserCommandHandler,

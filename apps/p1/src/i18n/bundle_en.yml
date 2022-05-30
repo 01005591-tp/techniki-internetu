@@ -34,6 +34,8 @@ main:
       button: "Create&nbsp;user"
   sign_out:
     signed_out_successfully_msg: "Signed out successfully"
+  home:
+    book_list_header: Book list
   errors:
     sign_in_request:
       invalid_email: "Invalid email address."

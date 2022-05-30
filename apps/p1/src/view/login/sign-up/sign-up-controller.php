@@ -2,13 +2,15 @@
 
 namespace p1\view\login\signup;
 
-require_once "state.php";
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/create-user-command.php";
 require_once "core/function/function.php";
+require_once "session/session-manager.php";
+require_once "state.php";
 require_once "view/alerts/alert-service.php";
 require_once "view/login/sign-up/sign-up-request.php";
 require_once "view/login/sign-up/sign-up-request-validator.php";
+require_once "view/redirect-manager.php";
 
 use p1\core\domain\user\CreateUserCommand;
 use p1\core\domain\user\CreateUserCommandHandler;
@@ -17,6 +19,8 @@ use p1\core\function\Either;
 use p1\core\function\Function2;
 use p1\state\State;
 use p1\view\alerts\AlertService;
+use p1\view\RedirectManager;
+use p1\view\session\SessionManager;
 
 class SignUpController
 {
@@ -24,16 +28,22 @@ class SignUpController
     private CreateUserCommandHandler $createUserCommandHandler;
     private State $state;
     private AlertService $alertService;
+    private SessionManager $sessionManager;
+    private RedirectManager $redirectManager;
 
     public function __construct(SignUpRequestValidator   $signUpRequestValidator,
                                 CreateUserCommandHandler $createUserCommandHandler,
                                 State                    $state,
-                                AlertService             $alertService)
+                                AlertService             $alertService,
+                                SessionManager           $sessionManager,
+                                RedirectManager          $redirectManager)
     {
         $this->signUpRequestValidator = $signUpRequestValidator;
         $this->createUserCommandHandler = $createUserCommandHandler;
         $this->state = $state;
         $this->alertService = $alertService;
+        $this->sessionManager = $sessionManager;
+        $this->redirectManager = $redirectManager;
     }
 
     public function signIn(): void
@@ -51,6 +61,8 @@ class SignUpController
                 ->peekLeft(new CreateUserCommandFailedConsumer($this->alertService))
                 ->peekRight(new CreateUserCommandSuccessConsumer($this->state))
                 ->peekRight(new RedirectToHomePageConsumer());
+        } else if (!is_null($this->sessionManager->userContext())) {
+            $this->redirectManager->redirectToMainPage()->run();
         } else {
             $this->state->remove(State::SIGN_UP_FORM_PROVIDED_EMAIL);
         }

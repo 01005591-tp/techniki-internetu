@@ -34,6 +34,8 @@ main:
       button: "Zarejestruj"
   sign_out:
     signed_out_successfully_msg: "Wylogowano"
+  home:
+    book_list_header: Lista książek
   errors:
     sign_in_request:
       invalid_email: "Nieprawidłowy adres email."
