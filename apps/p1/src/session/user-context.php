@@ -36,4 +36,24 @@ class UserContext
     {
         return $this->userRoles;
     }
+
+    public function hasAnyRole(array $roles): bool
+    {
+        foreach ($roles as $role) {
+            if (in_array($role, $this->userRoles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function __toString(): string
+    {
+        return "{userId: " . $this->userId .
+            ", userEmail: " . $this->userEmail .
+            ", userLang: " . $this->userLang .
+            ", userRoles: " . strval($this->userRoles) . "}";
+    }
+
+
 }

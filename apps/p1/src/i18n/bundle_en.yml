@@ -17,6 +17,7 @@ main:
       input_label: "Password"
     log_in:
       button: "Log&nbsp;In"
+      logged_in_successfully_msg: "Logged in"
     sign_up:
       button: "Sign&nbsp;Up"
   sign_up:
@@ -31,13 +32,15 @@ main:
       input_description: "Repeat your password"
     create_user:
       button: "Create&nbsp;user"
+  sign_out:
+    signed_out_successfully_msg: "Signed out successfully"
   errors:
     sign_in_request:
       invalid_email: "Invalid email address."
       password_too_short: "Password must have at least 6 characters."
       password_invalid_chars: "Password must contain at least one digit and a special character."
       passwords_dont_match: "Password and repeat password must be the same."
-      user_with_this_email_already_exists: "User with email {email_placeholder} already exists."
+      user_with_this_email_already_exists: "Could not sign up user. Please, try again."
       db_insert_user_error: "Could not sign up user. Please, try again."
     login_request:
       invalid_email: "Invalid email address."

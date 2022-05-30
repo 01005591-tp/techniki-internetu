@@ -72,11 +72,7 @@ class CreateUserAlreadyExistsFunction implements Function2
     function apply($value): Either
     {
         $user = $value;
-        $message = str_replace(
-            "{email_placeholder}",
-            $user->email(),
-            L::main_errors_sign_in_request_user_with_this_email_already_exists
-        );
-        return Either::ofLeft(Failure::of($message));
+        error_log('User with email "' . $user->email() . '" already exists');
+        return Either::ofLeft(Failure::of(L::main_errors_sign_in_request_user_with_this_email_already_exists));
     }
 }

@@ -5,16 +5,18 @@ namespace p1\view\login;
 require_once "state.php";
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/auth/authenticate-user-command-handler.php";
+require_once "session/session-manager.php";
 require_once "view/redirect-manager.php";
+require_once "view/alerts/alert-service.php";
 require_once "view/login/login-controller.php";
 require_once "view/login/sign-out/sign-out-controller.php";
 require_once "view/login/sign-up/sign-up-controller.php";
 require_once "view/login/sign-up/sign-up-request-validator.php";
-require_once "view/session/session-manager.php";
 
 use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\domain\user\CreateUserCommandHandler;
 use p1\state\State;
+use p1\view\alerts\AlertService;
 use p1\view\login\signout\SignOutController;
 use p1\view\login\signup\SignUpController;
 use p1\view\login\signup\SignUpRequestValidator;
@@ -31,22 +33,26 @@ class LoginConfiguration
                                 CreateUserCommandHandler       $createUserCommandHandler,
                                 AuthenticateUserCommandHandler $authenticateUserCommandHandler,
                                 SessionManager                 $sessionManager,
-                                RedirectManager                $redirectManager)
+                                RedirectManager                $redirectManager,
+                                AlertService                   $alertService)
     {
         $this->signUpController = new SignUpController(
             new SignUpRequestValidator(),
             $createUserCommandHandler,
-            $state
+            $state,
+            $alertService
         );
         $this->loginController = new LoginController(
             $authenticateUserCommandHandler,
             $state,
             $sessionManager,
-            $redirectManager
+            $redirectManager,
+            $alertService
         );
         $this->signOutController = new SignOutController(
             $sessionManager,
-            $redirectManager
+            $redirectManager,
+            $alertService
         );
     }
 

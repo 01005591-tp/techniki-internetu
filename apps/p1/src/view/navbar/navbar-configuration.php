@@ -2,8 +2,8 @@
 
 namespace p1\view\navbar;
 
+require_once "session/session-manager.php";
 require_once "view/navbar/navbar-controller.php";
-require_once "view/session/session-manager.php";
 
 use p1\state\State;
 use p1\view\session\SessionManager;

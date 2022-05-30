@@ -5,8 +5,7 @@ namespace p1\i18n;
 use Exception;
 use i18n;
 
-require_once "../../vendor/philipp15b/php-i18n/i18n.class.php";
-require_once "../../vendor/mustangostang/spyc/Spyc.php";
+require_once "../../vendor/autoload.php";
 
 class I18nConfiguration
 {

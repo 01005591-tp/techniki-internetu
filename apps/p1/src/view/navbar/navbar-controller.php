@@ -2,10 +2,10 @@
 
 namespace p1\view\navbar;
 
-require_once "state.php";
 require_once "core/observable/observable.php";
 require_once "core/observable/observable-map.php";
-require_once "view/session/session-manager.php";
+require_once "session/session-manager.php";
+require_once "state.php";
 
 use p1\core\observable\EntryPutSubscriber;
 use p1\state\State;

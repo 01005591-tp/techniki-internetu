@@ -2,13 +2,17 @@
 
 namespace p1\view\session;
 
-require_once "view/session/user-context.php";
+require_once "core/function/option.php";
+require_once "session/user-context.php";
 
 use Exception;
 use L;
+use p1\core\function\Option;
 
 class SessionManager
 {
+    private static SessionManager $instance;
+
     public function sessionStart(UserContext $context): void
     {
         $this->cleanUpSession();
@@ -37,10 +41,21 @@ class SessionManager
             : null;
     }
 
+    public function get(string $key): Option
+    {
+        return PHP_SESSION_ACTIVE === session_status() && array_key_exists($key, $_SESSION)
+            ? Option::of($_SESSION[$key])
+            : Option::none();
+    }
+
+    public function put(string $key, $value): void
+    {
+        $_SESSION[$key] = $value;
+    }
+
     private function doStartSession(): void
     {
         if (!session_start()) {
-            // TODO: implement error message printer
             echo '<script type="text/javascript">alert(\'' . L::main_errors_global_global_error_message . '\');</script>';
         }
     }
@@ -50,30 +65,31 @@ class SessionManager
         $_SESSION = [];
     }
 
-    public function printSession(): void
+    // SINGLETON SPECIFIC FUNCTIONS
+
+    /**
+     * Singleton cloning is forbidden.
+     * @return void
+     */
+    private function __clone()
     {
-        $sessionStatus = session_status();
-        switch ($sessionStatus) {
-            case PHP_SESSION_NONE:
-                echo "Session none<br/>";
-                break;
-            case PHP_SESSION_ACTIVE:
-                echo "Session active";
-                $userContext = $_SESSION[SessionConstants::USER_CONTEXT];
-                if ($userContext) {
-                    echo "<br/>Id: " . $userContext->userId();
-                    echo "<br/>Email: " . $userContext->userEmail();
-                    echo "<br/>Lang: " . $userContext->userLang();
-                    echo "<br/>Roles: ";
-                    print_r($userContext->userRoles());
-                } else {
-                    echo "<br/>No user context";
-                }
-                break;
-            case PHP_SESSION_DISABLED:
-                echo "Session disabled";
-                break;
+    }
+
+    /**
+     * Singleton deserialization is forbidden.
+     * @throws Exception
+     */
+    public function __wakeup()
+    {
+        throw new Exception("Cannot deserialize singleton");
+    }
+
+    static function instance(): SessionManager
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static();
         }
+        return self::$instance;
     }
 }
 
@@ -81,6 +97,7 @@ class SessionConstants
 {
     public const USER_CONTEXT = 'USER_CONTEXT';
     public const LANG = 'LANG';
+    public const ALERT_MESSAGES = 'ALERT_MESSAGES';
 
     /**
      * Utility class instantiation is forbidden.

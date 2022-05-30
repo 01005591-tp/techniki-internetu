@@ -12,14 +12,20 @@
     <link rel="icon" type="image/svg" href="assets/book-icon.svg"/>
 </head>
 <body>
-
 <?php
-require_once "routing.php";
 require_once "configuration.php";
+require_once "i18n/i18n-configuration.php";
+require_once "routing.php";
+require_once "session/session-manager.php";
 
 use p1\configuration\Configuration;
+use p1\i18n\I18nConfiguration;
 use p1\routing\Router;
+use p1\view\session\SessionManager;
 
+I18nConfiguration::instance();
+$sessionManager = SessionManager::instance();
+$sessionManager->recoverSession();
 $configuration = Configuration::instance();
 Router::navigate();
 ?>

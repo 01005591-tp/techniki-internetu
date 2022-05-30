@@ -6,6 +6,7 @@ require_once "state.php";
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/create-user-command.php";
 require_once "core/function/function.php";
+require_once "view/alerts/alert-service.php";
 require_once "view/login/sign-up/sign-up-request.php";
 require_once "view/login/sign-up/sign-up-request-validator.php";
 
@@ -15,20 +16,24 @@ use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
 use p1\state\State;
+use p1\view\alerts\AlertService;
 
 class SignUpController
 {
     private SignUpRequestValidator $signUpRequestValidator;
     private CreateUserCommandHandler $createUserCommandHandler;
     private State $state;
+    private AlertService $alertService;
 
     public function __construct(SignUpRequestValidator   $signUpRequestValidator,
                                 CreateUserCommandHandler $createUserCommandHandler,
-                                State                    $state)
+                                State                    $state,
+                                AlertService             $alertService)
     {
         $this->signUpRequestValidator = $signUpRequestValidator;
         $this->createUserCommandHandler = $createUserCommandHandler;
         $this->state = $state;
+        $this->alertService = $alertService;
     }
 
     public function signIn(): void
@@ -43,7 +48,7 @@ class SignUpController
             $this->signUpRequestValidator->validate($request)
                 ->mapRight(new CreateCreateUserCommand())
                 ->flatMapRight(new HandleCreateUserCommand($this->createUserCommandHandler))
-                ->peekLeft(new CreateUserCommandFailedConsumer())
+                ->peekLeft(new CreateUserCommandFailedConsumer($this->alertService))
                 ->peekRight(new CreateUserCommandSuccessConsumer($this->state))
                 ->peekRight(new RedirectToHomePageConsumer());
         } else {
@@ -86,11 +91,17 @@ class HandleCreateUserCommand implements Function2
 
 class CreateUserCommandFailedConsumer implements Consumer
 {
+    private AlertService $alertService;
+
+    public function __construct(AlertService $alertService)
+    {
+        $this->alertService = $alertService;
+    }
+
     function consume($value): void
     {
         $failure = $value;
-        // TODO: implement error message printer
-        echo '<script type="text/javascript">alert(\'' . $failure->message() . '\');</script>';
+        $this->alertService->error($failure->message());
     }
 }
 
