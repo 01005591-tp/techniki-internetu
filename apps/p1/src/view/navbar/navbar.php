@@ -5,7 +5,7 @@ require_once "configuration.php";
 use p1\configuration\Configuration;
 use p1\view\navbar\NavbarItem;
 
-$navbarController = Configuration::instance()->viewConfiguration()->navbarController();
+$navbarController = Configuration::instance()->viewConfiguration()->controllers()->navbarController();
 
 $toNavbarItemActiveCssClass = function (NavbarItem $navbarItem) use ($navbarController): string {
     return $navbarController->isActiveItem($navbarItem) ? 'active' : '';

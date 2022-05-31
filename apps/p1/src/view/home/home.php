@@ -1,17 +1,52 @@
+<?php
+
+use p1\configuration\Configuration;
+use p1\core\domain\book\BookAvailability;
+use p1\core\domain\language\Language;
+use p1\core\function\Function2;
+
+require_once "configuration.php";
+require_once "core/domain/book/book-availability.php";
+require_once "core/domain/book/book-list.php";
+require_once "core/domain/language/language.php";
+require_once "core/function/function.php";
+
+$homeController = Configuration::instance()->viewConfiguration()->controllers()->homeController();
+$bookList = $homeController->getDefaultBookList();
+$currentPage = $homeController->currentPage();
+?>
+
 <div class="shadow-lg p-2 mb-5 bg-body rounded">
     <div class="d-flex justify-content-center">
         <span class="p2 h1"><?php echo L::main_home_book_list_header ?></span>
     </div>
     <div class="d-flex flex-wrap justify-content-center">
         <?php
-        for ($i = 0; $i < 22; $i++) {
+        foreach ($bookList->books() as $book) {
+            $imgUri = (!is_null($book->imageUri())) ? $book->imageUri() : "/assets/book-icon.svg";
+            $availabilityDisplayName = BookAvailability::of($book->state())
+                ->map(new class implements Function2 {
+                    function apply($value)
+                    {
+                        return $value->displayName();
+                    }
+                })
+                ->orElse('');
+            $languageDisplayName = Language::ofOrUnknown($book->language())->displayName();
             echo '
         <div id="book-list-cards-container" class="p-2">
             <div class="card">
-                <img src="/assets/book-icon.svg" class="card-img-top" alt="Book icon">
+                <img src="' . $imgUri . '" class="card-img-top" alt="Book icon">
                 <div class="card-body">
-                    <h5 class="card-title">Book title</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean scelerisque eu magna et fermentum. Sed sollicitudin ut urna in lacinia. Nulla mattis dui nisi, at hendrerit augue mattis et. In tincidunt et nisl eu accumsan. Pellentesque vitae purus ex. Ut finibus venenatis felis. Mauris vitae sodales sem. Nunc eleifend sodales lorem. Fusce tincidunt mauris non dui vehicula, at posuere sapien mollis. Morbi sagittis ex dapibus, tristique massa sit amet, blandit ligula. Quisque eget mi ex. Ut luctus enim libero, vitae. </p>
+                    <h5 class="card-title">' . $book->title() . '</h5>
+                    <p class="card-text">
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>ISBN-13:</strong> ' . $book->isbn() . '</li>
+                        <li class="list-group-item"><strong>' . L::main_home_book_list_entry_language . ':</strong> ' . $languageDisplayName . '</li>
+                        <li class="list-group-item"><strong>' . L::main_home_book_list_entry_state . ':</strong> ' . $availabilityDisplayName . '</li>
+                      </ul>
+                    </p>
+                    <p class="card-text">' . $book->description() . '</p>
                     <a href="/" class="btn btn-primary">See details</a>
                 </div>
             </div>
@@ -20,4 +55,21 @@
         } ?>
 
     </div>
+    <nav aria-label="Book list navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="/" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="/">1</a></li>
+            <li class="page-item"><a class="page-link" href="/">2</a></li>
+            <li class="page-item"><a class="page-link" href="/">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="/" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>

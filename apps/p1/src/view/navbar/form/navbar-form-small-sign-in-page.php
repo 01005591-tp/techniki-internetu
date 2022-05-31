@@ -3,7 +3,7 @@ require_once "configuration.php";
 
 use p1\configuration\Configuration;
 
-$navbarController = Configuration::instance()->viewConfiguration()->navbarController();
+$navbarController = Configuration::instance()->viewConfiguration()->controllers()->navbarController();
 ?>
 
 

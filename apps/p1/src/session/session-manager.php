@@ -98,6 +98,7 @@ class SessionConstants
     public const USER_CONTEXT = 'USER_CONTEXT';
     public const LANG = 'LANG';
     public const ALERT_MESSAGES = 'ALERT_MESSAGES';
+    public const CURRENT_BOOK_LIST_PAGE = "CURRENT_BOOK_LIST_PAGE";
 
     /**
      * Utility class instantiation is forbidden.

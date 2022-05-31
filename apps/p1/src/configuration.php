@@ -6,12 +6,14 @@ require_once "state.php";
 require_once "i18n/i18n-configuration.php";
 require_once "core/database/database-configuration.php";
 require_once "core/app/user-configuration.php";
+require_once "core/app/book-configuration.php";
 require_once "session/session-manager.php";
 require_once "view/redirect-manager.php";
 require_once "view/view-configuration.php";
 require_once "view/navbar/navbar-controller.php";
 
 use Exception;
+use p1\core\app\BookConfiguration;
 use p1\core\app\UserConfiguration;
 use p1\core\database\DatabaseConfiguration;
 use p1\state\State;
@@ -26,6 +28,7 @@ class Configuration
     private ViewConfiguration $viewConfiguration;
     private DatabaseConfiguration $databaseConfiguration;
     private UserConfiguration $userConfiguration;
+    private BookConfiguration $bookConfiguration;
     private RedirectManager $redirectManager;
     private SessionManager $sessionManager;
 
@@ -37,11 +40,15 @@ class Configuration
         $this->redirectManager = new RedirectManager();
 
         $this->databaseConfiguration = new DatabaseConfiguration();
+
         $this->userConfiguration = new UserConfiguration($this->databaseConfiguration);
+        $this->bookConfiguration = new BookConfiguration($this->databaseConfiguration);
+
         $this->viewConfiguration = new ViewConfiguration(
             $this->state,
             $this->userConfiguration->createUserCommandHandler(),
             $this->userConfiguration->authenticateUserCommandHandler(),
+            $this->bookConfiguration->getBookListCommandHandler(),
             $this->redirectManager,
             $this->sessionManager
         );

@@ -4,7 +4,7 @@ use p1\configuration\Configuration;
 
 require_once "configuration.php";
 
-$signUpController = Configuration::instance()->viewConfiguration()->signUpController();
+$signUpController = Configuration::instance()->viewConfiguration()->controllers()->signUpController();
 $signUpController->signIn();
 ?>
 

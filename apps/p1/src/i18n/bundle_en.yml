@@ -35,7 +35,20 @@ main:
   sign_out:
     signed_out_successfully_msg: "Signed out successfully"
   home:
-    book_list_header: Book list
+    book_list_header: "Book list"
+    book_list_get_empty_result: "There are no books currently available. Please try again later."
+    book_list_entry:
+      state: "State"
+      language: "Language"
+    book_availability:
+      display_name:
+        available: "Available"
+        unavailable: "Unavailable"
+        available_soon: "Available soon"
+  languages:
+    en: "English"
+    pl: "Polish"
+    unknown: "Unknown"
   errors:
     sign_in_request:
       invalid_email: "Invalid email address."
