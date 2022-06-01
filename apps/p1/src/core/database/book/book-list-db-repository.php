@@ -27,11 +27,11 @@ class BookListDbRepository implements BookListRepository
     function findDefaultBookList(GetBookListCommand $command): Either
     {
         $books = $this->findDefaultBookListQuery->query($command->page() - 1, $command->pageSize());
-        if (empty($books)) {
+        if ($books->booksCount() === 0) {
             return Either::ofLeft(Failure::of(L::main_home_book_list_get_empty_result));
         } else {
             $bookEntries = array();
-            foreach ($books as $book) {
+            foreach ($books->books() as $book) {
                 $bookEntries[] = new BookListEntry($book->id(),
                     $book->isbn(),
                     $book->title(),
@@ -41,7 +41,7 @@ class BookListDbRepository implements BookListRepository
                     $book->language()
                 );
             }
-            return Either::ofRight(new BookList($bookEntries));
+            return Either::ofRight(new BookList($bookEntries, $books->booksCount()));
         }
     }
 }

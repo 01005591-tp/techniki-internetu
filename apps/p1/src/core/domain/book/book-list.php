@@ -68,10 +68,13 @@ class BookListEntry
 class BookList
 {
     private array $books;
+    private int $booksCount;
 
-    public function __construct(array $books)
+    public function __construct(array $books,
+                                int   $booksCount)
     {
         $this->books = $books;
+        $this->booksCount = $booksCount;
     }
 
     public function books(): array
@@ -79,9 +82,14 @@ class BookList
         return $this->books;
     }
 
+    public function booksCount(): int
+    {
+        return $this->booksCount;
+    }
+
     public static function emptyBookList(): BookList
     {
-        return new BookList(array());
+        return new BookList(array(), 0);
     }
 }
 
@@ -108,6 +116,6 @@ class BookListPage
 
     public static function defaultBookListPage(): BookListPage
     {
-        return new BookListPage(1, 25);
+        return new BookListPage(1, 1);
     }
 }

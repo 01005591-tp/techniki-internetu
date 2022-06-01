@@ -88,6 +88,13 @@ class OptionSome extends Option
     {
         return true;
     }
+
+    public function __toString(): string
+    {
+        return 'OptionSome(' . strval($this->value) . ')';
+    }
+
+
 }
 
 class OptionNone extends Option
@@ -104,9 +111,15 @@ class OptionNone extends Option
         return false;
     }
 
+    public function __toString(): string
+    {
+        return 'OptionNone()';
+    }
+
     private function __construct()
     {
     }
+
 
     /**
      * Singleton cloning is forbidden.

@@ -64,3 +64,25 @@ class BookListEntryView
         return $this->language;
     }
 }
+
+class BookListView
+{
+    private array $books;
+    private int $booksCount;
+
+    public function __construct(array $books, int $booksCount)
+    {
+        $this->books = $books;
+        $this->booksCount = $booksCount;
+    }
+
+    public function books(): array
+    {
+        return $this->books;
+    }
+
+    public function booksCount(): int
+    {
+        return $this->booksCount;
+    }
+}

@@ -15,11 +15,11 @@ class FindDefaultBookListQuery
         $this->connection = $connection;
     }
 
-    public function query(int $offset, int $pageSize): array
+    public function query(int $offset, int $pageSize): BookListView
     {
         $stmt = $this->connection->prepare("SELECT 
             b.ID
-            ,b.ISBN_13
+            ,b.ISBN
             ,b.TITLE
             ,b.IMAGE_URI
             ,CASE 
@@ -29,25 +29,30 @@ class FindDefaultBookListQuery
             END AS DESCRIPTION
             ,b.STATE
             ,b.LANGUAGE
+            ,COUNT(b.ID) OVER (PARTITION BY NULL) AS BOOKS_COUNT
         FROM BOOKS b 
         WHERE b.STATE != 'UNAVAILABLE' 
-        ORDER BY ID DESC 
+        ORDER BY ID DESC
         LIMIT ?,?");
         $stmt->bind_param("ii", $offset, $pageSize);
         $stmt->execute();
         $result = $stmt->get_result();
         $books = array();
+        $booksCount = 0;
         while ($row = $result->fetch_assoc()) {
             $books[] = new BookListEntryView(
                 $row['ID'],
-                $row['ISBN_13'],
+                $row['ISBN'],
                 $row['TITLE'],
                 $row['IMAGE_URI'],
                 $row['DESCRIPTION'],
                 $row['STATE'],
                 $row['LANGUAGE']
             );
+            if ($booksCount === 0) {
+                $booksCount = $row['BOOKS_COUNT'];
+            }
         }
-        return $books;
+        return new BookListView($books, $booksCount);
     }
 }

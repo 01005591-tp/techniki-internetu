@@ -13,7 +13,6 @@ require_once "core/function/function.php";
 
 $homeController = Configuration::instance()->viewConfiguration()->controllers()->homeController();
 $bookList = $homeController->getDefaultBookList();
-
 ?>
 
 <div class="shadow-lg p-2 mb-5 bg-body rounded">
@@ -53,17 +52,20 @@ $bookList = $homeController->getDefaultBookList();
         </div>
         ';
         } ?>
-
     </div>
+    <?php
+    $paginationData = $homeController->paginationData();
+    ?>
     <nav aria-label="Book list navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="/" aria-label="Previous">
+                <a class="page-link"
+                   href="/book-list?page=<?php echo $paginationData->previousPage(); ?>"
+                   aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <?php
-            $paginationData = $homeController->paginationData();
             $pages = $paginationData->pages();
             ksort($pages);
             foreach ($pages as $page) {
@@ -73,7 +75,9 @@ $bookList = $homeController->getDefaultBookList();
             }
             ?>
             <li class="page-item">
-                <a class="page-link" href="/" aria-label="Next">
+                <a class="page-link"
+                   href="/book-list?page=<?php echo $paginationData->nextPage(); ?>"
+                   aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

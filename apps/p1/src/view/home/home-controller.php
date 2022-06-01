@@ -83,7 +83,12 @@ class HomeController
                 $paginationPages[$paginationPage->index()] = $paginationPage;
             }
         }
-        return new PaginationData($paginationPages);
+        $getPaginationPageIndexFunction = new GetPaginationPageIndexFunction();
+        return new PaginationData(
+            $paginationPages,
+            $pageBeforeCurrent->map($getPaginationPageIndexFunction)->orElse($firstPage),
+            $pageAfterCurrent->map($getPaginationPageIndexFunction)->orElse($lastPage)
+        );
     }
 
     private function currentPageData(): BookListPage
@@ -167,5 +172,14 @@ class GetDefaultBookListFailedFunction implements Function2
     {
         error_log('Default book list not found: ' . $value->message());
         return $this->currentBookList;
+    }
+}
+
+class GetPaginationPageIndexFunction implements Function2
+{
+    function apply($value)
+    {
+        $paginationPage = $value;
+        return $paginationPage->index();
     }
 }

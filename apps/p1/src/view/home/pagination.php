@@ -5,16 +5,31 @@ namespace p1\view\home;
 class PaginationData
 {
     private array $pages;
+    private int $previousPage;
+    private int $nextPage;
 
-    public function __construct(array $pages)
+    public function __construct(array $pages, int $previousPage, int $nextPage)
     {
         $this->pages = $pages;
+        $this->previousPage = $previousPage;
+        $this->nextPage = $nextPage;
     }
 
     public function pages(): array
     {
         return $this->pages;
     }
+
+    public function previousPage(): int
+    {
+        return $this->previousPage;
+    }
+
+    public function nextPage(): int
+    {
+        return $this->nextPage;
+    }
+
 
     public function __toString(): string
     {
