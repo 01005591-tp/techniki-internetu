@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-01/change-books-isbn-column.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-01/change-books-isbn-column:rename-column"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <renameColumn tableName="BOOKS" oldColumnName="ISBN_13" newColumnName="ISBN" columnDataType="VARCHAR(14)"
+                      remarks="Book ISBN"/>
+    </changeSet>
+
+    <changeSet id="2022-06-01/change-books-isbn-column:drop-not-null-constraint"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <dropNotNullConstraint tableName="BOOKS" columnName="ISBN" columnDataType="VARCHAR(14)"/>
+    </changeSet>
+
+    <changeSet id="2022-06-01/change-books-isbn-column:resize-column"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <modifyDataType tableName="BOOKS" columnName="ISBN" newDataType="VARCHAR(40)"/>
+    </changeSet>
+
+</databaseChangeLog>

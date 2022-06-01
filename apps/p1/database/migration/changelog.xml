@@ -4,6 +4,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
+    <property name="now" value="now()" dbms="mysql"/>
+
     <include file="2022-05-25/create-users.xml" relativeToChangelogFile="true"/>
     <include file="2022-05-25/create-roles.xml" relativeToChangelogFile="true"/>
     <include file="2022-05-25/create-books.xml" relativeToChangelogFile="true"/>
@@ -13,5 +15,11 @@
 
     <include file="2022-05-28/insert-default-roles.xml" relativeToChangelogFile="true"/>
     <include file="2022-05-28/insert-employee-user.xml" relativeToChangelogFile="true"/>
+
+    <include file="2022-05-31/add-book-image-uri-column.xml" relativeToChangelogFile="true"/>
+    <include file="2022-05-31/add-audit-cols.xml" relativeToChangelogFile="true"/>
+
+    <include file="2022-06-01/change-books-isbn-column.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-01/insert-initial-books.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

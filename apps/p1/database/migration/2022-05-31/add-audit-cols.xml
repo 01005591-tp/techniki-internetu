@@ -1,0 +1,244 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-05-31/add-audit-cols.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2022-05-31/add-audit-cols:authors" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="AUTHORS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:book-authors" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOK_AUTHORS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:bookings" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOKINGS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:bookings-history" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOKINGS_HISTORY">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:books" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOKS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:publishers" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="PUBLISHERS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:book-pieces" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOK_PIECES">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:books-tags" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOKS_TAGS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:book-tags" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="BOOK_TAGS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:rentals" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="RENTALS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:rentals-history" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="RENTALS_HISTORY">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:roles" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="ROLES">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:user-roles" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="USER_ROLES">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-05-31/add-audit-cols:users" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="USERS">
+            <column name="CREATION_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="VARCHAR(255)" defaultValue="other">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="BIGINT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
