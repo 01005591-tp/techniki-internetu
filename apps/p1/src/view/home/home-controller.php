@@ -7,7 +7,8 @@ require_once "core/domain/book/get-book-list-command-handler.php";
 require_once "core/function/function.php";
 require_once "core/function/option.php";
 require_once "session/session-manager.php";
-require_once "view/home/pagination.php";
+require_once "view/pagination/pagination.php";
+require_once "view/pagination/pagination-service.php";
 
 use p1\core\domain\book\BookList;
 use p1\core\domain\book\BookListPage;
@@ -15,7 +16,6 @@ use p1\core\domain\book\GetBookListCommand;
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\function\Function2;
 use p1\core\function\FunctionIdentity;
-use p1\core\function\Option;
 use p1\core\function\Supplier;
 use p1\view\session\SessionConstants;
 use p1\view\session\SessionManager;
@@ -24,19 +24,23 @@ class HomeController
 {
     private GetBookListCommandHandler $getBookListCommandHandler;
     private SessionManager $sessionManager;
+    private PaginationService $paginationService;
     private BookList $bookList;
 
     public function __construct(GetBookListCommandHandler $getBookListCommandHandler,
-                                SessionManager            $sessionManager)
+                                SessionManager            $sessionManager,
+                                PaginationService         $paginationService)
     {
         $this->getBookListCommandHandler = $getBookListCommandHandler;
         $this->sessionManager = $sessionManager;
+        $this->paginationService = $paginationService;
         $this->bookList = BookList::emptyBookList();
     }
 
     public function getDefaultBookList(): BookList
     {
-        $bookListPage = $this->currentPageData();
+        $bookListPage = $this->resolveQueryParams();
+        $this->setCurrentPageData($bookListPage);
         $command = new GetBookListCommand($bookListPage->page(), $bookListPage->pageSize());
         $this->bookList = $this->getBookListCommandHandler->handle($command)
             ->fold(
@@ -48,52 +52,18 @@ class HomeController
 
     public function paginationData(): PaginationData
     {
-        if ($this->bookList->booksCount() < 1) {
-            return PaginationData::emptyPaginationData();
-        }
-
         $currentPageData = $this->currentPageData();
-        $pagesCount = ceil($this->bookList->booksCount() / $currentPageData->pageSize());
-        $currentPage = $currentPageData->page();
-        $firstPage = 1;
-        $lastPage = $pagesCount;
-
-        $pageCurrent = Option::of(PaginationPage::active($currentPage));
-        $pageFirst = $currentPage === $firstPage ? Option::none() : Option::of(PaginationPage::available($firstPage));
-        $pageLast = $currentPage === $lastPage ? Option::none() : Option::of(PaginationPage::available($lastPage));
-        $pageBeforeCurrent = $this->resolvePageBeforeCurrent($firstPage, $currentPage);
-        $pageAfterCurrent = $this->resolvePageAfterCurrent($lastPage, $currentPage);
-        $pageAfterFirst = $this->resolvePageAfterFirst($firstPage, $currentPage, $pageBeforeCurrent);
-        $pageBeforeLast = $this->resolvePageBeforeLast($lastPage, $currentPage, $pageAfterCurrent);
-
-        $paginationPagesOption = [
-            $pageCurrent,
-            $pageFirst,
-            $pageLast,
-            $pageBeforeCurrent,
-            $pageAfterCurrent,
-            $pageAfterFirst,
-            $pageBeforeLast
-        ];
-
-        $paginationPages = array();
-        foreach ($paginationPagesOption as $option) {
-            if ($option->isDefined()) {
-                $paginationPage = $option->get();
-                $paginationPages[$paginationPage->index()] = $paginationPage;
-            }
-        }
-        $getPaginationPageIndexFunction = new GetPaginationPageIndexFunction();
-        return new PaginationData(
-            $paginationPages,
-            $pageBeforeCurrent->map($getPaginationPageIndexFunction)->orElse($firstPage),
-            $pageAfterCurrent->map($getPaginationPageIndexFunction)->orElse($lastPage)
+        $params = new ResolvePaginationParams(
+            $currentPageData->page(),
+            $this->bookList->booksCount(),
+            $currentPageData->pageSize()
         );
+        return $this->paginationService->resolvePagination($params);
     }
 
     private function currentPageData(): BookListPage
     {
-        return $this->sessionManager->get(SessionConstants::CURRENT_BOOK_LIST_PAGE)
+        return $this->sessionManager->get(SessionConstants::BOOK_LIST_CURRENT_PAGE)
             ->orElseGet(new class implements Supplier {
                 function supply(): BookListPage
                 {
@@ -102,60 +72,22 @@ class HomeController
             });
     }
 
-    private function resolvePageBeforeCurrent(int $firstPage, int $currentPage): Option
+    private function setCurrentPageData(BookListPage $bookListPage): void
     {
-        return $currentPage < $firstPage + 2
-            ? Option::none()
-            : Option::of(PaginationPage::available($currentPage - 1));
+        $this->sessionManager->put(SessionConstants::BOOK_LIST_CURRENT_PAGE, $bookListPage);
     }
 
-    private function resolvePageAfterCurrent(int $lastPage, int $currentPage): Option
+    private function resolveQueryParams(): BookListPage
     {
-        return $currentPage > $lastPage - 2
-            ? Option::none()
-            : Option::of(PaginationPage::available($currentPage + 1));
-    }
-
-    private function resolvePageAfterFirst(int $firstPage, int $currentPage, Option $pageBeforeCurrent): Option
-    {
-        return $pageBeforeCurrent->flatMap(new class($firstPage, $currentPage) implements Function2 {
-            private int $firstPage;
-            private int $currentPage;
-
-            public function __construct(int $firstPage, int $currentPage)
-            {
-                $this->firstPage = $firstPage;
-                $this->currentPage = $currentPage;
+        if (array_key_exists('page', $_GET)) {
+            $pageQueryParam = htmlspecialchars($_GET['page']);
+            if (!is_numeric($pageQueryParam)) {
+                $pageQueryParam = 1;
             }
-
-            function apply($value): Option
-            {
-                return $this->currentPage > $this->firstPage + 2
-                    ? Option::of(PaginationPage::disabled($this->currentPage - 2))
-                    : Option::none();
-            }
-        });
-    }
-
-    private function resolvePageBeforeLast(int $lastPage, int $currentPage, Option $pageAfterCurrent): Option
-    {
-        return $pageAfterCurrent->flatMap(new class($lastPage, $currentPage) implements Function2 {
-            private int $lastPage;
-            private int $currentPage;
-
-            public function __construct(int $lastPage, int $currentPage)
-            {
-                $this->lastPage = $lastPage;
-                $this->currentPage = $currentPage;
-            }
-
-            function apply($value): Option
-            {
-                return $this->currentPage < $this->lastPage - 2
-                    ? Option::of(PaginationPage::disabled($this->currentPage + 2))
-                    : Option::none();
-            }
-        });
+            return $this->currentPageData()->withPage($pageQueryParam);
+        } else {
+            return $this->currentPageData()->withPage(1);
+        }
     }
 }
 
@@ -172,14 +104,5 @@ class GetDefaultBookListFailedFunction implements Function2
     {
         error_log('Default book list not found: ' . $value->message());
         return $this->currentBookList;
-    }
-}
-
-class GetPaginationPageIndexFunction implements Function2
-{
-    function apply($value)
-    {
-        $paginationPage = $value;
-        return $paginationPage->index();
     }
 }

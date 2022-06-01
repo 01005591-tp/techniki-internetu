@@ -26,7 +26,8 @@ class BookListDbRepository implements BookListRepository
 
     function findDefaultBookList(GetBookListCommand $command): Either
     {
-        $books = $this->findDefaultBookListQuery->query($command->page() - 1, $command->pageSize());
+        $offset = ($command->page() - 1) * $command->pageSize();
+        $books = $this->findDefaultBookListQuery->query($offset, $command->pageSize());
         if ($books->booksCount() === 0) {
             return Either::ofLeft(Failure::of(L::main_home_book_list_get_empty_result));
         } else {

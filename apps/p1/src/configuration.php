@@ -11,12 +11,14 @@ require_once "session/session-manager.php";
 require_once "view/redirect-manager.php";
 require_once "view/view-configuration.php";
 require_once "view/navbar/navbar-controller.php";
+require_once "view/pagination/pagination-service.php";
 
 use Exception;
 use p1\core\app\BookConfiguration;
 use p1\core\app\UserConfiguration;
 use p1\core\database\DatabaseConfiguration;
 use p1\state\State;
+use p1\view\home\PaginationService;
 use p1\view\RedirectManager;
 use p1\view\session\SessionManager;
 use p1\view\ViewConfiguration;
@@ -31,6 +33,7 @@ class Configuration
     private BookConfiguration $bookConfiguration;
     private RedirectManager $redirectManager;
     private SessionManager $sessionManager;
+    private PaginationService $paginationService;
 
     public function __construct()
     {
@@ -44,13 +47,16 @@ class Configuration
         $this->userConfiguration = new UserConfiguration($this->databaseConfiguration);
         $this->bookConfiguration = new BookConfiguration($this->databaseConfiguration);
 
+        $this->paginationService = new PaginationService();
+
         $this->viewConfiguration = new ViewConfiguration(
             $this->state,
             $this->userConfiguration->createUserCommandHandler(),
             $this->userConfiguration->authenticateUserCommandHandler(),
             $this->bookConfiguration->getBookListCommandHandler(),
             $this->redirectManager,
-            $this->sessionManager
+            $this->sessionManager,
+            $this->paginationService
         );
     }
 

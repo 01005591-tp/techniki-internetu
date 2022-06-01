@@ -16,6 +16,7 @@ require_once "view/login/sign-out/sign-out-controller.php";
 require_once "view/login/sign-up/sign-up-controller.php";
 require_once "view/navbar/navbar-configuration.php";
 require_once "view/navbar/navbar-controller.php";
+require_once "view/pagination/pagination-service.php";
 require_once "session/session-manager.php";
 
 use p1\core\domain\book\GetBookListCommandHandler;
@@ -27,6 +28,7 @@ use p1\view\alerts\AlertsConfiguration;
 use p1\view\alerts\AlertService;
 use p1\view\home\HomeConfiguration;
 use p1\view\home\HomeController;
+use p1\view\home\PaginationService;
 use p1\view\login\LoginConfiguration;
 use p1\view\login\LoginController;
 use p1\view\login\signout\SignOutController;
@@ -46,7 +48,8 @@ class ViewConfiguration
                                 AuthenticateUserCommandHandler $authenticateUserCommandHandler,
                                 GetBookListCommandHandler      $getBookListCommandHandler,
                                 RedirectManager                $redirectManager,
-                                SessionManager                 $sessionManager)
+                                SessionManager                 $sessionManager,
+                                PaginationService              $paginationService)
     {
         $this->sessionManager = $sessionManager;
         $this->alertsConfiguration = new AlertsConfiguration($this->sessionManager);
@@ -65,7 +68,8 @@ class ViewConfiguration
         );
         $homeConfiguration = new HomeConfiguration(
             $this->sessionManager,
-            $getBookListCommandHandler
+            $getBookListCommandHandler,
+            $paginationService
         );
 
         $this->controllers = new ViewControllers(

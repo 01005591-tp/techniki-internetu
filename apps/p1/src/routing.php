@@ -12,12 +12,15 @@ require_once "view/navbar/navbar-controller.php";
 
 class Router
 {
+    private const PAGE_BEFORE_QUERY_PARAMS_REGEX = '/^([a-zA-Z0-9\/\-_]+)(\??.*)$/';
     public static function navigate(): void
     {
         $request = $_SERVER['REQUEST_URI'];
+        $request = preg_replace(Router::PAGE_BEFORE_QUERY_PARAMS_REGEX, "$1", $request);
         switch ($request) {
             case '':
             case '/':
+            case '/book-list':
                 State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::Home);
                 break;
             case '/about':

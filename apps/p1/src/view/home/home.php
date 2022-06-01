@@ -13,12 +13,44 @@ require_once "core/function/function.php";
 
 $homeController = Configuration::instance()->viewConfiguration()->controllers()->homeController();
 $bookList = $homeController->getDefaultBookList();
+$paginationData = $homeController->paginationData();
 ?>
 
 <div class="shadow-lg p-2 mb-5 bg-body rounded">
     <div class="d-flex justify-content-center">
-        <span class="p2 h1"><?php echo L::main_home_book_list_header ?></span>
+        <span class="p2 h1 mb-4"><?php echo L::main_home_book_list_header ?></span>
     </div>
+
+    <nav aria-label="Book list navigation top">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link"
+                   href="/book-list?page=<?php echo $paginationData->previousPage(); ?>"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <?php
+            $pages = $paginationData->pages();
+            ksort($pages);
+            foreach ($pages as $page) {
+                echo '<li class="page-item ' . $page->style() . '">
+                        <a class="page-link" href="/book-list?page=' . $page->index() . '">' . $page->indexDisplay() . '</a>
+                      </li>';
+            }
+            ?>
+            <li class="page-item">
+                <a class="page-link"
+                   href="/book-list?page=<?php echo $paginationData->nextPage(); ?>"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <hr/>
+
     <div class="d-flex flex-wrap justify-content-center">
         <?php
         foreach ($bookList->books() as $book) {
@@ -53,10 +85,10 @@ $bookList = $homeController->getDefaultBookList();
         ';
         } ?>
     </div>
-    <?php
-    $paginationData = $homeController->paginationData();
-    ?>
-    <nav aria-label="Book list navigation">
+
+    <hr/>
+
+    <nav aria-label="Book list navigation bottom">
         <ul class="pagination justify-content-center">
             <li class="page-item">
                 <a class="page-link"

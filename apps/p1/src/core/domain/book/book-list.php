@@ -114,8 +114,13 @@ class BookListPage
         return $this->pageSize;
     }
 
+    public function withPage(int $page): BookListPage
+    {
+        return new BookListPage($page, $this->pageSize);
+    }
+
     public static function defaultBookListPage(): BookListPage
     {
-        return new BookListPage(1, 1);
+        return new BookListPage(1, 4);
     }
 }
