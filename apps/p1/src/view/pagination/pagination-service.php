@@ -11,10 +11,10 @@ use p1\core\function\Option;
 
 class PaginationService
 {
-    public function resolvePagination(ResolvePaginationParams $params): PaginationData
+    public function resolvePagination(ResolvePaginationParams $params): Option
     {
         if ($params->itemsCount() < 1) {
-            return PaginationData::emptyPaginationData();
+            return Option::none();
         }
 
         $pagesCount = ceil($params->itemsCount() / $params->pageSize());
@@ -47,12 +47,15 @@ class PaginationService
                 $paginationPages[$paginationPage->index()] = $paginationPage;
             }
         }
+        ksort($paginationPages);
         $getPaginationPageIndexFunction = new GetPaginationPageIndexFunction();
-        return new PaginationData(
+        return Option::of(new PaginationData(
+            $params->uri(),
+            $params->queryParamName(),
             $paginationPages,
             $pageBeforeCurrent->map($getPaginationPageIndexFunction)->orElse($firstPage),
             $pageAfterCurrent->map($getPaginationPageIndexFunction)->orElse($lastPage)
-        );
+        ));
     }
 
     private function resolvePageBeforeCurrent(int $firstPage, int $currentPage): Option
@@ -123,15 +126,33 @@ class GetPaginationPageIndexFunction implements Function2
 
 class ResolvePaginationParams
 {
+    private string $uri;
+    private string $queryParamName;
     private int $currentPage;
     private int $itemsCount;
     private int $pageSize;
 
-    public function __construct(int $currentPage, int $itemsCount, int $pageSize)
+    public function __construct(string $uri,
+                                string $queryParamName,
+                                int    $currentPage,
+                                int    $itemsCount,
+                                int    $pageSize)
     {
+        $this->uri = $uri;
+        $this->queryParamName = $queryParamName;
         $this->currentPage = $currentPage;
         $this->itemsCount = $itemsCount;
         $this->pageSize = $pageSize;
+    }
+
+    public function uri(): string
+    {
+        return $this->uri;
+    }
+
+    public function queryParamName(): string
+    {
+        return $this->queryParamName;
     }
 
     public function currentPage(): int

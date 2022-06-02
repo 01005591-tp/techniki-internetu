@@ -16,6 +16,7 @@ use p1\core\domain\book\GetBookListCommand;
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\function\Function2;
 use p1\core\function\FunctionIdentity;
+use p1\core\function\Option;
 use p1\core\function\Supplier;
 use p1\view\session\SessionConstants;
 use p1\view\session\SessionManager;
@@ -26,6 +27,7 @@ class HomeController
     private SessionManager $sessionManager;
     private PaginationService $paginationService;
     private BookList $bookList;
+    private Option $paginationData;
 
     public function __construct(GetBookListCommandHandler $getBookListCommandHandler,
                                 SessionManager            $sessionManager,
@@ -35,11 +37,17 @@ class HomeController
         $this->sessionManager = $sessionManager;
         $this->paginationService = $paginationService;
         $this->bookList = BookList::emptyBookList();
+        $this->paginationData = Option::none();
     }
 
     public function getDefaultBookList(): BookList
     {
         $bookListPage = $this->resolveQueryParams();
+        return $this->getBookListPage($bookListPage);
+    }
+
+    private function getBookListPage(BookListPage $bookListPage): BookList
+    {
         $this->setCurrentPageData($bookListPage);
         $command = new GetBookListCommand($bookListPage->page(), $bookListPage->pageSize());
         $this->bookList = $this->getBookListCommandHandler->handle($command)
@@ -47,13 +55,21 @@ class HomeController
                 new GetDefaultBookListFailedFunction($this->bookList),
                 FunctionIdentity::instance()
             );
+        $this->paginationData = $this->resolvePaginationData();
         return $this->bookList;
     }
 
-    public function paginationData(): PaginationData
+    public function paginationData(): Option
+    {
+        return $this->paginationData;
+    }
+
+    private function resolvePaginationData(): Option
     {
         $currentPageData = $this->currentPageData();
         $params = new ResolvePaginationParams(
+            '/book-list',
+            'page',
             $currentPageData->page(),
             $this->bookList->booksCount(),
             $currentPageData->pageSize()
@@ -81,7 +97,7 @@ class HomeController
     {
         if (array_key_exists('page', $_GET)) {
             $pageQueryParam = htmlspecialchars($_GET['page']);
-            if (!is_numeric($pageQueryParam)) {
+            if (!is_numeric($pageQueryParam) || $pageQueryParam < 1) {
                 $pageQueryParam = 1;
             }
             return $this->currentPageData()->withPage($pageQueryParam);

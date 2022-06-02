@@ -4,15 +4,33 @@ namespace p1\view\home;
 
 class PaginationData
 {
+    private string $uri;
+    private string $queryParamName;
     private array $pages;
     private int $previousPage;
     private int $nextPage;
 
-    public function __construct(array $pages, int $previousPage, int $nextPage)
+    public function __construct(string $uri,
+                                string $queryParamName,
+                                array  $pages,
+                                int    $previousPage,
+                                int    $nextPage)
     {
+        $this->uri = $uri;
+        $this->queryParamName = $queryParamName;
         $this->pages = $pages;
         $this->previousPage = $previousPage;
         $this->nextPage = $nextPage;
+    }
+
+    public function uri(): string
+    {
+        return $this->uri;
+    }
+
+    public function queryParamName(): string
+    {
+        return $this->queryParamName;
     }
 
     public function pages(): array
@@ -37,14 +55,11 @@ class PaginationData
         foreach ($this->pages as $page) {
             $string = $string . ',' . $page;
         }
-        return substr($string, 1);
+        return 'PaginationData(uri=' . $this->uri . ', queryParamName=' . $this->queryParamName
+            . ', previousPage=' . $this->previousPage . ', nextPage=' . $this->nextPage
+            . ', pages=(' . substr($string, 1) . '))';
     }
 
-
-    public static function emptyPaginationData(): PaginationData
-    {
-        return new PaginationData(array());
-    }
 }
 
 class PaginationPage

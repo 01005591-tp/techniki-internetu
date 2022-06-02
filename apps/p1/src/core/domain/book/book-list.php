@@ -121,6 +121,6 @@ class BookListPage
 
     public static function defaultBookListPage(): BookListPage
     {
-        return new BookListPage(1, 4);
+        return new BookListPage(1, 3);
     }
 }

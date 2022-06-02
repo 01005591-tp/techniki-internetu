@@ -36,6 +36,14 @@ abstract class Option
             : $this;
     }
 
+    public function peek(Consumer $consumer): Option
+    {
+        if ($this->isDefined()) {
+            $consumer->consume($this->get());
+        }
+        return $this;
+    }
+
     public function orElse($other)
     {
         return $this->isDefined()
