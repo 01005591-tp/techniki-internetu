@@ -5,7 +5,8 @@ namespace p1\core\database\book;
 class BookListEntryView
 {
     private string $id;
-    private string $isbn;
+    private string $nameId;
+    private ?string $isbn;
     private string $title;
     private ?string $imageUri;
     private ?string $description;
@@ -13,7 +14,8 @@ class BookListEntryView
     private ?string $language;
 
     public function __construct(string  $id,
-                                string  $isbn,
+                                string  $nameId,
+                                ?string $isbn,
                                 string  $title,
                                 ?string $imageUri,
                                 ?string $description,
@@ -21,6 +23,7 @@ class BookListEntryView
                                 ?string $language)
     {
         $this->id = $id;
+        $this->nameId = $nameId;
         $this->isbn = $isbn;
         $this->title = $title;
         $this->imageUri = $imageUri;
@@ -34,7 +37,12 @@ class BookListEntryView
         return $this->id;
     }
 
-    public function isbn(): string
+    public function nameId(): string
+    {
+        return $this->nameId;
+    }
+
+    public function isbn(): ?string
     {
         return $this->isbn;
     }

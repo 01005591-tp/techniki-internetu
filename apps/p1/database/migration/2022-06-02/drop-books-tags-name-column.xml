@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-02/drop-books-tags-name-column.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-02/drop-books-tags-name-column" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <dropColumn tableName="BOOKS_TAGS">
+            <column name="NAME"/>
+        </dropColumn>
+    </changeSet>
+
+</databaseChangeLog>

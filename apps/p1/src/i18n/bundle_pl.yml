@@ -45,6 +45,14 @@ main:
         available: "Dostępna"
         unavailable: "Niedostępna"
         available_soon: "Dostępna wkrótce"
+  books:
+    book_piece:
+      state:
+        display_name:
+          available: "Dostępna"
+          unavailable: "Niedostępna"
+          booked: "Zarezerwowana"
+          rented: "Wypożyczona"
   languages:
     en: "angielski"
     pl: "polski"

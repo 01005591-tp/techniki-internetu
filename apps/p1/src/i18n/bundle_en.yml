@@ -45,6 +45,14 @@ main:
         available: "Available"
         unavailable: "Unavailable"
         available_soon: "Available soon"
+  books:
+    book_piece:
+      state:
+        display_name:
+          available: "Available"
+          unavailable: "Unavailable"
+          booked: "Booked"
+          rented: "Rented"
   languages:
     en: "English"
     pl: "Polish"

@@ -54,6 +54,7 @@ class Configuration
             $this->userConfiguration->createUserCommandHandler(),
             $this->userConfiguration->authenticateUserCommandHandler(),
             $this->bookConfiguration->getBookListCommandHandler(),
+            $this->bookConfiguration->getBookDetailsCommandHandler(),
             $this->redirectManager,
             $this->sessionManager,
             $this->paginationService

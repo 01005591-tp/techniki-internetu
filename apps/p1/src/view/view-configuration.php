@@ -2,23 +2,37 @@
 
 namespace p1\view;
 
-require_once "state.php";
 require_once "core/domain/book/get-book-list-command-handler.php";
+require_once "core/domain/book/get-book-details-command-handler.php";
+
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/auth/authenticate-user-command-handler.php";
+
+require_once "session/session-manager.php";
+
+require_once "state.php";
+
 require_once "view/redirect-manager.php";
+
 require_once "view/alerts/alerts-configuration.php";
+
+require_once "view/books/book-configuration.php";
+require_once "view/books/book-controller.php";
+
 require_once "view/home/home-configuration.php";
 require_once "view/home/home-controller.php";
+
 require_once "view/login/login-configuration.php";
 require_once "view/login/login-controller.php";
 require_once "view/login/sign-out/sign-out-controller.php";
 require_once "view/login/sign-up/sign-up-controller.php";
+
 require_once "view/navbar/navbar-configuration.php";
 require_once "view/navbar/navbar-controller.php";
-require_once "view/pagination/pagination-service.php";
-require_once "session/session-manager.php";
 
+require_once "view/pagination/pagination-service.php";
+
+use p1\core\domain\book\GetBookDetailsCommandHandler;
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\domain\user\CreateUserCommandHandler;
@@ -26,6 +40,8 @@ use p1\state\State;
 use p1\view\alerts\AlertPrinter;
 use p1\view\alerts\AlertsConfiguration;
 use p1\view\alerts\AlertService;
+use p1\view\book\BookConfiguration;
+use p1\view\book\BookController;
 use p1\view\home\HomeConfiguration;
 use p1\view\home\HomeController;
 use p1\view\home\PaginationService;
@@ -47,6 +63,7 @@ class ViewConfiguration
                                 CreateUserCommandHandler       $createUserCommandHandler,
                                 AuthenticateUserCommandHandler $authenticateUserCommandHandler,
                                 GetBookListCommandHandler      $getBookListCommandHandler,
+                                GetBookDetailsCommandHandler   $getBookDetailsCommandHandler,
                                 RedirectManager                $redirectManager,
                                 SessionManager                 $sessionManager,
                                 PaginationService              $paginationService)
@@ -71,11 +88,17 @@ class ViewConfiguration
             $getBookListCommandHandler,
             $paginationService
         );
+        $bookConfiguration = new BookConfiguration(
+            $this->sessionManager,
+            $redirectManager,
+            $getBookDetailsCommandHandler
+        );
 
         $this->controllers = new ViewControllers(
             $loginConfiguration,
             $navbarConfiguration,
-            $homeConfiguration
+            $homeConfiguration,
+            $bookConfiguration
         );
     }
 
@@ -100,14 +123,17 @@ class ViewControllers
     private LoginConfiguration $loginConfiguration;
     private NavbarConfiguration $navbarConfiguration;
     private HomeConfiguration $homeConfiguration;
+    private BookConfiguration $bookConfiguration;
 
     public function __construct(LoginConfiguration  $loginConfiguration,
                                 NavbarConfiguration $navbarConfiguration,
-                                HomeConfiguration   $homeConfiguration)
+                                HomeConfiguration   $homeConfiguration,
+                                BookConfiguration   $bookConfiguration)
     {
         $this->loginConfiguration = $loginConfiguration;
         $this->navbarConfiguration = $navbarConfiguration;
         $this->homeConfiguration = $homeConfiguration;
+        $this->bookConfiguration = $bookConfiguration;
     }
 
     public function navbarController(): NavbarController
@@ -133,5 +159,10 @@ class ViewControllers
     public function homeController(): HomeController
     {
         return $this->homeConfiguration->homeController();
+    }
+
+    public function bookController(): BookController
+    {
+        return $this->bookConfiguration->bookController();
     }
 }

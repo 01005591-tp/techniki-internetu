@@ -34,6 +34,7 @@ class BookListDbRepository implements BookListRepository
             $bookEntries = array();
             foreach ($books->books() as $book) {
                 $bookEntries[] = new BookListEntry($book->id(),
+                    $book->nameId(),
                     $book->isbn(),
                     $book->title(),
                     $book->imageUri(),

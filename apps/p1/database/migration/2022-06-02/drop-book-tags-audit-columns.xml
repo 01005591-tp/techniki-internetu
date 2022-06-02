@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-02/drop-book-tags-audit-columns.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-02/drop-book-tags-audit-columns:books-tags" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <dropColumn tableName="BOOKS_TAGS">
+            <column name="CREATION_DATE"/>
+            <column name="UPDATE_DATE"/>
+            <column name="UPDATED_BY"/>
+            <column name="VERSION"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="2022-06-02/drop-book-tags-audit-columns:book-tags" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <dropColumn tableName="BOOK_TAGS">
+            <column name="CREATION_DATE"/>
+            <column name="UPDATE_DATE"/>
+            <column name="UPDATED_BY"/>
+            <column name="VERSION"/>
+        </dropColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -19,6 +19,7 @@ class FindDefaultBookListQuery
     {
         $stmt = $this->connection->prepare("SELECT 
             b.ID
+            ,b.NAME_ID
             ,b.ISBN
             ,b.TITLE
             ,b.IMAGE_URI
@@ -42,6 +43,7 @@ class FindDefaultBookListQuery
         while ($row = $result->fetch_assoc()) {
             $books[] = new BookListEntryView(
                 $row['ID'],
+                $row['NAME_ID'],
                 $row['ISBN'],
                 $row['TITLE'],
                 $row['IMAGE_URI'],

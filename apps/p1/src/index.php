@@ -6,10 +6,10 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/styles/custom.css"/>
+    <link rel="stylesheet" href="/assets/styles/custom.css"/>
 
     <title>Library</title>
-    <link rel="icon" type="image/svg" href="assets/book-icon.svg"/>
+    <link rel="icon" type="image/svg" href="/assets/book-icon.svg"/>
 </head>
 <body>
 <?php
@@ -27,7 +27,8 @@ I18nConfiguration::instance();
 $sessionManager = SessionManager::instance();
 $sessionManager->recoverSession();
 $configuration = Configuration::instance();
-Router::navigate();
+$router = new Router($sessionManager);
+$router->navigate();
 ?>
 
 <!-- Bootstrap JS -->

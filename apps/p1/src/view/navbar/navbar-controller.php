@@ -77,6 +77,9 @@ class NavbarController
             case NavbarItem::SignOut:
                 require "view/login/sign-out/sign-out.php";
                 break;
+            case NavbarItem::BookDetails:
+                require "view/books/book.php";
+                break;
             default:
                 require "view/home/home.php";
         }
@@ -90,4 +93,5 @@ enum NavbarItem
     case Login;
     case SignUp;
     case SignOut;
+    case BookDetails;
 }

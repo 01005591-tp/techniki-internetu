@@ -6,3 +6,16 @@ nav.navbar .logged-in-user-email {
 #book-list-cards-container .card {
     width: 20rem;
 }
+
+#book-title .author {
+    color: grey;
+}
+
+#book-title .author.author-1 {
+    color: black;
+    font-weight: bold;
+}
+
+#book-title .author.author-2 {
+    color: black;
+}

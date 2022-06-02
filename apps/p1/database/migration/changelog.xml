@@ -25,5 +25,7 @@
     <include file="2022-06-02/add-book-human-readable-id-column.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-02/add-book-authors-priority-column.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-02/insert-initial-authors.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-02/drop-book-tags-audit-columns.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-02/drop-books-tags-name-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
