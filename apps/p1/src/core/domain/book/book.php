@@ -18,7 +18,7 @@ class Book
     private ?int $publishedAt;
     private ?int $publisherId;
     private ?int $pages;
-    private string $state;
+    private BookState $state;
     private ?string $imageUri;
     private ?AuditableObject $auditableObject;
     private ?int $version;
@@ -32,7 +32,7 @@ class Book
                                 ?int             $publishedAt,
                                 ?int             $publisherId,
                                 ?int             $pages,
-                                string           $state,
+                                BookState        $state,
                                 ?string          $imageUri,
                                 ?AuditableObject $auditableObject,
                                 ?int             $version)
@@ -97,7 +97,7 @@ class Book
         return $this->pages;
     }
 
-    public function state(): string
+    public function state(): BookState
     {
         return $this->state;
     }

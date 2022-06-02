@@ -32,4 +32,9 @@ enum BookState
         error_log("BookState not found for: " . $state);
         return Option::none();
     }
+
+    public static function ofOrUnavailable(string $state): BookState
+    {
+        return BookState::of($state)->orElse(BookState::UNAVAILABLE);
+    }
 }

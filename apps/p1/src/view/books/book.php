@@ -6,6 +6,16 @@ require_once "configuration.php";
 
 $bookController = Configuration::instance()->viewConfiguration()->controllers()->bookController();
 $bookDetails = $bookController->getBookDetails();
+
+$imgUri = (!is_null($bookDetails->book()->imageUri())) ? $bookDetails->book()->imageUri() : "/assets/book-icon.svg";
+$publishedAt = new DateTimeImmutable('@' . $bookDetails->book()->publishedAt());
+$tagsString = '';
+foreach ($bookDetails->bookTags() as $bookTag) {
+    $tagsString = ',' . $bookTag->code();
+}
+if (str_starts_with($tagsString, ',')) {
+    $tagsString = substr($tagsString, 1);
+}
 ?>
 
 
@@ -22,6 +32,39 @@ $bookDetails = $bookController->getBookDetails();
     </div>
 
     <hr/>
+    <div class="d-flex">
+        <img src="<?php echo $imgUri; ?>" class="img-thumbnail" alt="Book icon">
+        <ul class="mx-1 list-group">
+            <li class="list-group-item">
+                <strong>ISBN: </strong><?php echo $bookDetails->book()->isbn(); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>State: </strong><?php echo $bookDetails->book()->state()->displayName(); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>Published at: </strong>
+                <?php echo $publishedAt->format("Y-m-d"); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>Language: </strong><?php echo $bookDetails->book()->language()->displayName(); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>Pages: </strong><?php echo $bookDetails->book()->pages(); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>Publisher: </strong><?php echo $bookDetails->publisher()->name(); ?>
+            </li>
+            <li class="list-group-item">
+                <strong>Tags: </strong><?php echo $tagsString; ?>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <p class="h3 mt-2">About the book</p>
+        <div>
+            <?php echo $bookDetails->book()->description(); ?>
+        </div>
+    </div>
 
-    
+    <hr/>
 </div>

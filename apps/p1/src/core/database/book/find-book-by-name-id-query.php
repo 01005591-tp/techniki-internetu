@@ -4,6 +4,7 @@ namespace p1\core\database\book;
 
 require_once "core/domain/audit/auditable-object.php";
 require_once "core/domain/book/book.php";
+require_once "core/domain/book/book-state.php";
 require_once "core/domain/language/language.php";
 
 require_once "core/function/option.php";
@@ -11,6 +12,7 @@ require_once "core/function/option.php";
 use mysqli;
 use p1\core\domain\audit\AuditableObject;
 use p1\core\domain\book\Book;
+use p1\core\domain\book\BookState;
 use p1\core\domain\language\Language;
 use p1\core\function\Option;
 
@@ -65,7 +67,7 @@ class FindBookByNameIdQuery
                     $row['B_PUBLISHED_AT'],
                     $row['B_PUBLISHER_ID'],
                     $row['B_PAGES'],
-                    $row['B_STATE'],
+                    BookState::ofOrUnavailable($row['B_STATE']),
                     $row['B_IMAGE_URI'],
                     new AuditableObject(
                         $row['B_CREATION_DATE'],

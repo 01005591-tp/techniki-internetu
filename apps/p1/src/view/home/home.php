@@ -29,6 +29,9 @@ $addPagination = new class implements Consumer {
         <span class="p2 h1 mb-4"><?php echo L::main_home_book_list_header ?></span>
     </div>
 
+    <hr/>
+    <hr/>
+
     <?php $maybePaginationData->peek($addPagination); ?>
 
     <hr/>
@@ -56,7 +59,7 @@ $addPagination = new class implements Consumer {
                     <h5 class="card-title">' . $book->title() . '</h5>
                     <p class="card-text">
                       <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>ISBN-13:</strong> ' . $book->isbn() . '</li>
+                        <li class="list-group-item"><strong>ISBN:</strong> ' . $book->isbn() . '</li>
                         <li class="list-group-item"><strong>' . L::main_home_book_list_entry_language . ':</strong> ' . $languageDisplayName . '</li>
                         <li class="list-group-item"><strong>' . L::main_home_book_list_entry_state . ':</strong> ' . $bookStateDisplayName . '</li>
                       </ul>
