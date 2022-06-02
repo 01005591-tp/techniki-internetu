@@ -1,0 +1,112 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-02/insert-initial-authors.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-02/insert-initial-authors:insert-authors"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <loadData tableName="AUTHORS"
+                  relativeToChangelogFile="true"
+                  file="initial-authors.csv"
+                  encoding="UTF-8"
+                  separator="|"
+                  quotchar="'">
+            <column header="FIRST_NAME"
+                    name="FIRST_NAME"
+                    type="STRING"/>
+            <column header="LAST_NAME"
+                    name="LAST_NAME"
+                    type="STRING"/>
+            <column header="BIOGRAPHY_NOTE"
+                    name="BIOGRAPHY_NOTE"
+                    type="STRING"/>
+            <column header="BIRTH_DATE"
+                    name="BIRTH_DATE"
+                    type="DATE"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2022-06-02/insert-initial-authors:insert-book-authors"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0137314911')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'David' AND a.LAST_NAME = 'Farley')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-1492034025')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Sam' AND a.LAST_NAME = 'Newman')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-1492047841')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Sam' AND a.LAST_NAME = 'Newman')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0134685991')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Joshua' AND a.LAST_NAME = 'Bloch')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-1617294044')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Richard' AND a.LAST_NAME = 'Feldman')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0997148008')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Martin' AND a.LAST_NAME = 'Odersky')"/>
+        </insert>
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0997148008')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Lex' AND a.LAST_NAME = 'Spoon')"/>
+            <column name="PRIORITY" value="2"/>
+        </insert>
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0997148008')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Bill' AND a.LAST_NAME = 'Venners')"/>
+            <column name="PRIORITY" value="2"/>
+        </insert>
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0997148008')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Frank' AND a.LAST_NAME = 'Sommers')"/>
+            <column name="PRIORITY" value="2"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-1617294549')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Chris' AND a.LAST_NAME = 'Richardson')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0321125217')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Eric' AND a.LAST_NAME = 'Evans')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0321127426')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Martin' AND a.LAST_NAME = 'Fowler')"/>
+        </insert>
+
+        <insert tableName="BOOK_AUTHORS">
+            <column name="BOOK_ID" valueComputed="(SELECT b.ID FROM BOOKS b WHERE b.ISBN = '978-0134757599')"/>
+            <column name="AUTHOR_ID"
+                    valueComputed="(SELECT a.ID FROM AUTHORS a WHERE a.FIRST_NAME = 'Martin' AND a.LAST_NAME = 'Fowler')"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

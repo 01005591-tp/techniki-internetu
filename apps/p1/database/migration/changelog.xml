@@ -22,4 +22,8 @@
     <include file="2022-06-01/change-books-isbn-column.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-01/insert-initial-books.xml" relativeToChangelogFile="true"/>
 
+    <include file="2022-06-02/add-book-human-readable-id-column.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-02/add-book-authors-priority-column.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-02/insert-initial-authors.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
