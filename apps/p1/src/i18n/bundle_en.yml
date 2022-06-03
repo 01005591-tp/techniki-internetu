@@ -2,9 +2,6 @@ main:
   navbar:
     home: "Home"
     about: "About"
-    search:
-      input_placeholder: "Search"
-      search_button: "Search"
     sign_in:
       signed_in_user_email_label: "Signed in user email"
       sign_in_button: "Sign&nbsp;In"
@@ -45,6 +42,18 @@ main:
         available: "Available"
         unavailable: "Unavailable"
         available_soon: "Available soon"
+    book_search:
+      book_title_input_label: "Title"
+      book_description_input_label: "Description"
+      book_author_input_label: "Author"
+      book_isbn_input_label: "ISBN"
+      book_tags_input_label: "Tags"
+      search_btn_label: "Search"
+      clear_btn_label: "Clear"
+  multiple_select_component:
+    select_main_btn_label: "Select"
+    search_input_label: "Search"
+    select_all_option_label: "Select all"
   books:
     book_piece:
       state:

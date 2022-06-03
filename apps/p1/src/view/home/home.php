@@ -5,6 +5,7 @@ use p1\core\domain\book\BookState;
 use p1\core\domain\language\Language;
 use p1\core\function\Consumer;
 use p1\core\function\Function2;
+use p1\core\function\Runnable;
 
 require_once "configuration.php";
 require_once "core/domain/book/book-state.php";
@@ -13,7 +14,7 @@ require_once "core/domain/language/language.php";
 require_once "core/function/function.php";
 
 $homeController = Configuration::instance()->viewConfiguration()->controllers()->homeController();
-$bookList = $homeController->getDefaultBookList();
+$bookList = $homeController->findBooks();
 $maybePaginationData = $homeController->paginationData();
 $addPagination = new class implements Consumer {
     function consume($value): void
@@ -21,7 +22,21 @@ $addPagination = new class implements Consumer {
         $paginationData = $value;
         require "view/pagination/pagination-component.php";
     }
-}
+};
+$searchComponentRunnable = new class($homeController->availableTags()) implements Runnable {
+    private array $availableTags;
+
+    public function __construct(array $availableTags)
+    {
+        $this->availableTags = $availableTags;
+    }
+
+    function run(): void
+    {
+        $availableTags = $this->availableTags;
+        require "view/home/search-component.php";
+    }
+};
 ?>
 
 <div class="shadow-lg p-2 mb-5 bg-body rounded">
@@ -30,7 +45,7 @@ $addPagination = new class implements Consumer {
     </div>
 
     <hr/>
-
+    <?php $searchComponentRunnable->run(); ?>
     <hr/>
 
     <?php $maybePaginationData->peek($addPagination); ?>

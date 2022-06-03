@@ -5,6 +5,8 @@ namespace p1\view;
 require_once "core/domain/book/get-book-list-command-handler.php";
 require_once "core/domain/book/get-book-details-command-handler.php";
 
+require_once "core/domain/book/tag/get-all-book-tags-use-case.php";
+
 require_once "core/domain/user/create-user-command-handler.php";
 require_once "core/domain/user/auth/authenticate-user-command-handler.php";
 
@@ -34,6 +36,7 @@ require_once "view/pagination/pagination-service.php";
 
 use p1\core\domain\book\GetBookDetailsCommandHandler;
 use p1\core\domain\book\GetBookListCommandHandler;
+use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\domain\user\CreateUserCommandHandler;
 use p1\state\State;
@@ -64,6 +67,7 @@ class ViewConfiguration
                                 AuthenticateUserCommandHandler $authenticateUserCommandHandler,
                                 GetBookListCommandHandler      $getBookListCommandHandler,
                                 GetBookDetailsCommandHandler   $getBookDetailsCommandHandler,
+                                GetAllBookTagsUseCase          $getAllBookTagsUseCase,
                                 RedirectManager                $redirectManager,
                                 SessionManager                 $sessionManager,
                                 PaginationService              $paginationService)
@@ -86,6 +90,7 @@ class ViewConfiguration
         $homeConfiguration = new HomeConfiguration(
             $this->sessionManager,
             $getBookListCommandHandler,
+            $getAllBookTagsUseCase,
             $paginationService
         );
         $bookConfiguration = new BookConfiguration(

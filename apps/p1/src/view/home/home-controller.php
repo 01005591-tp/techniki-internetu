@@ -5,6 +5,8 @@ namespace p1\view\home;
 require_once "core/domain/book/book-list.php";
 require_once "core/domain/book/get-book-list-command-handler.php";
 
+require_once "core/domain/book/tag/get-all-book-tags-use-case.php";
+
 require_once "core/function/function.php";
 require_once "core/function/option.php";
 
@@ -17,6 +19,7 @@ use p1\core\domain\book\BookList;
 use p1\core\domain\book\BookListPage;
 use p1\core\domain\book\GetBookListCommand;
 use p1\core\domain\book\GetBookListCommandHandler;
+use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 use p1\core\function\Function2;
 use p1\core\function\FunctionIdentity;
 use p1\core\function\Option;
@@ -27,25 +30,31 @@ use p1\view\session\SessionManager;
 class HomeController
 {
     private GetBookListCommandHandler $getBookListCommandHandler;
+    private GetAllBookTagsUseCase $getAllBookTagsUseCase;
     private SessionManager $sessionManager;
     private PaginationService $paginationService;
     private BookList $bookList;
     private Option $paginationData;
+    private array $availableTags;
 
     public function __construct(GetBookListCommandHandler $getBookListCommandHandler,
+                                GetAllBookTagsUseCase     $getAllBookTagsUseCase,
                                 SessionManager            $sessionManager,
                                 PaginationService         $paginationService)
     {
         $this->getBookListCommandHandler = $getBookListCommandHandler;
+        $this->getAllBookTagsUseCase = $getAllBookTagsUseCase;
         $this->sessionManager = $sessionManager;
         $this->paginationService = $paginationService;
         $this->bookList = BookList::emptyBookList();
         $this->paginationData = Option::none();
+        $this->availableTags = [];
     }
 
-    public function getDefaultBookList(): BookList
+    public function findBooks(): BookList
     {
-        $bookListPage = $this->resolveQueryParams();
+        $bookListPage = $this->resolvePageQueryParams();
+        $this->availableTags = $this->getAllBookTagsUseCase->execute();
         return $this->getBookListPage($bookListPage);
     }
 
@@ -65,6 +74,11 @@ class HomeController
     public function paginationData(): Option
     {
         return $this->paginationData;
+    }
+
+    public function availableTags(): array
+    {
+        return $this->availableTags;
     }
 
     private function resolvePaginationData(): Option
@@ -96,7 +110,7 @@ class HomeController
         $this->sessionManager->put(SessionConstants::BOOK_LIST_CURRENT_PAGE, $bookListPage);
     }
 
-    private function resolveQueryParams(): BookListPage
+    private function resolvePageQueryParams(): BookListPage
     {
         if (array_key_exists('page', $_GET)) {
             $pageQueryParam = htmlspecialchars($_GET['page']);

@@ -2,9 +2,6 @@ main:
   navbar:
     home: "Start"
     about: "O nas"
-    search:
-      input_placeholder: "Szukaj"
-      search_button: "Szukaj"
     sign_in:
       signed_in_user_email_label: "Adres email zalogowanego użytkownika"
       sign_in_button: "Zaloguj"
@@ -45,6 +42,18 @@ main:
         available: "Dostępna"
         unavailable: "Niedostępna"
         available_soon: "Dostępna wkrótce"
+    book_search:
+      book_title_input_label: "Tytuł"
+      book_description_input_label: "Opis"
+      book_author_input_label: "Autor"
+      book_isbn_input_label: "ISBN"
+      book_tags_input_label: "Tagi"
+      search_btn_label: "Szukaj"
+      clear_btn_label: "Wyczyść"
+  multiple_select_component:
+    select_main_btn_label: "Wybierz"
+    search_input_label: "Szukaj"
+    select_all_option_label: "Wybierz wszystkie"
   books:
     book_piece:
       state:
