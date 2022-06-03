@@ -53,6 +53,15 @@ main:
           unavailable: "Niedostępna"
           booked: "Zarezerwowana"
           rented: "Wypożyczona"
+      details_page:
+        isbn_label: "ISBN"
+        state_label: "Status"
+        published_at_label: "Opublikowano"
+        language_label: "Język"
+        pages_label: "Liczba stron"
+        publisher_label: "Wydawca"
+        tags_label: "Tagi"
+        about_the_book_header: "O książce"
   languages:
     en: "angielski"
     pl: "polski"

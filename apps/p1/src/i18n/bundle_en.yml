@@ -53,6 +53,15 @@ main:
           unavailable: "Unavailable"
           booked: "Booked"
           rented: "Rented"
+      details_page:
+        isbn_label: "ISBN"
+        state_label: "State"
+        published_at_label: "Published at"
+        language_label: "Language"
+        pages_label: "Pages"
+        publisher_label: "Publisher"
+        tags_label: "Tags"
+        about_the_book_header: "About the book"
   languages:
     en: "English"
     pl: "Polish"

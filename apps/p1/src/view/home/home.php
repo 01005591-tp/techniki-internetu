@@ -30,6 +30,7 @@ $addPagination = new class implements Consumer {
     </div>
 
     <hr/>
+
     <hr/>
 
     <?php $maybePaginationData->peek($addPagination); ?>

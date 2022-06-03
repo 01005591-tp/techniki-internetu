@@ -36,31 +36,37 @@ if (str_starts_with($tagsString, ',')) {
         <img src="<?php echo $imgUri; ?>" class="img-thumbnail" alt="Book icon">
         <ul class="mx-1 list-group">
             <li class="list-group-item">
-                <strong>ISBN: </strong><?php echo $bookDetails->book()->isbn(); ?>
+                <strong><?php echo L::main_books_book_piece_details_page_isbn_label; ?>
+                    : </strong><?php echo $bookDetails->book()->isbn(); ?>
             </li>
             <li class="list-group-item">
-                <strong>State: </strong><?php echo $bookDetails->book()->state()->displayName(); ?>
+                <strong><?php echo L::main_books_book_piece_details_page_state_label; ?>
+                    : </strong><?php echo $bookDetails->book()->state()->displayName(); ?>
             </li>
             <li class="list-group-item">
-                <strong>Published at: </strong>
+                <strong><?php echo L::main_books_book_piece_details_page_published_at_label; ?>: </strong>
                 <?php echo $publishedAt->format("Y-m-d"); ?>
             </li>
             <li class="list-group-item">
-                <strong>Language: </strong><?php echo $bookDetails->book()->language()->displayName(); ?>
+                <strong><?php echo L::main_books_book_piece_details_page_language_label; ?>
+                    : </strong><?php echo $bookDetails->book()->language()->displayName(); ?>
             </li>
             <li class="list-group-item">
-                <strong>Pages: </strong><?php echo $bookDetails->book()->pages(); ?>
+                <strong><?php echo L::main_books_book_piece_details_page_pages_label; ?>
+                    : </strong><?php echo $bookDetails->book()->pages(); ?>
             </li>
             <li class="list-group-item">
-                <strong>Publisher: </strong><?php echo $bookDetails->publisher()->name(); ?>
+                <strong><?php echo L::main_books_book_piece_details_page_publisher_label; ?>
+                    : </strong><?php echo $bookDetails->publisher()->name(); ?>
             </li>
             <li class="list-group-item">
-                <strong>Tags: </strong><?php echo $tagsString; ?>
+                <strong><?php echo L::main_books_book_piece_details_page_tags_label; ?>
+                    : </strong><?php echo $tagsString; ?>
             </li>
         </ul>
     </div>
     <div>
-        <p class="h3 mt-2">About the book</p>
+        <p class="h3 mt-2"><?php echo L::main_books_book_piece_details_page_about_the_book_header; ?></p>
         <div>
             <?php echo $bookDetails->book()->description(); ?>
         </div>
