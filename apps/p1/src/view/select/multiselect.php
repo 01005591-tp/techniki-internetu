@@ -86,4 +86,13 @@ class SelectOption
     {
         return $this->displayName;
     }
+
+    public function __toString(): string
+    {
+        return 'SelectOption(id=' . $this->id
+            . ', value=' . $this->value
+            . ', displayname=' . $this->displayName . ')';
+    }
+
+
 }

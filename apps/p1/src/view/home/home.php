@@ -6,12 +6,15 @@ use p1\core\domain\language\Language;
 use p1\core\function\Consumer;
 use p1\core\function\Function2;
 use p1\core\function\Runnable;
+use p1\view\home\HomeController;
 
 require_once "configuration.php";
 require_once "core/domain/book/book-state.php";
 require_once "core/domain/book/book-list.php";
 require_once "core/domain/language/language.php";
 require_once "core/function/function.php";
+
+require_once "view/home/home-controller.php";
 
 $homeController = Configuration::instance()->viewConfiguration()->controllers()->homeController();
 $bookList = $homeController->findBooks();
@@ -23,17 +26,18 @@ $addPagination = new class implements Consumer {
         require "view/pagination/pagination-component.php";
     }
 };
-$searchComponentRunnable = new class($homeController->availableTags()) implements Runnable {
-    private array $availableTags;
+$searchComponentRunnable = new class($homeController) implements Runnable {
+    private HomeController $homeController;
 
-    public function __construct(array $availableTags)
+    public function __construct(HomeController $homeController)
     {
-        $this->availableTags = $availableTags;
+        $this->homeController = $homeController;
     }
 
     function run(): void
     {
-        $availableTags = $this->availableTags;
+        $availableTags = $this->homeController->availableTags();
+        $searchCriteria = $this->homeController->searchCriteria();
         require "view/home/search-component.php";
     }
 };

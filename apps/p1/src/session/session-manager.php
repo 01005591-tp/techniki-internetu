@@ -1,6 +1,6 @@
 <?php
 
-namespace p1\view\session;
+namespace p1\session;
 
 require_once "core/function/option.php";
 require_once "session/user-context.php";
@@ -97,8 +97,9 @@ class SessionConstants
 {
     public const USER_CONTEXT = 'USER_CONTEXT';
     public const LANG = 'LANG';
+    public const REQUEST_URI = 'REQUEST_URI';
     public const ALERT_MESSAGES = 'ALERT_MESSAGES';
-    public const BOOK_LIST_CURRENT_PAGE = "BOOK_LIST_CURRENT_PAGE";
+    public const BOOK_LIST_SEARCH_REQUEST = "BOOK_LIST_SEARCH_REQUEST";
     public const BOOK_DETAILS_BOOK_NAME_ID = "BOOK_DETAILS_BOOK_NAME_ID";
 
     /**

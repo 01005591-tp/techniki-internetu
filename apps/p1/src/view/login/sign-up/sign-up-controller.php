@@ -17,10 +17,10 @@ use p1\core\domain\user\CreateUserCommandHandler;
 use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
+use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\alerts\AlertService;
 use p1\view\RedirectManager;
-use p1\view\session\SessionManager;
 
 class SignUpController
 {

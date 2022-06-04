@@ -15,13 +15,13 @@ require_once "view/login/sign-up/sign-up-request-validator.php";
 
 use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\domain\user\CreateUserCommandHandler;
+use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\alerts\AlertService;
 use p1\view\login\signout\SignOutController;
 use p1\view\login\signup\SignUpController;
 use p1\view\login\signup\SignUpRequestValidator;
 use p1\view\RedirectManager;
-use p1\view\session\SessionManager;
 
 class LoginConfiguration
 {

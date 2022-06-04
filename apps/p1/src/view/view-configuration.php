@@ -39,6 +39,7 @@ use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\domain\user\CreateUserCommandHandler;
+use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\alerts\AlertPrinter;
 use p1\view\alerts\AlertsConfiguration;
@@ -54,7 +55,6 @@ use p1\view\login\signout\SignOutController;
 use p1\view\login\signup\SignUpController;
 use p1\view\navbar\NavbarConfiguration;
 use p1\view\navbar\NavbarController;
-use p1\view\session\SessionManager;
 
 class ViewConfiguration
 {

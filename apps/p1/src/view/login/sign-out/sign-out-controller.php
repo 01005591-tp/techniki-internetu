@@ -7,9 +7,9 @@ require_once "view/alerts/alert-service.php";
 require_once "view/redirect-manager.php";
 
 use L;
+use p1\session\SessionManager;
 use p1\view\alerts\AlertService;
 use p1\view\RedirectManager;
-use p1\view\session\SessionManager;
 
 class SignOutController
 {

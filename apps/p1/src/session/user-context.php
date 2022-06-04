@@ -1,6 +1,6 @@
 <?php
 
-namespace p1\view\session;
+namespace p1\session;
 
 class UserContext
 {

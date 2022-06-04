@@ -17,10 +17,10 @@ use Exception;
 use p1\core\app\BookConfiguration;
 use p1\core\app\UserConfiguration;
 use p1\core\database\DatabaseConfiguration;
+use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\home\PaginationService;
 use p1\view\RedirectManager;
-use p1\view\session\SessionManager;
 use p1\view\ViewConfiguration;
 
 class Configuration

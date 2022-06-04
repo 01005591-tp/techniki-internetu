@@ -100,35 +100,3 @@ class BookList
         return new BookList(array(), 0);
     }
 }
-
-class BookListPage
-{
-    private int $page;
-    private int $pageSize;
-
-    public function __construct(int $page, int $pageSize)
-    {
-        $this->page = $page;
-        $this->pageSize = $pageSize;
-    }
-
-    public function page(): int
-    {
-        return $this->page;
-    }
-
-    public function pageSize(): int
-    {
-        return $this->pageSize;
-    }
-
-    public function withPage(int $page): BookListPage
-    {
-        return new BookListPage($page, $this->pageSize);
-    }
-
-    public static function defaultBookListPage(): BookListPage
-    {
-        return new BookListPage(1, 3);
-    }
-}

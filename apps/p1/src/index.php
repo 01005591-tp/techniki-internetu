@@ -22,7 +22,7 @@ require_once "session/session-manager.php";
 use p1\configuration\Configuration;
 use p1\i18n\I18nConfiguration;
 use p1\routing\Router;
-use p1\view\session\SessionManager;
+use p1\session\SessionManager;
 
 I18nConfiguration::instance();
 $sessionManager = SessionManager::instance();

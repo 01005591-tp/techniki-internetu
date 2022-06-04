@@ -8,9 +8,9 @@ require_once "session/session-manager.php";
 require_once "state.php";
 
 use p1\core\observable\EntryPutSubscriber;
+use p1\session\SessionManager;
+use p1\session\UserContext;
 use p1\state\State;
-use p1\view\session\SessionManager;
-use p1\view\session\UserContext;
 
 class NavbarController
 {

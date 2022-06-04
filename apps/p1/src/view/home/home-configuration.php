@@ -8,11 +8,14 @@ require_once "core/domain/book/tag/get-all-book-tags-use-case.php";
 
 require_once "session/session-manager.php";
 
+require_once "view/home/search-books-request-factory.php";
+
 require_once "view/pagination/pagination-service.php";
+
 
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\GetAllBookTagsUseCase;
-use p1\view\session\SessionManager;
+use p1\session\SessionManager;
 
 class HomeConfiguration
 {
@@ -23,11 +26,13 @@ class HomeConfiguration
                                 GetAllBookTagsUseCase     $getAllBookTagsUseCase,
                                 PaginationService         $paginationService)
     {
+
         $this->homeController = new HomeController(
             $getBookListCommandHandler,
             $getAllBookTagsUseCase,
             $sessionManager,
-            $paginationService
+            $paginationService,
+            new SearchBooksRequestFactory($sessionManager)
         );
     }
 

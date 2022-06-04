@@ -4,8 +4,8 @@ namespace p1\view\alerts;
 
 use p1\core\function\Supplier;
 use p1\core\observable\SimpleObservable;
-use p1\view\session\SessionConstants;
-use p1\view\session\SessionManager;
+use p1\session\SessionConstants;
+use p1\session\SessionManager;
 
 require_once "session/session-manager.php";
 

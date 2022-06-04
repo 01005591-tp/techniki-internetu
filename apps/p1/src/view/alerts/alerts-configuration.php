@@ -3,7 +3,7 @@
 namespace p1\view\alerts;
 
 use p1\core\observable\Subscriber;
-use p1\view\session\SessionManager;
+use p1\session\SessionManager;
 
 require_once "session/session-manager.php";
 require_once "view/alerts/alert-service.php";

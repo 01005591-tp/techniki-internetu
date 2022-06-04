@@ -6,6 +6,33 @@ require_once "view/select/multiselect.php";
 use p1\core\function\Runnable;
 use p1\view\select\SelectOption;
 
+$selectedOptions = [];
+foreach ($multiselect->selectedOptions() as $selectedOption) {
+    $options = array_filter($multiselect->options(), function ($option, $key) use ($selectedOption) {
+        return $selectedOption === $option->value();
+    }, ARRAY_FILTER_USE_BOTH);
+    $option = array_pop($options);
+    $selectedOptions[] = $option;
+}
+$selectedOptionIds = array_map(function ($opt) {
+    return 'opt_' . $opt->id();
+}, $selectedOptions);
+
+$selectedOptionValues = array_filter(array_map(function ($opt) {
+    return $opt->value();
+}, $selectedOptions), function ($optValue, $key) {
+    return !empty($optValue);
+}, ARRAY_FILTER_USE_BOTH);
+
+$selectedOptionDisplayNames = array_filter(array_map(function ($opt) {
+    return $opt->displayName();
+}, $selectedOptions), function ($displayName, $key) {
+    return !empty($displayName);
+}, ARRAY_FILTER_USE_BOTH);
+
+$selectedOptionIdsString = join(',', $selectedOptionIds);
+$selectedOptionValuesString = join(',', $selectedOptionValues);
+$selectedOptionDisplayNamesString = join(',', $selectedOptionDisplayNames);
 ?>
 
 <div id="<?php echo $multiselect->name() . '_parentElement'; ?>" class="dropdown">
@@ -13,8 +40,12 @@ use p1\view\select\SelectOption;
         <input type="text"
                id="<?php echo $multiselect->name() . '_displayInput'; ?>"
                class="form-control"
+               name="<?php echo $multiselect->name() . '_displayInput'; ?>"
                readonly
                placeholder="<?php echo $multiselect->displayValuesInputLabel(); ?>"
+            <?php if (!empty($selectedOptionDisplayNamesString)) {
+                echo 'value="' . $selectedOptionDisplayNamesString . '"';
+            } ?>
         />
         <label for="<?php echo $multiselect->name() . '_displayInput'; ?>">
             <?php echo $multiselect->displayValuesInputLabel(); ?>
@@ -34,7 +65,8 @@ use p1\view\select\SelectOption;
                     <input type="text"
                            id="<?php echo $multiselect->name() . '_search_input'; ?>"
                            class="form-control"
-                           placeholder="<?php echo L::main_multiple_select_component_search_input_label; ?>">
+                           placeholder="
+            <?php echo L::main_multiple_select_component_search_input_label; ?>">
                     <label for="<?php echo $multiselect->name() . '_search_input'; ?>">
                         <?php echo L::main_multiple_select_component_search_input_label; ?>
                     </label>
@@ -81,17 +113,24 @@ use p1\view\select\SelectOption;
            name="<?php echo $multiselect->name() . '_valueHolderInput'; ?>"
            aria-label="hiddenValueHolderInput"
            aria-hidden="true"
+        <?php if (!empty($selectedOptionValuesString)) {
+            echo 'value="' . $selectedOptionValuesString . '"';
+        } ?>
            hidden>
     <input id="<?php echo $multiselect->name() . '_optionsHolderInput'; ?>"
            aria-label="hiddenOptionsHolderInput"
            aria-hidden="true"
+        <?php if (!empty($selectedOptionIdsString)) {
+            echo 'value="' . $selectedOptionIdsString . '"';
+        } ?>
            hidden>
 
     <script>
         let multipleSelectComponent = new MultipleSelectComponent(
             "<?php echo $multiselect->name() . '_displayInput'; ?>",
             "<?php echo $multiselect->name() . '_parentElement'; ?>",
-            "<?php echo $multiselect->name() . '_valueHolderInput'; ?>"
+            "<?php echo $multiselect->name() . '_valueHolderInput'; ?>",
+            "<?php echo $multiselect->name() . '_optionsHolderInput'; ?>"
         );
     </script>
 

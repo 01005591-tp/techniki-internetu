@@ -20,12 +20,12 @@ use p1\core\domain\user\auth\AuthenticateUserCommandHandler;
 use p1\core\function\Consumer;
 use p1\core\function\Either;
 use p1\core\function\Function2;
+use p1\session\SessionManager;
+use p1\session\UserContext;
 use p1\state\State;
 use p1\view\alerts\AlertService;
 use p1\view\RedirectManager;
 use p1\view\RedirectToMainPageRunnable;
-use p1\view\session\SessionManager;
-use p1\view\session\UserContext;
 
 class LoginController
 {

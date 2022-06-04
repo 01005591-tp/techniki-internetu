@@ -23,9 +23,9 @@ use p1\core\function\Either;
 use p1\core\function\Function2;
 use p1\core\function\FunctionIdentity;
 use p1\core\function\Supplier;
+use p1\session\SessionConstants;
+use p1\session\SessionManager;
 use p1\view\RedirectManager;
-use p1\view\session\SessionConstants;
-use p1\view\session\SessionManager;
 
 class BookController
 {

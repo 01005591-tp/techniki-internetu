@@ -3,20 +3,32 @@
 require_once "core/function/function.php";
 require_once "view/select/multiselect.php";
 
+use p1\core\function\Consumer;
 use p1\core\function\Runnable;
 use p1\view\select\Multiselect;
 use p1\view\select\SelectOption;
 
 $multiselectName = 'bookSearchTags';
-$loadOptionEntryRunnable = new class($multiselectName, $availableTags) implements Runnable {
+$setValueIfPresent = new class implements Consumer {
+    function consume($value): void
+    {
+        if (!empty($value)) {
+            echo 'value="' . $value . '"';
+        }
+    }
+};
+$loadOptionEntryRunnable = new class($multiselectName, $availableTags, $searchCriteria->tags()) implements Runnable {
     private string $multiselectName;
     private array $availableTags;
+    private array $selectedTags;
 
     public function __construct(string $multiselectName,
-                                array  $availableTags)
+                                array  $availableTags,
+                                array  $selectedTags)
     {
         $this->multiselectName = $multiselectName;
         $this->availableTags = $availableTags;
+        $this->selectedTags = $selectedTags;
     }
 
     function run(): void
@@ -35,7 +47,8 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
             $this->multiselectName,
             L::main_home_book_search_book_tags_input_label,
             L::main_home_book_search_book_tags_input_label,
-            $tagOptions
+            $tagOptions,
+            $this->selectedTags
         );
         require "view/select/multiple-select-component.php";
     }
@@ -49,9 +62,8 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
                        id="searchBookTitleInput"
                        name="searchBookTitleInput"
                        class="form-control"
-                       placeholder="<?php
-
-                       echo L::main_home_book_search_book_title_input_label; ?>"
+                       placeholder="<?php echo L::main_home_book_search_book_title_input_label; ?>"
+                    <?php $setValueIfPresent->consume($searchCriteria->title()) ?>
                 />
                 <label for="searchBookTitleInput">
                     <?php echo L::main_home_book_search_book_title_input_label; ?>
@@ -63,6 +75,7 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
                        name="searchBookDescriptionInput"
                        class="form-control"
                        placeholder="<?php echo L::main_home_book_search_book_description_input_label; ?>"
+                    <?php $setValueIfPresent->consume($searchCriteria->description()) ?>
                 />
                 <label for="searchBookDescriptionInput">
                     <?php echo L::main_home_book_search_book_description_input_label; ?>
@@ -74,6 +87,7 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
                        name="searchBookAuthorInput"
                        class="form-control"
                        placeholder="<?php echo L::main_home_book_search_book_author_input_label; ?>"
+                    <?php $setValueIfPresent->consume($searchCriteria->author()) ?>
                 />
                 <label for="searchBookAuthorInput">
                     <?php echo L::main_home_book_search_book_author_input_label; ?>
@@ -88,6 +102,7 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
                        name="searchBookIsbnInput"
                        class="form-control"
                        placeholder="<?php echo L::main_home_book_search_book_isbn_input_label; ?>"
+                    <?php $setValueIfPresent->consume($searchCriteria->isbn()) ?>
                 />
                 <label for="searchBookIsbnInput">
                     <?php echo L::main_home_book_search_book_isbn_input_label; ?>
@@ -107,7 +122,8 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags) implement
                         'searchBookAuthorInput',
                         'searchBookIsbnInput',
                         '<?php echo $multiselectName . '_displayInput'; ?>',
-                        '<?php echo $multiselectName . '_valueHolderInput'; ?>'
+                        '<?php echo $multiselectName . '_valueHolderInput'; ?>',
+                        '<?php echo $multiselectName . '_optionsHolderInput'; ?>'
                         ]);">
             <i class="fa-solid fa-xmark"></i>
             <?php echo L::main_home_book_search_clear_btn_label; ?>

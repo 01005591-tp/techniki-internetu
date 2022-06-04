@@ -61,7 +61,9 @@ const InputUtils = (function () {
     }
 
     InputUtils.prototype.clearInput = function (id) {
-        document.getElementById(id).value = '';
+        let element = document.getElementById(id);
+        element.value = '';
+        element.removeAttribute('value');
     };
     InputUtils.prototype.clearInputs = function (inputs) {
         if (inputs !== undefined && inputs) {
@@ -72,13 +74,15 @@ const InputUtils = (function () {
 }());
 
 const MultipleSelectComponent = (function () {
-    function MultipleSelectComponent(displayInputId, dropdownId, valueHolderId) {
+    function MultipleSelectComponent(displayInputId, dropdownId, valueHolderId, optionsHolderId) {
         logger.debug('Instantiating MultipleSelectComponent with params (displayInputId=' + displayInputId
             + ', dropdownId=' + dropdownId
-            + ', valueHolderId=' + valueHolderId + ')')
+            + ', valueHolderId=' + valueHolderId + '' +
+            ', optionsHolderId = ' + optionsHolderId + ')')
         this._displayInputId = document.getElementById(displayInputId);
         this._dropdown = document.getElementById(dropdownId);
         this._valueHolder = document.getElementById(valueHolderId);
+        this._optionsHolder = document.getElementById(optionsHolderId);
         let multipleSelectComponent = this;
 
         this.findSelectedOptions = function () {
@@ -89,12 +93,18 @@ const MultipleSelectComponent = (function () {
                     let elementId = element.attr('id');
                     let elementValue = element.attr('value');
                     let elementLabel = multipleSelectComponent.findCorrespondingLabel(elementId);
-                    let elementDisplayName = elementLabel.text();
-                    selectedInputs[index] = {
+                    let elementLabelText = elementLabel.text();
+                    let elementDisplayName = elementLabelText !== undefined && elementLabelText
+                        ? elementLabelText.trim()
+                        : null;
+                    selectedInputs.push({
                         "id": elementId,
                         "value": elementValue,
                         "displayName": elementDisplayName
-                    };
+                    });
+                    logger.trace('findSelectedOptions() [' + index + ']: SelectedInput(id=' + elementId
+                        + ', value=' + elementValue
+                        + ', displayName=' + elementDisplayName + ')');
                 });
             return selectedInputs;
         }
@@ -105,8 +115,14 @@ const MultipleSelectComponent = (function () {
 
         this.storeOptionsToValueHolder = function (selectedOptions) {
             let selectedValuesString = selectedOptions.map(it => it.value).join(',');
-            logger.debug(selectedValuesString);
-            $(multipleSelectComponent._valueHolder).attr('value', selectedValuesString);
+            logger.trace('storeOptionsToValueHolder(): ' + selectedValuesString);
+            multipleSelectComponent._valueHolder.value = selectedValuesString;
+        }
+
+        this.storeOptionsToOptionsHolder = function (selectedOptions) {
+            let selectedIds = selectedOptions.map(it => it.id)
+            logger.trace('storeOptionsToOptionsHolder(): ' + selectedIds);
+            multipleSelectComponent._optionsHolder.value = selectedIds;
         }
 
         this.displayOptions = function (selectedOptions) {
@@ -114,19 +130,66 @@ const MultipleSelectComponent = (function () {
                 .filter(it => it !== undefined && it)
                 .map(it => it.trim())
                 .join(',');
-            logger.debug(selectedValuesString);
-            $(multipleSelectComponent._displayInputId).attr('value', selectedValuesString);
+            logger.trace('displayOptions(): ' + selectedValuesString);
+            multipleSelectComponent._displayInputId.value = selectedValuesString;
+        }
+
+        this.findLastSelectedOptions = function () {
+            let selectedIdsString = $(multipleSelectComponent._optionsHolder).attr('value')
+            logger.trace('findLastSelectedOptions(): selectedIdsString=' + selectedIdsString);
+            let selectedInputs = [];
+            if (selectedIdsString === undefined || !selectedIdsString) {
+                $(multipleSelectComponent._dropdown).find('input.form-check-input')
+                    .each(function (index) {
+                        this.checked = false;
+                    });
+                return selectedInputs;
+            }
+            let selectedIds = selectedIdsString.split(',');
+            $(multipleSelectComponent._dropdown).find('input.form-check-input')
+                .each(function (index) {
+                    let jsElement = this;
+                    let element = $(this);
+                    let elementId = element.attr('id');
+                    logger.trace('findLastSelectedOptions(): Element(id=' + elementId
+                        + ', checked=' + element.attr('checked')
+                        + ', selected=' + selectedIds.some(it => it === elementId) + ')')
+                    if (selectedIds.some(it => it === elementId)) {
+                        let elementValue = element.attr('value');
+                        let elementLabel = multipleSelectComponent.findCorrespondingLabel(elementId);
+                        let elementDisplayName = elementLabel.text();
+                        selectedInputs.push({
+                            "id": elementId,
+                            "value": elementValue,
+                            "displayName": elementDisplayName
+                        });
+                        jsElement.checked = true;
+                    } else {
+                        jsElement.checked = false;
+                    }
+                });
+            return selectedInputs;
         }
 
         this.onDropdownHide = function (event) {
             let selectedOptions = multipleSelectComponent.findSelectedOptions();
+            multipleSelectComponent.storeOptionsToValueHolder(selectedOptions);
+            multipleSelectComponent.storeOptionsToOptionsHolder(selectedOptions)
+            multipleSelectComponent.displayOptions(selectedOptions);
+        }
+
+        this.onDropdownShow = function (event) {
+            let selectedOptions = multipleSelectComponent.findLastSelectedOptions();
             multipleSelectComponent.storeOptionsToValueHolder(selectedOptions);
             multipleSelectComponent.displayOptions(selectedOptions);
         }
 
         this._dropdown.addEventListener('hide.bs.dropdown', event => {
             multipleSelectComponent.onDropdownHide(event);
-        });
+        })
+        this._dropdown.addEventListener('show.bs.dropdown', event => {
+            multipleSelectComponent.onDropdownShow(event);
+        })
     }
 
 

@@ -9,8 +9,8 @@ require_once "session/session-manager.php";
 require_once "view/redirect-manager.php";
 
 use p1\core\domain\book\GetBookDetailsCommandHandler;
+use p1\session\SessionManager;
 use p1\view\RedirectManager;
-use p1\view\session\SessionManager;
 
 class BookConfiguration
 {

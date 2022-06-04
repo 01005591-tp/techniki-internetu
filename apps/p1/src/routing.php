@@ -3,10 +3,10 @@
 namespace p1\routing;
 
 use p1\config\Config;
+use p1\session\SessionConstants;
+use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\navbar\NavbarItem;
-use p1\view\session\SessionConstants;
-use p1\view\session\SessionManager;
 
 require_once "config.php";
 require_once "state.php";
@@ -28,6 +28,7 @@ class Router
     public function navigate(): void
     {
         $request = $_SERVER['REQUEST_URI'];
+        $this->sessionManager->put(SessionConstants::REQUEST_URI, $request);
         $request = preg_replace(Router::PAGE_BEFORE_QUERY_PARAMS_REGEX, "$1", $request);
         if ($this->resolveGetBookDetailsByBookNameIdEndpoint($request)) {
             return;
