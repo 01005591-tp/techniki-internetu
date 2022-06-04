@@ -10,19 +10,16 @@ use p1\core\domain\audit\AuditableObject;
 use p1\core\domain\book\BookPiece;
 use p1\core\domain\book\BookPieceState;
 
-class FindBookPiecesByBookNameIdQuery
-{
-    private mysqli $connection;
+class FindBookPiecesByBookNameIdQuery {
+  private mysqli $connection;
 
-    public function __construct(mysqli $connection)
-    {
-        $this->connection = $connection;
-    }
+  public function __construct(mysqli $connection) {
+    $this->connection = $connection;
+  }
 
-    public function query(string $nameId): array
-    {
-        $stmt = $this->connection->prepare(
-            "SELECT
+  public function query(string $nameId): array {
+    $stmt = $this->connection->prepare(
+      "SELECT
                     BP.ID AS BP_ID
                     ,BP.BOOK_ID AS BP_BOOK_ID
                     ,BP.STATE AS BP_STATE
@@ -36,24 +33,24 @@ class FindBookPiecesByBookNameIdQuery
                         BP.BOOK_ID = B.ID
                 WHERE
                     B.NAME_ID = ?");
-        $escapedNameId = $this->connection->real_escape_string($nameId);
-        $stmt->bind_param("s", $escapedNameId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $bookPieces = array();
-        while ($row = $result->fetch_assoc()) {
-            $bookPieces[] = new BookPiece(
-                $row['BP_ID'],
-                $row['BP_BOOK_ID'],
-                BookPieceState::of($row['BP_STATE'])->orElse(BookPieceState::UNAVAILABLE),
-                new AuditableObject(
-                    $row['BP_CREATION_DATE'],
-                    $row['BP_UPDATE_DATE'],
-                    $row['BP_UPDATED_BY']
-                ),
-                $row['BP_VERSION']
-            );
-        }
-        return $bookPieces;
+    $escapedNameId = $this->connection->real_escape_string($nameId);
+    $stmt->bind_param("s", $escapedNameId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $bookPieces = array();
+    while ($row = $result->fetch_assoc()) {
+      $bookPieces[] = new BookPiece(
+        $row['BP_ID'],
+        $row['BP_BOOK_ID'],
+        BookPieceState::of($row['BP_STATE'])->orElse(BookPieceState::UNAVAILABLE),
+        new AuditableObject(
+          $row['BP_CREATION_DATE'],
+          $row['BP_UPDATE_DATE'],
+          $row['BP_UPDATED_BY']
+        ),
+        $row['BP_VERSION']
+      );
     }
+    return $bookPieces;
+  }
 }

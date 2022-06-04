@@ -7,7 +7,6 @@ require_once "core/domain/book/get-book-details-command.php";
 
 use p1\core\function\Option;
 
-interface BookDetailsRepository
-{
-    function findBookDetails(GetBookDetailsCommand $command): Option;
+interface BookDetailsRepository {
+  function findBookDetails(GetBookDetailsCommand $command): Option;
 }

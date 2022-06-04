@@ -17,27 +17,24 @@ use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 use p1\session\SessionManager;
 
-class HomeConfiguration
-{
-    private HomeController $homeController;
+class HomeConfiguration {
+  private HomeController $homeController;
 
-    public function __construct(SessionManager            $sessionManager,
-                                GetBookListCommandHandler $getBookListCommandHandler,
-                                GetAllBookTagsUseCase     $getAllBookTagsUseCase,
-                                PaginationService         $paginationService)
-    {
+  public function __construct(SessionManager            $sessionManager,
+                              GetBookListCommandHandler $getBookListCommandHandler,
+                              GetAllBookTagsUseCase     $getAllBookTagsUseCase,
+                              PaginationService         $paginationService) {
 
-        $this->homeController = new HomeController(
-            $getBookListCommandHandler,
-            $getAllBookTagsUseCase,
-            $sessionManager,
-            $paginationService,
-            new SearchBooksRequestFactory($sessionManager)
-        );
-    }
+    $this->homeController = new HomeController(
+      $getBookListCommandHandler,
+      $getAllBookTagsUseCase,
+      $sessionManager,
+      $paginationService,
+      new SearchBooksRequestFactory($sessionManager)
+    );
+  }
 
-    public function homeController(): HomeController
-    {
-        return $this->homeController;
-    }
+  public function homeController(): HomeController {
+    return $this->homeController;
+  }
 }

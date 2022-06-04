@@ -11,27 +11,24 @@ use p1\session\SessionManager;
 use p1\view\alerts\AlertService;
 use p1\view\RedirectManager;
 
-class SignOutController
-{
-    private SessionManager $sessionManager;
-    private RedirectManager $redirectManager;
-    private AlertService $alertService;
+class SignOutController {
+  private SessionManager $sessionManager;
+  private RedirectManager $redirectManager;
+  private AlertService $alertService;
 
-    public function __construct(SessionManager  $sessionManager,
-                                RedirectManager $redirectManager,
-                                AlertService    $alertService)
-    {
-        $this->sessionManager = $sessionManager;
-        $this->redirectManager = $redirectManager;
-        $this->alertService = $alertService;
-    }
+  public function __construct(SessionManager  $sessionManager,
+                              RedirectManager $redirectManager,
+                              AlertService    $alertService) {
+    $this->sessionManager = $sessionManager;
+    $this->redirectManager = $redirectManager;
+    $this->alertService = $alertService;
+  }
 
 
-    public function logout(): void
-    {
-        // TODO: ALERTS - fix alert printing after redirect
-        $this->sessionManager->sessionDestroy();
-        $this->alertService->success(L::main_sign_out_signed_out_successfully_msg);
-        $this->redirectManager->redirectToMainPage()->run();
-    }
+  public function logout(): void {
+    // TODO: ALERTS - fix alert printing after redirect
+    $this->sessionManager->sessionDestroy();
+    $this->alertService->success(L::main_sign_out_signed_out_successfully_msg);
+    $this->redirectManager->redirectToMainPage()->run();
+  }
 }

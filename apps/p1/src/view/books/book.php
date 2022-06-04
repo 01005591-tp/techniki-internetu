@@ -11,10 +11,10 @@ $imgUri = (!is_null($bookDetails->book()->imageUri())) ? $bookDetails->book()->i
 $publishedAt = new DateTimeImmutable('@' . $bookDetails->book()->publishedAt());
 $tagsString = '';
 foreach ($bookDetails->bookTags() as $bookTag) {
-    $tagsString = ',' . $bookTag->code();
+  $tagsString = ',' . $bookTag->code();
 }
 if (str_starts_with($tagsString, ',')) {
-    $tagsString = substr($tagsString, 1);
+  $tagsString = substr($tagsString, 1);
 }
 ?>
 
@@ -23,11 +23,11 @@ if (str_starts_with($tagsString, ',')) {
     <div id="book-title" class="d-flex flex-column justify-content-center">
         <span class="p-2 h1 mb-1"><?php echo $bookDetails->book()->title(); ?></span>
         <div class="d-flex flex-wrap">
-            <?php if (!empty($bookDetails->authors())) {
-                foreach ($bookDetails->authors() as $author) {
-                    echo '<div class="mb-3 mx-2 text-nowrap author author-' . $author->priority() . '">' . $author->firstName() . ' ' . $author->lastName() . '</div>';
-                }
-            } ?>
+          <?php if (!empty($bookDetails->authors())) {
+            foreach ($bookDetails->authors() as $author) {
+              echo '<div class="mb-3 mx-2 text-nowrap author author-' . $author->priority() . '">' . $author->firstName() . ' ' . $author->lastName() . '</div>';
+            }
+          } ?>
         </div>
     </div>
 
@@ -45,7 +45,7 @@ if (str_starts_with($tagsString, ',')) {
             </li>
             <li class="list-group-item">
                 <strong><?php echo L::main_books_book_piece_details_page_published_at_label; ?>: </strong>
-                <?php echo $publishedAt->format("Y-m-d"); ?>
+              <?php echo $publishedAt->format("Y-m-d"); ?>
             </li>
             <li class="list-group-item">
                 <strong><?php echo L::main_books_book_piece_details_page_language_label; ?>
@@ -68,7 +68,7 @@ if (str_starts_with($tagsString, ',')) {
     <div>
         <p class="h3 mt-2"><?php echo L::main_books_book_piece_details_page_about_the_book_header; ?></p>
         <div>
-            <?php echo $bookDetails->book()->description(); ?>
+          <?php echo $bookDetails->book()->description(); ?>
         </div>
     </div>
 

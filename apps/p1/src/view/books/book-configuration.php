@@ -12,23 +12,20 @@ use p1\core\domain\book\GetBookDetailsCommandHandler;
 use p1\session\SessionManager;
 use p1\view\RedirectManager;
 
-class BookConfiguration
-{
-    private BookController $bookController;
+class BookConfiguration {
+  private BookController $bookController;
 
-    public function __construct(SessionManager               $sessionManager,
-                                RedirectManager              $redirectManager,
-                                GetBookDetailsCommandHandler $getBookDetailsCommandHandler)
-    {
-        $this->bookController = new BookController(
-            $getBookDetailsCommandHandler,
-            $sessionManager,
-            $redirectManager
-        );
-    }
+  public function __construct(SessionManager               $sessionManager,
+                              RedirectManager              $redirectManager,
+                              GetBookDetailsCommandHandler $getBookDetailsCommandHandler) {
+    $this->bookController = new BookController(
+      $getBookDetailsCommandHandler,
+      $sessionManager,
+      $redirectManager
+    );
+  }
 
-    public function bookController(): BookController
-    {
-        return $this->bookController;
-    }
+  public function bookController(): BookController {
+    return $this->bookController;
+  }
 }

@@ -20,26 +20,23 @@ $homeController = Configuration::instance()->viewConfiguration()->controllers()-
 $bookList = $homeController->findBooks();
 $maybePaginationData = $homeController->paginationData();
 $addPagination = new class implements Consumer {
-    function consume($value): void
-    {
-        $paginationData = $value;
-        require "view/pagination/pagination-component.php";
-    }
+  function consume($value): void {
+    $paginationData = $value;
+    require "view/pagination/pagination-component.php";
+  }
 };
 $searchComponentRunnable = new class($homeController) implements Runnable {
-    private HomeController $homeController;
+  private HomeController $homeController;
 
-    public function __construct(HomeController $homeController)
-    {
-        $this->homeController = $homeController;
-    }
+  public function __construct(HomeController $homeController) {
+    $this->homeController = $homeController;
+  }
 
-    function run(): void
-    {
-        $availableTags = $this->homeController->availableTags();
-        $searchCriteria = $this->homeController->searchCriteria();
-        require "view/home/search-component.php";
-    }
+  function run(): void {
+    $availableTags = $this->homeController->availableTags();
+    $searchCriteria = $this->homeController->searchCriteria();
+    require "view/home/search-component.php";
+  }
 };
 ?>
 
@@ -49,27 +46,26 @@ $searchComponentRunnable = new class($homeController) implements Runnable {
     </div>
 
     <hr/>
-    <?php $searchComponentRunnable->run(); ?>
+  <?php $searchComponentRunnable->run(); ?>
     <hr/>
 
-    <?php $maybePaginationData->peek($addPagination); ?>
+  <?php $maybePaginationData->peek($addPagination); ?>
 
     <hr/>
 
     <div class="d-flex flex-wrap justify-content-center">
-        <?php
-        foreach ($bookList->books() as $book) {
-            $imgUri = (!is_null($book->imageUri())) ? $book->imageUri() : "/assets/book-icon.svg";
-            $bookStateDisplayName = BookState::of($book->state())
-                ->map(new class implements Function2 {
-                    function apply($value)
-                    {
-                        return $value->displayName();
-                    }
-                })
-                ->orElse('');
-            $languageDisplayName = Language::ofOrUnknown($book->language())->displayName();
-            echo '
+      <?php
+      foreach ($bookList->books() as $book) {
+        $imgUri = (!is_null($book->imageUri())) ? $book->imageUri() : "/assets/book-icon.svg";
+        $bookStateDisplayName = BookState::of($book->state())
+          ->map(new class implements Function2 {
+            function apply($value) {
+              return $value->displayName();
+            }
+          })
+          ->orElse('');
+        $languageDisplayName = Language::ofOrUnknown($book->language())->displayName();
+        echo '
         <div id="book-list-cards-container" class="p-2">
             <div class="card">
                 <a href="/books/' . $book->nameId() . '">
@@ -89,10 +85,10 @@ $searchComponentRunnable = new class($homeController) implements Runnable {
             </div>
         </div>
         ';
-        } ?>
+      } ?>
     </div>
 
     <hr/>
 
-    <?php $maybePaginationData->peek($addPagination); ?>
+  <?php $maybePaginationData->peek($addPagination); ?>
 </div>

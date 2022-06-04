@@ -14,6 +14,6 @@ $navbarController = Configuration::instance()->viewConfiguration()->controllers(
     </span>
     <a class="ms-2 align-self-center btn btn-outline-danger text-nowrap" href="/sign-out"
        role="button" aria-pressed="true">
-        <?php echo L::main_navbar_sign_in_sign_out_button ?>
+      <?php echo L::main_navbar_sign_in_sign_out_button ?>
     </a>
 </dov>

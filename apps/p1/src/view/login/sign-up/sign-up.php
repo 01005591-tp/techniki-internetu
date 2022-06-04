@@ -25,7 +25,7 @@ $signUpController->signIn();
             <input type="password" name="signUpPasswordInput"
                    class="form-control" id="signUpPasswordInput" aria-describedby="signUpPasswordHelp">
             <div id="signUpPasswordHelp" class="form-text">
-                <?php echo L::main_sign_up_password_input_description ?>
+              <?php echo L::main_sign_up_password_input_description ?>
             </div>
         </div>
         <div class="mb-3">
@@ -35,7 +35,7 @@ $signUpController->signIn();
                    class="form-control" id="signUpPasswordRepeatInput"
                    aria-describedby="signUpPasswordRepeatHelp">
             <div id="signUpPasswordRepeatHelp" class="form-text">
-                <?php echo L::main_sign_up_repeat_password_input_description ?>
+              <?php echo L::main_sign_up_repeat_password_input_description ?>
             </div>
         </div>
         <button type="submit" name="sign-up-create-user-btn"

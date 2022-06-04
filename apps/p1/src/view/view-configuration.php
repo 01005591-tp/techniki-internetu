@@ -56,118 +56,105 @@ use p1\view\login\signup\SignUpController;
 use p1\view\navbar\NavbarConfiguration;
 use p1\view\navbar\NavbarController;
 
-class ViewConfiguration
-{
-    private ViewControllers $controllers;
-    private AlertsConfiguration $alertsConfiguration;
-    private SessionManager $sessionManager;
+class ViewConfiguration {
+  private ViewControllers $controllers;
+  private AlertsConfiguration $alertsConfiguration;
+  private SessionManager $sessionManager;
 
-    public function __construct(State                          $state,
-                                CreateUserCommandHandler       $createUserCommandHandler,
-                                AuthenticateUserCommandHandler $authenticateUserCommandHandler,
-                                GetBookListCommandHandler      $getBookListCommandHandler,
-                                GetBookDetailsCommandHandler   $getBookDetailsCommandHandler,
-                                GetAllBookTagsUseCase          $getAllBookTagsUseCase,
-                                RedirectManager                $redirectManager,
-                                SessionManager                 $sessionManager,
-                                PaginationService              $paginationService)
-    {
-        $this->sessionManager = $sessionManager;
-        $this->alertsConfiguration = new AlertsConfiguration($this->sessionManager);
+  public function __construct(State                          $state,
+                              CreateUserCommandHandler       $createUserCommandHandler,
+                              AuthenticateUserCommandHandler $authenticateUserCommandHandler,
+                              GetBookListCommandHandler      $getBookListCommandHandler,
+                              GetBookDetailsCommandHandler   $getBookDetailsCommandHandler,
+                              GetAllBookTagsUseCase          $getAllBookTagsUseCase,
+                              RedirectManager                $redirectManager,
+                              SessionManager                 $sessionManager,
+                              PaginationService              $paginationService) {
+    $this->sessionManager = $sessionManager;
+    $this->alertsConfiguration = new AlertsConfiguration($this->sessionManager);
 
-        $loginConfiguration = new LoginConfiguration(
-            $state,
-            $createUserCommandHandler,
-            $authenticateUserCommandHandler,
-            $this->sessionManager,
-            $redirectManager,
-            $this->alertService()
-        );
-        $navbarConfiguration = new NavbarConfiguration(
-            $state,
-            $this->sessionManager
-        );
-        $homeConfiguration = new HomeConfiguration(
-            $this->sessionManager,
-            $getBookListCommandHandler,
-            $getAllBookTagsUseCase,
-            $paginationService
-        );
-        $bookConfiguration = new BookConfiguration(
-            $this->sessionManager,
-            $redirectManager,
-            $getBookDetailsCommandHandler
-        );
+    $loginConfiguration = new LoginConfiguration(
+      $state,
+      $createUserCommandHandler,
+      $authenticateUserCommandHandler,
+      $this->sessionManager,
+      $redirectManager,
+      $this->alertService()
+    );
+    $navbarConfiguration = new NavbarConfiguration(
+      $state,
+      $this->sessionManager
+    );
+    $homeConfiguration = new HomeConfiguration(
+      $this->sessionManager,
+      $getBookListCommandHandler,
+      $getAllBookTagsUseCase,
+      $paginationService
+    );
+    $bookConfiguration = new BookConfiguration(
+      $this->sessionManager,
+      $redirectManager,
+      $getBookDetailsCommandHandler
+    );
 
-        $this->controllers = new ViewControllers(
-            $loginConfiguration,
-            $navbarConfiguration,
-            $homeConfiguration,
-            $bookConfiguration
-        );
-    }
+    $this->controllers = new ViewControllers(
+      $loginConfiguration,
+      $navbarConfiguration,
+      $homeConfiguration,
+      $bookConfiguration
+    );
+  }
 
-    public function controllers(): ViewControllers
-    {
-        return $this->controllers;
-    }
+  public function controllers(): ViewControllers {
+    return $this->controllers;
+  }
 
-    public function alertPrinter(): AlertPrinter
-    {
-        return $this->alertsConfiguration->alertPrinter();
-    }
+  public function alertPrinter(): AlertPrinter {
+    return $this->alertsConfiguration->alertPrinter();
+  }
 
-    public function alertService(): AlertService
-    {
-        return $this->alertsConfiguration->alertService();
-    }
+  public function alertService(): AlertService {
+    return $this->alertsConfiguration->alertService();
+  }
 }
 
-class ViewControllers
-{
-    private LoginConfiguration $loginConfiguration;
-    private NavbarConfiguration $navbarConfiguration;
-    private HomeConfiguration $homeConfiguration;
-    private BookConfiguration $bookConfiguration;
+class ViewControllers {
+  private LoginConfiguration $loginConfiguration;
+  private NavbarConfiguration $navbarConfiguration;
+  private HomeConfiguration $homeConfiguration;
+  private BookConfiguration $bookConfiguration;
 
-    public function __construct(LoginConfiguration  $loginConfiguration,
-                                NavbarConfiguration $navbarConfiguration,
-                                HomeConfiguration   $homeConfiguration,
-                                BookConfiguration   $bookConfiguration)
-    {
-        $this->loginConfiguration = $loginConfiguration;
-        $this->navbarConfiguration = $navbarConfiguration;
-        $this->homeConfiguration = $homeConfiguration;
-        $this->bookConfiguration = $bookConfiguration;
-    }
+  public function __construct(LoginConfiguration  $loginConfiguration,
+                              NavbarConfiguration $navbarConfiguration,
+                              HomeConfiguration   $homeConfiguration,
+                              BookConfiguration   $bookConfiguration) {
+    $this->loginConfiguration = $loginConfiguration;
+    $this->navbarConfiguration = $navbarConfiguration;
+    $this->homeConfiguration = $homeConfiguration;
+    $this->bookConfiguration = $bookConfiguration;
+  }
 
-    public function navbarController(): NavbarController
-    {
-        return $this->navbarConfiguration->navbarController();
-    }
+  public function navbarController(): NavbarController {
+    return $this->navbarConfiguration->navbarController();
+  }
 
-    public function signUpController(): SignUpController
-    {
-        return $this->loginConfiguration->signUpController();
-    }
+  public function signUpController(): SignUpController {
+    return $this->loginConfiguration->signUpController();
+  }
 
-    public function loginController(): LoginController
-    {
-        return $this->loginConfiguration->loginController();
-    }
+  public function loginController(): LoginController {
+    return $this->loginConfiguration->loginController();
+  }
 
-    public function signOutController(): SignOutController
-    {
-        return $this->loginConfiguration->signOutController();
-    }
+  public function signOutController(): SignOutController {
+    return $this->loginConfiguration->signOutController();
+  }
 
-    public function homeController(): HomeController
-    {
-        return $this->homeConfiguration->homeController();
-    }
+  public function homeController(): HomeController {
+    return $this->homeConfiguration->homeController();
+  }
 
-    public function bookController(): BookController
-    {
-        return $this->bookConfiguration->bookController();
-    }
+  public function bookController(): BookController {
+    return $this->bookConfiguration->bookController();
+  }
 }

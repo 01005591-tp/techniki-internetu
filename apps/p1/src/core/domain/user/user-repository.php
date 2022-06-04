@@ -9,9 +9,8 @@ require_once "core/domain/user/create-user-command.php";
 use p1\core\function\Either;
 use p1\core\function\Option;
 
-interface UserRepository
-{
-    public function createUser(CreateUserCommand $command): Either;
+interface UserRepository {
+  public function createUser(CreateUserCommand $command): Either;
 
-    public function findUserByEmail(string $email): Option;
+  public function findUserByEmail(string $email): Option;
 }

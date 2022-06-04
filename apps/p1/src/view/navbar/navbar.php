@@ -8,27 +8,27 @@ use p1\view\navbar\NavbarItem;
 $navbarController = Configuration::instance()->viewConfiguration()->controllers()->navbarController();
 
 $toNavbarItemActiveCssClass = function (NavbarItem $navbarItem) use ($navbarController): string {
-    return $navbarController->isActiveItem($navbarItem) ? 'active' : '';
+  return $navbarController->isActiveItem($navbarItem) ? 'active' : '';
 };
 
 $loggedInUserComponents = function () use ($navbarController): void {
-    if ($navbarController->isLoggedInUser()) {
-        require "view/navbar/form/navbar-form-logged-in-user.php";
-    } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
-        require "view/navbar/form/navbar-form-sign-in-page.php";
-    } else {
-        require "view/navbar/form/navbar-form-default.php";
-    }
+  if ($navbarController->isLoggedInUser()) {
+    require "view/navbar/form/navbar-form-logged-in-user.php";
+  } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
+    require "view/navbar/form/navbar-form-sign-in-page.php";
+  } else {
+    require "view/navbar/form/navbar-form-default.php";
+  }
 };
 
 $loggedInUserComponentsSmall = function () use ($navbarController): void {
-    if ($navbarController->isLoggedInUser()) {
-        require "view/navbar/form/navbar-form-small-logged-in-user.php";
-    } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
-        require "view/navbar/form/navbar-form-small-sign-in-page.php";
-    } else {
-        require "view/navbar/form/navbar-form-small-default.php";
-    }
+  if ($navbarController->isLoggedInUser()) {
+    require "view/navbar/form/navbar-form-small-logged-in-user.php";
+  } else if ($navbarController->isActiveItem(NavbarItem::Login)) {
+    require "view/navbar/form/navbar-form-small-sign-in-page.php";
+  } else {
+    require "view/navbar/form/navbar-form-small-default.php";
+  }
 };
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -47,20 +47,20 @@ $loggedInUserComponentsSmall = function () use ($navbarController): void {
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link <?php echo($toNavbarItemActiveCssClass(NavbarItem::Home)); ?>" href="/">
-                        <?php echo L::main_navbar_home ?>
+                      <?php echo L::main_navbar_home ?>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo($toNavbarItemActiveCssClass(NavbarItem::About)); ?>" href="/about">
-                        <?php echo L::main_navbar_about ?>
+                      <?php echo L::main_navbar_about ?>
                     </a>
                 </li>
             </ul>
             <div class="d-none d-lg-block">
-                <?php $loggedInUserComponents(); ?>
+              <?php $loggedInUserComponents(); ?>
             </div>
             <div class="d-xxl-none d-xl-none d-lg-none d-block">
-                <?php $loggedInUserComponentsSmall(); ?>
+              <?php $loggedInUserComponentsSmall(); ?>
             </div>
         </div>
     </div>

@@ -11,19 +11,16 @@ use p1\core\domain\audit\AuditableObject;
 use p1\core\domain\book\Publisher;
 use p1\core\function\Option;
 
-class FindPublisherByBookNameIdQuery
-{
-    private mysqli $connection;
+class FindPublisherByBookNameIdQuery {
+  private mysqli $connection;
 
-    public function __construct(mysqli $connection)
-    {
-        $this->connection = $connection;
-    }
+  public function __construct(mysqli $connection) {
+    $this->connection = $connection;
+  }
 
-    public function query(string $nameId): Option
-    {
-        $stmt = $this->connection->prepare(
-            "SELECT
+  public function query(string $nameId): Option {
+    $stmt = $this->connection->prepare(
+      "SELECT
                 P.ID AS P_ID
                 ,P.NAME AS P_NAME
                 ,UNIX_TIMESTAMP(P.CREATION_DATE) AS P_CREATION_DATE
@@ -36,24 +33,24 @@ class FindPublisherByBookNameIdQuery
                     P.ID = B.PUBLISHER_ID
             WHERE
                 B.NAME_ID = ?");
-        $escapedNameId = $this->connection->real_escape_string($nameId);
-        $stmt->bind_param("s", $escapedNameId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        if (!$row) {
-            return Option::none();
-        } else {
-            return Option::of(new Publisher(
-                $row['P_ID'],
-                $row['P_NAME'],
-                new AuditableObject(
-                    $row['P_CREATION_DATE'],
-                    $row['P_UPDATE_DATE'],
-                    $row['P_UPDATED_BY']
-                ),
-                $row['P_VERSION']
-            ));
-        }
+    $escapedNameId = $this->connection->real_escape_string($nameId);
+    $stmt->bind_param("s", $escapedNameId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if (!$row) {
+      return Option::none();
+    } else {
+      return Option::of(new Publisher(
+        $row['P_ID'],
+        $row['P_NAME'],
+        new AuditableObject(
+          $row['P_CREATION_DATE'],
+          $row['P_UPDATE_DATE'],
+          $row['P_UPDATED_BY']
+        ),
+        $row['P_VERSION']
+      ));
     }
+  }
 }

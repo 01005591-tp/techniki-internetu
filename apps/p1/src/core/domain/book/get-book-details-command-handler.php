@@ -8,18 +8,15 @@ require_once "core/function/option.php";
 
 use p1\core\function\Option;
 
-class GetBookDetailsCommandHandler
-{
-    private BookDetailsRepository $bookDetailsRepository;
+class GetBookDetailsCommandHandler {
+  private BookDetailsRepository $bookDetailsRepository;
 
-    public function __construct(BookDetailsRepository $bookDetailsRepository)
-    {
-        $this->bookDetailsRepository = $bookDetailsRepository;
-    }
+  public function __construct(BookDetailsRepository $bookDetailsRepository) {
+    $this->bookDetailsRepository = $bookDetailsRepository;
+  }
 
-    public function handle(GetBookDetailsCommand $command): Option
-    {
-        return $this->bookDetailsRepository->findBookDetails($command);
-    }
+  public function handle(GetBookDetailsCommand $command): Option {
+    return $this->bookDetailsRepository->findBookDetails($command);
+  }
 }
 

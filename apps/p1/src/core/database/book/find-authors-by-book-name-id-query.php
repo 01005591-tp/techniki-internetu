@@ -12,19 +12,16 @@ use p1\core\domain\audit\AuditableObject;
 use p1\core\domain\book\Author;
 use p1\core\domain\book\BookAuthor;
 
-class FindAuthorsByBookNameIdQuery
-{
-    private mysqli $connection;
+class FindAuthorsByBookNameIdQuery {
+  private mysqli $connection;
 
-    public function __construct(mysqli $connection)
-    {
-        $this->connection = $connection;
-    }
+  public function __construct(mysqli $connection) {
+    $this->connection = $connection;
+  }
 
-    public function query(string $nameId): BookAuthorsView
-    {
-        $stmt = $this->connection->prepare(
-            "SELECT
+  public function query(string $nameId): BookAuthorsView {
+    $stmt = $this->connection->prepare(
+      "SELECT
                     A.ID AS A_ID
                     ,A.FIRST_NAME AS A_FIRST_NAME
                     ,A.LAST_NAME AS A_LAST_NAME
@@ -52,39 +49,39 @@ class FindAuthorsByBookNameIdQuery
                     BA.PRIORITY
                     ,A.FIRST_NAME
                     ,A.LAST_NAME");
-        $escapedNameId = $this->connection->real_escape_string($nameId);
-        $stmt->bind_param("s", $escapedNameId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $authors = array();
-        $bookAuthors = array();
-        while ($row = $result->fetch_assoc()) {
-            $authors[] = new Author(
-                $row['A_ID'],
-                $row['A_FIRST_NAME'],
-                $row['A_LAST_NAME'],
-                $row['A_BIOGRAPHY_NOTE'],
-                $row['A_BIRTH_DATE'],
-                $row['BA_PRIORITY'],
-                new AuditableObject(
-                    $row['A_CREATION_DATE'],
-                    $row['A_UPDATE_DATE'],
-                    $row['A_UPDATED_BY']
-                ),
-                $row['A_VERSION']
-            );
-            $bookAuthors[] = new BookAuthor(
-                $row['BA_BOOK_ID'],
-                $row['A_ID'],
-                $row['BA_PRIORITY'],
-                new AuditableObject(
-                    $row['BA_CREATION_DATE'],
-                    $row['BA_UPDATE_DATE'],
-                    $row['BA_UPDATED_BY']
-                ),
-                $row['BA_VERSION']
-            );
-        }
-        return new BookAuthorsView($authors, $bookAuthors);
+    $escapedNameId = $this->connection->real_escape_string($nameId);
+    $stmt->bind_param("s", $escapedNameId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $authors = array();
+    $bookAuthors = array();
+    while ($row = $result->fetch_assoc()) {
+      $authors[] = new Author(
+        $row['A_ID'],
+        $row['A_FIRST_NAME'],
+        $row['A_LAST_NAME'],
+        $row['A_BIOGRAPHY_NOTE'],
+        $row['A_BIRTH_DATE'],
+        $row['BA_PRIORITY'],
+        new AuditableObject(
+          $row['A_CREATION_DATE'],
+          $row['A_UPDATE_DATE'],
+          $row['A_UPDATED_BY']
+        ),
+        $row['A_VERSION']
+      );
+      $bookAuthors[] = new BookAuthor(
+        $row['BA_BOOK_ID'],
+        $row['A_ID'],
+        $row['BA_PRIORITY'],
+        new AuditableObject(
+          $row['BA_CREATION_DATE'],
+          $row['BA_UPDATE_DATE'],
+          $row['BA_UPDATED_BY']
+        ),
+        $row['BA_VERSION']
+      );
     }
+    return new BookAuthorsView($authors, $bookAuthors);
+  }
 }

@@ -23,53 +23,48 @@ use p1\view\login\signup\SignUpController;
 use p1\view\login\signup\SignUpRequestValidator;
 use p1\view\RedirectManager;
 
-class LoginConfiguration
-{
-    private SignUpController $signUpController;
-    private LoginController $loginController;
-    private SignOutController $signOutController;
+class LoginConfiguration {
+  private SignUpController $signUpController;
+  private LoginController $loginController;
+  private SignOutController $signOutController;
 
-    public function __construct(State                          $state,
-                                CreateUserCommandHandler       $createUserCommandHandler,
-                                AuthenticateUserCommandHandler $authenticateUserCommandHandler,
-                                SessionManager                 $sessionManager,
-                                RedirectManager                $redirectManager,
-                                AlertService                   $alertService)
-    {
-        $this->signUpController = new SignUpController(
-            new SignUpRequestValidator(),
-            $createUserCommandHandler,
-            $state,
-            $alertService,
-            $sessionManager,
-            $redirectManager
-        );
-        $this->loginController = new LoginController(
-            $authenticateUserCommandHandler,
-            $state,
-            $sessionManager,
-            $redirectManager,
-            $alertService
-        );
-        $this->signOutController = new SignOutController(
-            $sessionManager,
-            $redirectManager,
-            $alertService
-        );
-    }
+  public function __construct(State                          $state,
+                              CreateUserCommandHandler       $createUserCommandHandler,
+                              AuthenticateUserCommandHandler $authenticateUserCommandHandler,
+                              SessionManager                 $sessionManager,
+                              RedirectManager                $redirectManager,
+                              AlertService                   $alertService) {
+    $this->signUpController = new SignUpController(
+      new SignUpRequestValidator(),
+      $createUserCommandHandler,
+      $state,
+      $alertService,
+      $sessionManager,
+      $redirectManager
+    );
+    $this->loginController = new LoginController(
+      $authenticateUserCommandHandler,
+      $state,
+      $sessionManager,
+      $redirectManager,
+      $alertService
+    );
+    $this->signOutController = new SignOutController(
+      $sessionManager,
+      $redirectManager,
+      $alertService
+    );
+  }
 
-    public function signUpController(): SignUpController
-    {
-        return $this->signUpController;
-    }
+  public function signUpController(): SignUpController {
+    return $this->signUpController;
+  }
 
-    public function loginController(): LoginController
-    {
-        return $this->loginController;
-    }
+  public function loginController(): LoginController {
+    return $this->loginController;
+  }
 
-    public function signOutController(): SignOutController
-    {
-        return $this->signOutController;
-    }
+  public function signOutController(): SignOutController {
+    return $this->signOutController;
+  }
 }

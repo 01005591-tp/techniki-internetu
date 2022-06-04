@@ -16,19 +16,16 @@ use p1\core\domain\book\BookState;
 use p1\core\domain\language\Language;
 use p1\core\function\Option;
 
-class FindBookByNameIdQuery
-{
-    private mysqli $connection;
+class FindBookByNameIdQuery {
+  private mysqli $connection;
 
-    public function __construct(mysqli $connection)
-    {
-        $this->connection = $connection;
-    }
+  public function __construct(mysqli $connection) {
+    $this->connection = $connection;
+  }
 
-    public function query(string $nameId): Option
-    {
-        $stmt = $this->connection->prepare(
-            "SELECT
+  public function query(string $nameId): Option {
+    $stmt = $this->connection->prepare(
+      "SELECT
                     B.ID AS B_ID
                     ,B.NAME_ID AS B_NAME_ID
                     ,B.ISBN AS B_ISBN
@@ -48,35 +45,35 @@ class FindBookByNameIdQuery
                     BOOKS B
                 WHERE
                     B.NAME_ID = ?");
-        $escapedNameId = $this->connection->real_escape_string($nameId);
-        $stmt->bind_param("s", $escapedNameId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        if (!$row) {
-            return Option::none();
-        } else {
-            return Option::of(
-                new Book(
-                    $row['B_ID'],
-                    $row['B_NAME_ID'],
-                    $row['B_ISBN'],
-                    $row['B_TITLE'],
-                    $row['B_DESCRIPTION'],
-                    Language::ofOrUnknown($row['B_LANGUAGE']),
-                    $row['B_PUBLISHED_AT'],
-                    $row['B_PUBLISHER_ID'],
-                    $row['B_PAGES'],
-                    BookState::ofOrUnavailable($row['B_STATE']),
-                    $row['B_IMAGE_URI'],
-                    new AuditableObject(
-                        $row['B_CREATION_DATE'],
-                        $row['B_UPDATE_DATE'],
-                        $row['B_UPDATED_BY']
-                    ),
-                    $row['B_VERSION']
-                )
-            );
-        }
+    $escapedNameId = $this->connection->real_escape_string($nameId);
+    $stmt->bind_param("s", $escapedNameId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if (!$row) {
+      return Option::none();
+    } else {
+      return Option::of(
+        new Book(
+          $row['B_ID'],
+          $row['B_NAME_ID'],
+          $row['B_ISBN'],
+          $row['B_TITLE'],
+          $row['B_DESCRIPTION'],
+          Language::ofOrUnknown($row['B_LANGUAGE']),
+          $row['B_PUBLISHED_AT'],
+          $row['B_PUBLISHER_ID'],
+          $row['B_PAGES'],
+          BookState::ofOrUnavailable($row['B_STATE']),
+          $row['B_IMAGE_URI'],
+          new AuditableObject(
+            $row['B_CREATION_DATE'],
+            $row['B_UPDATE_DATE'],
+            $row['B_UPDATED_BY']
+          ),
+          $row['B_VERSION']
+        )
+      );
     }
+  }
 }

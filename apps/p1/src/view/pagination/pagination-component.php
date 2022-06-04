@@ -12,14 +12,14 @@ $uri = $paginationData->uri() . '?' . $paginationData->queryParamName() . '=';
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <?php
-        $pages = $paginationData->pages();
-        foreach ($pages as $page) {
-            echo '<li class="page-item ' . $page->style() . '">
+      <?php
+      $pages = $paginationData->pages();
+      foreach ($pages as $page) {
+        echo '<li class="page-item ' . $page->style() . '">
                         <a class="page-link" href="' . $uri . $page->index() . '">' . $page->indexDisplay() . '</a>
                       </li>';
-        }
-        ?>
+      }
+      ?>
         <li class="page-item">
             <a class="page-link"
                href="<?php echo $uri . $paginationData->nextPage(); ?>"

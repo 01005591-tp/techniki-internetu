@@ -46,64 +46,59 @@ use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\BookTagsRepository;
 use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 
-class BookConfiguration
-{
-    private DatabaseConnection $databaseConnection;
-    private FindDefaultBookListQuery $findDefaultBookListQuery;
-    private BookListRepository $bookListRepository;
-    private GetBookListCommandHandler $getBookListCommandHandler;
+class BookConfiguration {
+  private DatabaseConnection $databaseConnection;
+  private FindDefaultBookListQuery $findDefaultBookListQuery;
+  private BookListRepository $bookListRepository;
+  private GetBookListCommandHandler $getBookListCommandHandler;
 
-    private FindBookByNameIdQuery $findBookByNameIdQuery;
-    private FindPublisherByBookNameIdQuery $findPublisherByBookNameIdQuery;
-    private FindAuthorsByBookNameIdQuery $findAuthorsByBookNameIdQuery;
-    private FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery;
-    private FindBookTagsByBookNameIdQuery $findBookTagsByBookNameIdQuery;
-    private BookDetailsRepository $bookDetailsRepository;
-    private GetBookDetailsCommandHandler $getBookDetailsCommandHandler;
+  private FindBookByNameIdQuery $findBookByNameIdQuery;
+  private FindPublisherByBookNameIdQuery $findPublisherByBookNameIdQuery;
+  private FindAuthorsByBookNameIdQuery $findAuthorsByBookNameIdQuery;
+  private FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery;
+  private FindBookTagsByBookNameIdQuery $findBookTagsByBookNameIdQuery;
+  private BookDetailsRepository $bookDetailsRepository;
+  private GetBookDetailsCommandHandler $getBookDetailsCommandHandler;
 
-    private FindAllBookTagsQuery $findAllBookTagsQuery;
-    private BookTagsRepository $bookTagsRepository;
-    private GetAllBookTagsUseCase $getAllBookTagsUseCase;
+  private FindAllBookTagsQuery $findAllBookTagsQuery;
+  private BookTagsRepository $bookTagsRepository;
+  private GetAllBookTagsUseCase $getAllBookTagsUseCase;
 
-    public function __construct(DatabaseConfiguration $databaseConfiguration)
-    {
-        $this->databaseConnection = $databaseConfiguration->databaseConnection();
-        $this->findDefaultBookListQuery = new FindDefaultBookListQuery($this->databaseConnection->connection());
-        $this->bookListRepository = new BookListDbRepository($this->findDefaultBookListQuery);
-        $this->getBookListCommandHandler = new GetBookListCommandHandler($this->bookListRepository);
+  public function __construct(DatabaseConfiguration $databaseConfiguration) {
+    $this->databaseConnection = $databaseConfiguration->databaseConnection();
+    $this->findDefaultBookListQuery = new FindDefaultBookListQuery($this->databaseConnection->connection());
+    $this->bookListRepository = new BookListDbRepository($this->findDefaultBookListQuery);
+    $this->getBookListCommandHandler = new GetBookListCommandHandler($this->bookListRepository);
 
-        $this->findBookByNameIdQuery = new FindBookByNameIdQuery($this->databaseConnection->connection());
-        $this->findPublisherByBookNameIdQuery = new FindPublisherByBookNameIdQuery($this->databaseConnection->connection());
-        $this->findAuthorsByBookNameIdQuery = new FindAuthorsByBookNameIdQuery($this->databaseConnection->connection());
-        $this->findBookPiecesByBookNameIdQuery = new FindBookPiecesByBookNameIdQuery($this->databaseConnection->connection());
-        $this->findBookTagsByBookNameIdQuery = new FindBookTagsByBookNameIdQuery($this->databaseConnection->connection());
+    $this->findBookByNameIdQuery = new FindBookByNameIdQuery($this->databaseConnection->connection());
+    $this->findPublisherByBookNameIdQuery = new FindPublisherByBookNameIdQuery($this->databaseConnection->connection());
+    $this->findAuthorsByBookNameIdQuery = new FindAuthorsByBookNameIdQuery($this->databaseConnection->connection());
+    $this->findBookPiecesByBookNameIdQuery = new FindBookPiecesByBookNameIdQuery($this->databaseConnection->connection());
+    $this->findBookTagsByBookNameIdQuery = new FindBookTagsByBookNameIdQuery($this->databaseConnection->connection());
 
-        $this->bookDetailsRepository = new BookDetailsDbRepository(
-            $this->findBookByNameIdQuery,
-            $this->findPublisherByBookNameIdQuery,
-            $this->findAuthorsByBookNameIdQuery,
-            $this->findBookPiecesByBookNameIdQuery,
-            $this->findBookTagsByBookNameIdQuery
-        );
-        $this->getBookDetailsCommandHandler = new GetBookDetailsCommandHandler($this->bookDetailsRepository);
+    $this->bookDetailsRepository = new BookDetailsDbRepository(
+      $this->findBookByNameIdQuery,
+      $this->findPublisherByBookNameIdQuery,
+      $this->findAuthorsByBookNameIdQuery,
+      $this->findBookPiecesByBookNameIdQuery,
+      $this->findBookTagsByBookNameIdQuery
+    );
+    $this->getBookDetailsCommandHandler = new GetBookDetailsCommandHandler($this->bookDetailsRepository);
 
-        $this->findAllBookTagsQuery = new FindAllBookTagsQuery($this->databaseConnection->connection());
-        $this->bookTagsRepository = new BookTagsDbRepository($this->findAllBookTagsQuery);
-        $this->getAllBookTagsUseCase = new GetAllBookTagsUseCase($this->bookTagsRepository);
-    }
+    $this->findAllBookTagsQuery = new FindAllBookTagsQuery($this->databaseConnection->connection());
+    $this->bookTagsRepository = new BookTagsDbRepository($this->findAllBookTagsQuery);
+    $this->getAllBookTagsUseCase = new GetAllBookTagsUseCase($this->bookTagsRepository);
+  }
 
-    public function getBookListCommandHandler(): GetBookListCommandHandler
-    {
-        return $this->getBookListCommandHandler;
-    }
+  public function getBookListCommandHandler(): GetBookListCommandHandler {
+    return $this->getBookListCommandHandler;
+  }
 
-    public function getBookDetailsCommandHandler(): GetBookDetailsCommandHandler
-    {
-        return $this->getBookDetailsCommandHandler;
-    }
+  public function getBookDetailsCommandHandler(): GetBookDetailsCommandHandler {
+    return $this->getBookDetailsCommandHandler;
+  }
 
-    public function getAllBookTagsUseCase(): GetAllBookTagsUseCase
-    {
-        return $this->getAllBookTagsUseCase;
-    }
+  public function getAllBookTagsUseCase(): GetAllBookTagsUseCase {
+    return $this->getAllBookTagsUseCase;
+  }
 }

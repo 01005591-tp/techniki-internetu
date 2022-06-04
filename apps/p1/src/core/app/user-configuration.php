@@ -29,49 +29,45 @@ use p1\core\domain\user\auth\UserAuthRepository;
 use p1\core\domain\user\CreateUserCommandHandler;
 use p1\core\domain\user\UserRepository;
 
-class UserConfiguration
-{
-    private DatabaseConnection $databaseConnection;
-    private FindUserByEmailQuery $findUserByEmailQuery;
-    private InsertUserStatement $insertUserStatement;
-    private UserRepository $userRepository;
+class UserConfiguration {
+  private DatabaseConnection $databaseConnection;
+  private FindUserByEmailQuery $findUserByEmailQuery;
+  private InsertUserStatement $insertUserStatement;
+  private UserRepository $userRepository;
 
-    private FindUserRolesByUserIdQuery $findUserRolesByUserIdQuery;
-    private UserAuthRepository $userAuthRepository;
+  private FindUserRolesByUserIdQuery $findUserRolesByUserIdQuery;
+  private UserAuthRepository $userAuthRepository;
 
-    private CreateUserCommandHandler $createUserCommandHandler;
-    private AuthenticateUserCommandHandler $authenticateUserCommandHandler;
+  private CreateUserCommandHandler $createUserCommandHandler;
+  private AuthenticateUserCommandHandler $authenticateUserCommandHandler;
 
-    public function __construct(DatabaseConfiguration $databaseConfiguration)
-    {
-        $this->databaseConnection = $databaseConfiguration->databaseConnection();
+  public function __construct(DatabaseConfiguration $databaseConfiguration) {
+    $this->databaseConnection = $databaseConfiguration->databaseConnection();
 
-        $this->findUserByEmailQuery = new FindUserByEmailQuery($this->databaseConnection->connection());
-        $this->insertUserStatement = new InsertUserStatement($this->databaseConnection->connection());
-        $this->userRepository = new UserDbRepository(
-            $this->findUserByEmailQuery,
-            $this->insertUserStatement
-        );
+    $this->findUserByEmailQuery = new FindUserByEmailQuery($this->databaseConnection->connection());
+    $this->insertUserStatement = new InsertUserStatement($this->databaseConnection->connection());
+    $this->userRepository = new UserDbRepository(
+      $this->findUserByEmailQuery,
+      $this->insertUserStatement
+    );
 
-        $this->findUserRolesByUserIdQuery = new FindUserRolesByUserIdQuery($this->databaseConnection->connection());
-        $this->userAuthRepository = new UserAuthDbRepository(
-            $this->findUserRolesByUserIdQuery
-        );
+    $this->findUserRolesByUserIdQuery = new FindUserRolesByUserIdQuery($this->databaseConnection->connection());
+    $this->userAuthRepository = new UserAuthDbRepository(
+      $this->findUserRolesByUserIdQuery
+    );
 
-        $this->createUserCommandHandler = new CreateUserCommandHandler($this->userRepository);
-        $this->authenticateUserCommandHandler = new AuthenticateUserCommandHandler(
-            $this->userRepository,
-            $this->userAuthRepository
-        );
-    }
+    $this->createUserCommandHandler = new CreateUserCommandHandler($this->userRepository);
+    $this->authenticateUserCommandHandler = new AuthenticateUserCommandHandler(
+      $this->userRepository,
+      $this->userAuthRepository
+    );
+  }
 
-    public function createUserCommandHandler(): CreateUserCommandHandler
-    {
-        return $this->createUserCommandHandler;
-    }
+  public function createUserCommandHandler(): CreateUserCommandHandler {
+    return $this->createUserCommandHandler;
+  }
 
-    public function authenticateUserCommandHandler(): AuthenticateUserCommandHandler
-    {
-        return $this->authenticateUserCommandHandler;
-    }
+  public function authenticateUserCommandHandler(): AuthenticateUserCommandHandler {
+    return $this->authenticateUserCommandHandler;
+  }
 }

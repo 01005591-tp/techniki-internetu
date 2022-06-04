@@ -13,6 +13,6 @@ $navbarController = Configuration::instance()->viewConfiguration()->controllers(
         <?php echo $navbarController->loggedInUser()->userEmail(); ?>
     </span>
     <a class="my-2 btn btn-outline-danger text-nowrap" role="button" href="/sign-out" aria-pressed="true">
-        <?php echo L::main_navbar_sign_in_sign_out_button ?>
+      <?php echo L::main_navbar_sign_in_sign_out_button ?>
     </a>
 </div>

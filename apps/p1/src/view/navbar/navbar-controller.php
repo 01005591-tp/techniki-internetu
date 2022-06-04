@@ -12,86 +12,76 @@ use p1\session\SessionManager;
 use p1\session\UserContext;
 use p1\state\State;
 
-class NavbarController
-{
-    private NavbarItem $activeItem;
-    private State $state;
-    private SessionManager $sessionManager;
+class NavbarController {
+  private NavbarItem $activeItem;
+  private State $state;
+  private SessionManager $sessionManager;
 
-    public function __construct(State          $state,
-                                SessionManager $sessionManager)
-    {
-        $this->activeItem = NavbarItem::Home;
-        $this->state = $state;
-        $this->sessionManager = $sessionManager;
-        $subscriber = new class($this) implements EntryPutSubscriber {
-            private NavbarController $controller;
+  public function __construct(State          $state,
+                              SessionManager $sessionManager) {
+    $this->activeItem = NavbarItem::Home;
+    $this->state = $state;
+    $this->sessionManager = $sessionManager;
+    $subscriber = new class($this) implements EntryPutSubscriber {
+      private NavbarController $controller;
 
-            public function __construct(NavbarController $controller)
-            {
-                $this->controller = $controller;
-            }
+      public function __construct(NavbarController $controller) {
+        $this->controller = $controller;
+      }
 
-            function onNext($item)
-            {
-                $this->controller->setActiveItem($item);
-            }
+      function onNext($item) {
+        $this->controller->setActiveItem($item);
+      }
 
-            function type(): string
-            {
-                return State::ACTIVE_ITEM_KEY;
-            }
-        };
-        $this->state->subscribe()->entryPut($subscriber);
+      function type(): string {
+        return State::ACTIVE_ITEM_KEY;
+      }
+    };
+    $this->state->subscribe()->entryPut($subscriber);
+  }
+
+  public function isLoggedInUser(): bool {
+    return !is_null($this->sessionManager->userContext());
+  }
+
+  public function loggedInUser(): UserContext {
+    return $this->sessionManager->userContext();
+  }
+
+  public function isActiveItem(NavbarItem $item): bool {
+    return $this->activeItem === $item;
+  }
+
+  public function setActiveItem(NavbarItem $item): void {
+    $this->activeItem = $item;
+    require "view/navbar/navbar.php";
+    switch ($this->activeItem) {
+      case NavbarItem::About:
+        require "view/about/about.php";
+        break;
+      case NavbarItem::Login:
+        require "view/login/login.php";
+        break;
+      case NavbarItem::SignUp:
+        require "view/login/sign-up/sign-up.php";
+        break;
+      case NavbarItem::SignOut:
+        require "view/login/sign-out/sign-out.php";
+        break;
+      case NavbarItem::BookDetails:
+        require "view/books/book.php";
+        break;
+      default:
+        require "view/home/home.php";
     }
-
-    public function isLoggedInUser(): bool
-    {
-        return !is_null($this->sessionManager->userContext());
-    }
-
-    public function loggedInUser(): UserContext
-    {
-        return $this->sessionManager->userContext();
-    }
-
-    public function isActiveItem(NavbarItem $item): bool
-    {
-        return $this->activeItem === $item;
-    }
-
-    public function setActiveItem(NavbarItem $item): void
-    {
-        $this->activeItem = $item;
-        require "view/navbar/navbar.php";
-        switch ($this->activeItem) {
-            case NavbarItem::About:
-                require "view/about/about.php";
-                break;
-            case NavbarItem::Login:
-                require "view/login/login.php";
-                break;
-            case NavbarItem::SignUp:
-                require "view/login/sign-up/sign-up.php";
-                break;
-            case NavbarItem::SignOut:
-                require "view/login/sign-out/sign-out.php";
-                break;
-            case NavbarItem::BookDetails:
-                require "view/books/book.php";
-                break;
-            default:
-                require "view/home/home.php";
-        }
-    }
+  }
 }
 
-enum NavbarItem
-{
-    case Home;
-    case About;
-    case Login;
-    case SignUp;
-    case SignOut;
-    case BookDetails;
+enum NavbarItem {
+  case Home;
+  case About;
+  case Login;
+  case SignUp;
+  case SignOut;
+  case BookDetails;
 }
