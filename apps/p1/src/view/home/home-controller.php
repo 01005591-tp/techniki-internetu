@@ -24,12 +24,10 @@ use p1\core\domain\book\tag\GetAllBookTagsUseCase;
 use p1\core\function\Function2;
 use p1\core\function\FunctionIdentity;
 use p1\core\function\Option;
-use p1\session\SessionManager;
 
 class HomeController {
   private GetBookListCommandHandler $getBookListCommandHandler;
   private GetAllBookTagsUseCase $getAllBookTagsUseCase;
-  private SessionManager $sessionManager;
   private PaginationService $paginationService;
   private SearchBooksRequestFactory $searchBooksRequestFactory;
   private BookList $bookList;
@@ -38,12 +36,10 @@ class HomeController {
 
   public function __construct(GetBookListCommandHandler $getBookListCommandHandler,
                               GetAllBookTagsUseCase     $getAllBookTagsUseCase,
-                              SessionManager            $sessionManager,
                               PaginationService         $paginationService,
                               SearchBooksRequestFactory $searchBooksRequestFactory) {
     $this->getBookListCommandHandler = $getBookListCommandHandler;
     $this->getAllBookTagsUseCase = $getAllBookTagsUseCase;
-    $this->sessionManager = $sessionManager;
     $this->paginationService = $paginationService;
     $this->searchBooksRequestFactory = $searchBooksRequestFactory;
 
@@ -99,7 +95,6 @@ class HomeController {
     );
     return $this->paginationService->resolvePagination($params);
   }
-
 
   private function resolveSearchBooksRequest(): SearchBooksRequest {
     return $this->searchBooksRequestFactory->create();

@@ -28,7 +28,6 @@ class HomeConfiguration {
     $this->homeController = new HomeController(
       $getBookListCommandHandler,
       $getAllBookTagsUseCase,
-      $sessionManager,
       $paginationService,
       new SearchBooksRequestFactory($sessionManager)
     );

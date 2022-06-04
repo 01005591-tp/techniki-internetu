@@ -16,6 +16,6 @@ class GetBookListCommandHandler {
   }
 
   public function handle(GetBookListCommand $command): Either {
-    return $this->bookListRepository->findDefaultBookList($command);
+    return $this->bookListRepository->findBooks($command);
   }
 }

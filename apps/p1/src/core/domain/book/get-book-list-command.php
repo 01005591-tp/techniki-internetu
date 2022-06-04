@@ -10,6 +10,7 @@ class GetBookListCommand {
   private array $tags;
   private ?string $author;
   private ?string $isbn;
+  private bool $includeUnavailable;
 
   public function __construct(int     $page,
                               int     $pageSize,
@@ -17,7 +18,8 @@ class GetBookListCommand {
                               ?string $description,
                               array   $tags,
                               ?string $author,
-                              ?string $isbn) {
+                              ?string $isbn,
+                              bool    $includeUnavailable = false) {
     $this->page = $page;
     $this->pageSize = $pageSize;
     $this->title = $title;
@@ -25,6 +27,7 @@ class GetBookListCommand {
     $this->tags = $tags;
     $this->author = $author;
     $this->isbn = $isbn;
+    $this->includeUnavailable = $includeUnavailable;
   }
 
   public function page(): int {
@@ -53,5 +56,9 @@ class GetBookListCommand {
 
   public function isbn(): ?string {
     return $this->isbn;
+  }
+
+  public function includeUnavailable(): bool {
+    return $this->includeUnavailable;
   }
 }

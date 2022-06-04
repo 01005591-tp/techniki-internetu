@@ -8,5 +8,5 @@ require_once "core/domain/book/get-book-list-command.php";
 use p1\core\function\Either;
 
 interface BookListRepository {
-  function findDefaultBookList(GetBookListCommand $command): Either;
+  function findBooks(GetBookListCommand $command): Either;
 }
