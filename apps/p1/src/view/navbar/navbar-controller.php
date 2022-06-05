@@ -41,7 +41,7 @@ class NavbarController {
   }
 
   public function isLoggedInUser(): bool {
-    return !is_null($this->sessionManager->userContext());
+    return $this->sessionManager->userContext()->isDefined();
   }
 
   public function loggedInUser(): UserContext {
@@ -71,6 +71,9 @@ class NavbarController {
       case NavbarItem::BookDetails:
         require "view/books/book.php";
         break;
+      case NavbarItem::BookEdition:
+        require "view/books/edition/book-edit.php";
+        break;
       default:
         require "view/home/home.php";
     }
@@ -84,4 +87,5 @@ enum NavbarItem {
   case SignUp;
   case SignOut;
   case BookDetails;
+  case BookEdition;
 }

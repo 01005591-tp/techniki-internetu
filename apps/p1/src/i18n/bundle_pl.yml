@@ -70,8 +70,10 @@ main:
         pages_label: "Liczba stron"
         publisher_label: "Wydawca"
         tags_label: "Tagi"
+        pieces_available_header: "Sztuki"
         about_the_book_header: "O książce"
         about_the_authors_header: "O autorach"
+        edit_btn_label: "Edytuj"
   languages:
     en: "angielski"
     pl: "polski"

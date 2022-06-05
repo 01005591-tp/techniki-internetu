@@ -14,6 +14,7 @@ require_once "core/domain/book/book-author.php";
 require_once "core/domain/book/book-details.php";
 require_once "core/domain/book/book-details-repository.php";
 require_once "core/domain/book/book-piece.php";
+require_once "core/domain/book/book-pieces.php";
 require_once "core/domain/book/book-state.php";
 require_once "core/domain/book/book-tag.php";
 require_once "core/domain/book/publisher.php";
@@ -24,6 +25,7 @@ require_once "core/function/function.php";
 use p1\core\domain\book\Book;
 use p1\core\domain\book\BookDetails;
 use p1\core\domain\book\BookDetailsRepository;
+use p1\core\domain\book\BookPieces;
 use p1\core\domain\book\GetBookDetailsCommand;
 use p1\core\domain\book\Publisher;
 use p1\core\function\Function2;
@@ -235,7 +237,7 @@ class BookDetailsBuilderAuthors {
     $this->bookAuthors = $bookAuthors;
   }
 
-  public function bookPieces(array $bookPieces): BookDetailsBuilderPieces {
+  public function bookPieces(BookPieces $bookPieces): BookDetailsBuilderPieces {
     return new BookDetailsBuilderPieces(
       $this->book,
       $this->publisher,
@@ -251,13 +253,13 @@ class BookDetailsBuilderPieces {
   private ?Publisher $publisher;
   private array $authors;
   private array $bookAuthors;
-  private array $bookPieces;
+  private BookPieces $bookPieces;
 
   public function __construct(Book       $book,
                               ?Publisher $publisher,
                               array      $authors,
                               array      $bookAuthors,
-                              array      $bookPieces) {
+                              BookPieces $bookPieces) {
     $this->book = $book;
     $this->publisher = $publisher;
     $this->authors = $authors;

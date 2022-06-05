@@ -58,7 +58,7 @@ class SignUpController {
         ->peekLeft(new CreateUserCommandFailedConsumer($this->alertService))
         ->peekRight(new CreateUserCommandSuccessConsumer($this->state))
         ->peekRight(new RedirectToHomePageConsumer());
-    } else if (!is_null($this->sessionManager->userContext())) {
+    } else if ($this->sessionManager->userContext()->isDefined()) {
       $this->redirectManager->redirectToMainPage()->run();
     } else {
       $this->state->remove(State::SIGN_UP_FORM_PROVIDED_EMAIL);

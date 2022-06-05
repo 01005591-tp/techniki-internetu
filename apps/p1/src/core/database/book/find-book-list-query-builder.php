@@ -54,7 +54,7 @@ class FindBookListQueryBuilder {
       $sql = $sql . $this->likeClauseParam('b.DESCRIPTION', $command->description());
     }
 
-    // like ISBN
+    // equal ISBN
     if (!empty($command->isbn())) {
       $sql = $sql . $this->equalParam('b.ISBN', $command->isbn());
     }

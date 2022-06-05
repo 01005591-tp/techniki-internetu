@@ -65,7 +65,7 @@ class LoginController {
           $this->redirectManager->redirectToMainPage(),
           $this->alertService
         ));
-    } else if (!is_null($this->sessionManager->userContext())) {
+    } else if ($this->sessionManager->userContext()->isDefined()) {
       $this->redirectManager->redirectToMainPage()->run();
     } else {
       $this->state->remove(State::LOGIN_FORM_PROVIDED_EMAIL);

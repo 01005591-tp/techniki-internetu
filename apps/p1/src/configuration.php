@@ -8,6 +8,7 @@ require_once "core/database/database-configuration.php";
 require_once "core/app/user-configuration.php";
 require_once "core/app/book-configuration.php";
 require_once "session/session-manager.php";
+require_once "session/user-context.php";
 require_once "view/redirect-manager.php";
 require_once "view/view-configuration.php";
 require_once "view/navbar/navbar-controller.php";
@@ -18,6 +19,7 @@ use p1\core\app\BookConfiguration;
 use p1\core\app\UserConfiguration;
 use p1\core\database\DatabaseConfiguration;
 use p1\session\SessionManager;
+use p1\session\UserContext;
 use p1\state\State;
 use p1\view\home\PaginationService;
 use p1\view\RedirectManager;
@@ -62,6 +64,10 @@ class Configuration {
 
   public function viewConfiguration(): ViewConfiguration {
     return $this->viewConfiguration;
+  }
+
+  public function userContext(): UserContext {
+    return $this->sessionManager->userContext();
   }
 
   // SINGLETON SPECIFIC FUNCTIONS

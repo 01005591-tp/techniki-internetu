@@ -50,3 +50,26 @@ class FunctionIdentity implements Function2 {
     return self::$instance;
   }
 }
+
+class FunctionUtils {
+  private function __construct() {
+    throw new Exception("Cannot instantiate utility class.");
+  }
+
+  public static function runnableToFunction2(Runnable $runnable): Function2 {
+    return new RunnableToFunction2Wrapper($runnable);
+  }
+}
+
+class RunnableToFunction2Wrapper implements Function2 {
+  private Runnable $runnable;
+
+  public function __construct(Runnable $runnable) {
+    $this->runnable = $runnable;
+  }
+
+  function apply($value) {
+    $this->runnable->run();
+    return null;
+  }
+}

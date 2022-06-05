@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-05/load-book-pieces.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-05/load-book-pieces"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <loadData tableName="BOOK_PIECES"
+                  relativeToChangelogFile="true"
+                  file="initial-book-pieces.csv"
+                  encoding="UTF-8"
+                  separator="|"
+                  quotchar="&quot;">
+            <column header="BOOK_ID"
+                    name="BOOK_ID"
+                    type="COMPUTED"/>
+            <column header="STATE"
+                    name="STATE"
+                    type="STRING"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

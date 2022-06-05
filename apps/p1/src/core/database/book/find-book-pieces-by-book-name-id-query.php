@@ -4,10 +4,12 @@ namespace p1\core\database\book;
 
 require_once "core/domain/audit/auditable-object.php";
 require_once "core/domain/book/book-piece.php";
+require_once "core/domain/book/book-pieces.php";
 
 use mysqli;
 use p1\core\domain\audit\AuditableObject;
 use p1\core\domain\book\BookPiece;
+use p1\core\domain\book\BookPieces;
 use p1\core\domain\book\BookPieceState;
 
 class FindBookPiecesByBookNameIdQuery {
@@ -17,7 +19,7 @@ class FindBookPiecesByBookNameIdQuery {
     $this->connection = $connection;
   }
 
-  public function query(string $nameId): array {
+  public function query(string $nameId): BookPieces {
     $stmt = $this->connection->prepare(
       "SELECT
                     BP.ID AS BP_ID
@@ -27,6 +29,7 @@ class FindBookPiecesByBookNameIdQuery {
                     ,UNIX_TIMESTAMP(BP.UPDATE_DATE) AS BP_UPDATE_DATE
                     ,BP.UPDATED_BY AS BP_UPDATED_BY
                     ,BP.VERSION AS BP_VERSION
+                    ,COUNT(BP.ID) OVER (PARTITION BY BP.STATE) AS BP_STATE_COUNT
                 FROM
                     BOOK_PIECES BP
                     JOIN BOOKS B ON
@@ -37,12 +40,20 @@ class FindBookPiecesByBookNameIdQuery {
     $stmt->bind_param("s", $escapedNameId);
     $stmt->execute();
     $result = $stmt->get_result();
-    $bookPieces = array();
+    $bookPieces = [];
+    $stateCounts = [
+      BookPieceState::UNAVAILABLE->name => 0,
+      BookPieceState::AVAILABLE->name => 0,
+      BookPieceState::RENTED->name => 0,
+      BookPieceState::BOOKED->name => 0
+    ];
     while ($row = $result->fetch_assoc()) {
+      $state = BookPieceState::of($row['BP_STATE'])->orElse(BookPieceState::UNAVAILABLE);
+      $stateCounts[$state->name] = $row['BP_STATE_COUNT'];
       $bookPieces[] = new BookPiece(
         $row['BP_ID'],
         $row['BP_BOOK_ID'],
-        BookPieceState::of($row['BP_STATE'])->orElse(BookPieceState::UNAVAILABLE),
+        $state,
         new AuditableObject(
           $row['BP_CREATION_DATE'],
           $row['BP_UPDATE_DATE'],
@@ -51,6 +62,6 @@ class FindBookPiecesByBookNameIdQuery {
         $row['BP_VERSION']
       );
     }
-    return $bookPieces;
+    return new BookPieces($bookPieces, $stateCounts);
   }
 }

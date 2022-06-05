@@ -9,14 +9,14 @@ class BookDetails {
   private Book $book;
   private ?Publisher $publisher;
   private array $authors;
-  private array $bookPieces;
+  private BookPieces $bookPieces;
   private array $bookTags;
   private array $bookAuthors;
 
   public function __construct(Book       $book,
                               ?Publisher $publisher,
                               array      $authors,
-                              array      $bookPieces,
+                              BookPieces $bookPieces,
                               array      $bookTags,
                               array      $bookAuthors) {
     $this->book = $book;
@@ -39,7 +39,7 @@ class BookDetails {
     return $this->authors;
   }
 
-  public function bookPieces(): array {
+  public function bookPieces(): BookPieces {
     return $this->bookPieces;
   }
 

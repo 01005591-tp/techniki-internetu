@@ -70,8 +70,18 @@ main:
         pages_label: "Pages"
         publisher_label: "Publisher"
         tags_label: "Tags"
+        pieces_available_header: "Pieces"
         about_the_book_header: "About the book"
         about_the_authors_header: "About the authors"
+        edit_btn_label: "Edit"
+      edit_page:
+        title_label: "Title"
+        isbn_label: "ISBN"
+        language_label: "Language"
+        published_at_label: "Published at"
+        page_count_label: "Page count"
+        name_id_label: "Link name"
+        state_label: "State"
   languages:
     en: "English"
     pl: "Polish"

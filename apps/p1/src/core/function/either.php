@@ -78,6 +78,14 @@ abstract class Either {
   public static function ofLeft($value): Either {
     return new EitherLeft($value);
   }
+
+  public static function leftSupplier($value): Supplier {
+    return new EitherLeftSupplier($value);
+  }
+
+  public static function wrapToRightFunction(): Function2 {
+    return new EitherRightFunction();
+  }
 }
 
 class EitherRight extends Either {
@@ -117,5 +125,23 @@ class EitherLeft extends Either {
 
   public function isRight(): bool {
     return false;
+  }
+}
+
+class EitherLeftSupplier implements Supplier {
+  private $value;
+
+  public function __construct($value) {
+    $this->value = $value;
+  }
+
+  function supply(): Either {
+    return Either::ofLeft($this->value);
+  }
+}
+
+class EitherRightFunction implements Function2 {
+  function apply($value): Either {
+    return Either::ofRight($value);
   }
 }

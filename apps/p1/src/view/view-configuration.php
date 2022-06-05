@@ -20,6 +20,7 @@ require_once "view/alerts/alerts-configuration.php";
 
 require_once "view/books/book-configuration.php";
 require_once "view/books/book-controller.php";
+require_once "view/books/edition/book-edit-controller.php";
 
 require_once "view/home/home-configuration.php";
 require_once "view/home/home-controller.php";
@@ -46,6 +47,7 @@ use p1\view\alerts\AlertsConfiguration;
 use p1\view\alerts\AlertService;
 use p1\view\book\BookConfiguration;
 use p1\view\book\BookController;
+use p1\view\books\edition\BookEditController;
 use p1\view\home\HomeConfiguration;
 use p1\view\home\HomeController;
 use p1\view\home\PaginationService;
@@ -156,5 +158,9 @@ class ViewControllers {
 
   public function bookController(): BookController {
     return $this->bookConfiguration->bookController();
+  }
+
+  public function bookEditController(): BookEditController {
+    return $this->bookConfiguration->bookEditController();
   }
 }

@@ -2,33 +2,40 @@
 
 namespace p1\routing;
 
+require_once "config.php";
+require_once "state.php";
+require_once "view/routing/routing-configuration.php";
+require_once "view/navbar/navbar-controller.php";
+
 use p1\config\Config;
 use p1\session\SessionConstants;
 use p1\session\SessionManager;
 use p1\state\State;
 use p1\view\navbar\NavbarItem;
-
-require_once "config.php";
-require_once "state.php";
-require_once "view/navbar/navbar-controller.php";
+use p1\view\routing\RoutingConfiguration;
 
 class Router {
   private const PAGE_BEFORE_QUERY_PARAMS_REGEX = '/^([a-zA-Z0-9\/\-_]+)(\??.*)$/';
-  private const GET_SINGLE_BOOK_ENDPOINT_REGEX = '/^(\/books\/){1}([^\/\?]+){1}$/';
-  private const GET_SINGLE_BOOK_ENDPOINT_BOOK_NAME_ID_PATH_PARAM_REGEX = '/^(\/books\/){1}([^\/\?]+){1}$/';
 
   private SessionManager $sessionManager;
+  private array $endpointResolvers;
 
-  public function __construct(SessionManager $sessionManager) {
+  public function __construct(SessionManager       $sessionManager,
+                              RoutingConfiguration $routingConfiguration) {
     $this->sessionManager = $sessionManager;
+    $this->endpointResolvers = $routingConfiguration->endpointResolvers();
   }
 
   public function navigate(): void {
     $request = $_SERVER['REQUEST_URI'];
     $this->sessionManager->put(SessionConstants::REQUEST_URI, $request);
     $request = preg_replace(Router::PAGE_BEFORE_QUERY_PARAMS_REGEX, "$1", $request);
-    if ($this->resolveGetBookDetailsByBookNameIdEndpoint($request)) {
-      return;
+    if (!empty($this->endpointResolvers)) {
+      foreach ($this->endpointResolvers as $endpointResolver) {
+        if ($endpointResolver->resolve($request)) {
+          return;
+        }
+      }
     }
     switch ($request) {
       case '':
@@ -52,17 +59,6 @@ class Router {
         http_response_code(404);
         require Config::instance()->rootDir() . '/view/errors/404.php';
         break;
-    }
-  }
-
-  private function resolveGetBookDetailsByBookNameIdEndpoint(string $request): bool {
-    if (preg_match(Router::GET_SINGLE_BOOK_ENDPOINT_REGEX, $request)) {
-      $bookNameId = preg_replace(Router::GET_SINGLE_BOOK_ENDPOINT_BOOK_NAME_ID_PATH_PARAM_REGEX, "$2", $request);
-      $this->sessionManager->put(SessionConstants::BOOK_DETAILS_BOOK_NAME_ID, $bookNameId);
-      State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::BookDetails);
-      return true;
-    } else {
-      return false;
     }
   }
 }

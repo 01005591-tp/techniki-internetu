@@ -33,5 +33,6 @@
     <include file="2022-06-05/load-more-authors.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-05/update-book-and-authors-descriptions.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-05/insert-tags.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-05/load-book-pieces.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

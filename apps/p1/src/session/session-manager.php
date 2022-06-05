@@ -30,10 +30,10 @@ class SessionManager {
     }
   }
 
-  public function userContext(): ?UserContext {
+  public function userContext(): UserContext {
     return PHP_SESSION_ACTIVE === session_status() && array_key_exists(SessionConstants::USER_CONTEXT, $_SESSION)
       ? $_SESSION[SessionConstants::USER_CONTEXT]
-      : null;
+      : UserContext::emptyUserContext();
   }
 
   public function get(string $key): Option {
@@ -81,10 +81,10 @@ class SessionManager {
 }
 
 class SessionConstants {
-  public const USER_CONTEXT = 'USER_CONTEXT';
-  public const LANG = 'LANG';
-  public const REQUEST_URI = 'REQUEST_URI';
-  public const ALERT_MESSAGES = 'ALERT_MESSAGES';
+  public const USER_CONTEXT = "USER_CONTEXT";
+  public const LANG = "LANG";
+  public const REQUEST_URI = "REQUEST_URI";
+  public const ALERT_MESSAGES = "ALERT_MESSAGES";
   public const BOOK_LIST_SEARCH_REQUEST = "BOOK_LIST_SEARCH_REQUEST";
   public const BOOK_DETAILS_BOOK_NAME_ID = "BOOK_DETAILS_BOOK_NAME_ID";
 
