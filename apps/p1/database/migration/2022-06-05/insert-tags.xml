@@ -1,0 +1,198 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-05/insert-tags.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-05/insert-tags:load-tags" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <loadData tableName="BOOKS_TAGS"
+                  relativeToChangelogFile="true"
+                  file="initial-tags.csv"
+                  encoding="UTF-8"
+                  separator="|"
+                  quotchar="&quot;">
+            <column header="CODE"
+                    name="CODE"
+                    type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2022-06-05/insert-tags:join-tags-with-books" author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0134757599')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0134757599')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0321127426')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0321127426')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0321125217')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0321125217')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1617294549')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1617294549')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0997148008')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0997148008')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1617294044')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1617294044')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0134685991')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0134685991')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1492047841')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1492047841')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1492034025')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1492034025')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="programming"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0137314911')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="technical"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0137314911')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="fiction"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0399501487')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="social"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0399501487')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="novel"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0486284736')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="romantic"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0486284736')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="novel"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0141439662')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="romantic"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0141439662')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="classic"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0141197494')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="poem"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0141197494')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="adventure"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0553213508')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="novel"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0553213508')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="adventure"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0451530776')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="novel"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0451530776')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="crime"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062073792')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="detective"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062073792')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="crime"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062073587')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="detective"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062073587')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="crime"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062689665')"/>
+        </insert>
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="detective"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-0062689665')"/>
+        </insert>
+
+        <insert tableName="BOOK_TAGS">
+            <column name="TAG_CODE" value="play"/>
+            <column name="BOOK_ID" valueComputed="(SELECT ID FROM BOOKS WHERE ISBN = '978-1626860988')"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
