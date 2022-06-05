@@ -2,10 +2,12 @@
 
 require_once "core/function/function.php";
 require_once "view/select/multiselect.php";
+require_once "view/select/multiselect-id-normalizer.php";
 
 use p1\core\function\Consumer;
 use p1\core\function\Runnable;
 use p1\view\select\Multiselect;
+use p1\view\select\MultiSelectIdNormalizer;
 use p1\view\select\SelectOption;
 
 $multiselectName = 'bookSearchTags';
@@ -34,7 +36,7 @@ $tagsMultipleSearchLoader = new class($multiselectName, $availableTags, $searchC
     if (!empty($this->availableTags)) {
       foreach ($this->availableTags as $tag) {
         $tagOptions[] = new SelectOption(
-          $tag->code(),
+          MultiSelectIdNormalizer::normalize($tag->code()),
           $tag->code(),
           $tag->code()
         );

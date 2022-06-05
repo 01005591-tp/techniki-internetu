@@ -13,12 +13,17 @@ $bookDetails = $bookController->getBookDetails();
 
 $imgUri = (!is_null($bookDetails->book()->imageUri())) ? $bookDetails->book()->imageUri() : "/assets/book-icon.svg";
 $publishedAt = new DateTimeImmutable('@' . $bookDetails->book()->publishedAt());
-$tagsString = '';
-foreach ($bookDetails->bookTags() as $bookTag) {
-  $tagsString = ',' . $bookTag->code();
-}
-if (str_starts_with($tagsString, ',')) {
-  $tagsString = substr($tagsString, 1);
+
+$tagsString = resolveBookTagsString($bookDetails->bookTags());
+
+function resolveBookTagsString($bookTags): string {
+  if (empty($bookTags)) {
+    return '';
+  }
+  $bookTagCodes = array_map(function ($tag) {
+    return $tag->code();
+  }, $bookTags);
+  return join(',', $bookTagCodes);
 }
 
 class BookDetailsComponentLoader implements Runnable {

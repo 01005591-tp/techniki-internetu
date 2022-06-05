@@ -89,9 +89,9 @@ const MultipleSelectComponent = (function () {
             let selectedInputs = [];
             $(multipleSelectComponent._dropdown).find('input.form-check-input:checked')
                 .each(function (index) {
-                    let element = $(this);
-                    let elementId = element.attr('id');
-                    let elementValue = element.attr('value');
+                    let element = this;
+                    let elementId = element.id;
+                    let elementValue = element.value;
                     let elementLabel = multipleSelectComponent.findCorrespondingLabel(elementId);
                     let elementLabelText = elementLabel.text();
                     let elementDisplayName = elementLabelText !== undefined && elementLabelText
@@ -123,6 +123,7 @@ const MultipleSelectComponent = (function () {
             let selectedIds = selectedOptions.map(it => it.id)
             logger.trace('storeOptionsToOptionsHolder(): ' + selectedIds);
             multipleSelectComponent._optionsHolder.value = selectedIds;
+            logger.trace('storeOptionsToOptionsHolder(): ids = ' + multipleSelectComponent._optionsHolder.value);
         }
 
         this.displayOptions = function (selectedOptions) {
@@ -135,7 +136,7 @@ const MultipleSelectComponent = (function () {
         }
 
         this.findLastSelectedOptions = function () {
-            let selectedIdsString = $(multipleSelectComponent._optionsHolder).attr('value')
+            let selectedIdsString = multipleSelectComponent._optionsHolder.value;
             logger.trace('findLastSelectedOptions(): selectedIdsString=' + selectedIdsString);
             let selectedInputs = [];
             if (selectedIdsString === undefined || !selectedIdsString) {
@@ -148,14 +149,13 @@ const MultipleSelectComponent = (function () {
             let selectedIds = selectedIdsString.split(',');
             $(multipleSelectComponent._dropdown).find('input.form-check-input')
                 .each(function (index) {
-                    let jsElement = this;
-                    let element = $(this);
-                    let elementId = element.attr('id');
+                    let element = this;
+                    let elementId = element.id;
                     logger.trace('findLastSelectedOptions(): Element(id=' + elementId
-                        + ', checked=' + element.attr('checked')
+                        + ', checked=' + element.checked
                         + ', selected=' + selectedIds.some(it => it === elementId) + ')')
                     if (selectedIds.some(it => it === elementId)) {
-                        let elementValue = element.attr('value');
+                        let elementValue = element.value;
                         let elementLabel = multipleSelectComponent.findCorrespondingLabel(elementId);
                         let elementDisplayName = elementLabel.text();
                         selectedInputs.push({
@@ -163,9 +163,9 @@ const MultipleSelectComponent = (function () {
                             "value": elementValue,
                             "displayName": elementDisplayName
                         });
-                        jsElement.checked = true;
+                        element.checked = true;
                     } else {
-                        jsElement.checked = false;
+                        element.checked = false;
                     }
                 });
             return selectedInputs;

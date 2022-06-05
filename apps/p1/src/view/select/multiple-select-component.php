@@ -2,8 +2,10 @@
 
 require_once "core/function/function.php";
 require_once "view/select/multiselect.php";
+require_once "view/select/multiselect-id-normalizer.php";
 
 use p1\core\function\Runnable;
+use p1\view\select\MultiSelectIdNormalizer;
 use p1\view\select\SelectOption;
 
 $selectedOptions = [];
@@ -78,7 +80,7 @@ $selectedOptionDisplayNamesString = join(',', $selectedOptionDisplayNames);
             $selectAllRunnable = new class implements Runnable {
               function run(): void {
                 $option = new SelectOption(
-                  'select-all-option-unique-id-i-hope-so',
+                  MultiSelectIdNormalizer::normalize('select-all-option-unique-id-i-hope-so'),
                   null,
                   L::main_multiple_select_component_select_all_option_label
                 );

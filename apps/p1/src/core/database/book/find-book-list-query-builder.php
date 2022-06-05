@@ -60,7 +60,8 @@ class FindBookListQueryBuilder {
     }
 
     // order by
-    $sql = $sql . " ORDER BY ID DESC";
+    $sql = $sql . " ORDER BY CASE STATE WHEN 'AVAILABLE_SOON' THEN 1 WHEN 'AVAILABLE' THEN 2 ELSE 0 END DESC,  
+    ID DESC";
     // limit pagination part
     $offset = ($command->page() - 1) * $command->pageSize();
     return $sql . " LIMIT " . $offset . "," . $command->pageSize();

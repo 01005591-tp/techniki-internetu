@@ -72,9 +72,6 @@ main:
         tags_label: "Tags"
         about_the_book_header: "About the book"
         about_the_authors_header: "About the authors"
-        author:
-          name_label: "Name"
-          birth_date_label: "Birth date"
   languages:
     en: "English"
     pl: "Polish"
