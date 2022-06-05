@@ -71,6 +71,7 @@ main:
         publisher_label: "Wydawca"
         tags_label: "Tagi"
         about_the_book_header: "O książce"
+        about_the_authors_header: "O autorach"
   languages:
     en: "angielski"
     pl: "polski"

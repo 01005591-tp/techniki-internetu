@@ -1,0 +1,34 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-05/change-author-birth-date-column.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-05/change-author-birth-date-column:add-separate-columns"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <addColumn tableName="AUTHORS">
+            <column name="BIRTH_YEAR" type="SMALLINT"/>
+            <column name="BIRTH_MONTH" type="SMALLINT"/>
+            <column name="BIRTH_DAY" type="SMALLINT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2022-06-05/change-author-birth-date-column:migrate-dates-to-new-columns"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <sql dbms="mysql" endDelimiter=";">
+            UPDATE AUTHORS SET
+            BIRTH_YEAR = EXTRACT(YEAR FROM BIRTH_DATE),
+            BIRTH_MONTH = EXTRACT(MONTH FROM BIRTH_DATE),
+            BIRTH_DAY = EXTRACT(DAY FROM BIRTH_DATE)
+            WHERE BIRTH_DATE IS NOT NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="2022-06-05/change-author-birth-date-column:drop-birth-date-column"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <dropColumn tableName="AUTHORS">
+            <column name="BIRTH_DATE"/>
+        </dropColumn>
+    </changeSet>
+</databaseChangeLog>

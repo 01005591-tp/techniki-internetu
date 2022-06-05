@@ -11,7 +11,9 @@ class Author {
   private string $firstName;
   private string $lastName;
   private ?string $biographyNote;
-  private ?int $birthDate;
+  private ?int $birthYear;
+  private ?int $birthMonth;
+  private ?int $birthDay;
   private int $priority;
   private ?AuditableObject $auditableObject;
   private ?int $version;
@@ -20,7 +22,9 @@ class Author {
                               string           $firstName,
                               string           $lastName,
                               ?string          $biographyNote,
-                              ?int             $birthDate,
+                              ?int             $birthYear,
+                              ?int             $birthMonth,
+                              ?int             $birthDay,
                               int              $priority,
                               ?AuditableObject $auditableObject,
                               ?int             $version) {
@@ -28,7 +32,9 @@ class Author {
     $this->firstName = $firstName;
     $this->lastName = $lastName;
     $this->biographyNote = $biographyNote;
-    $this->birthDate = $birthDate;
+    $this->birthYear = $birthYear;
+    $this->birthMonth = $birthMonth;
+    $this->birthDay = $birthDay;
     $this->priority = $priority;
     $this->auditableObject = $auditableObject;
     $this->version = $version;
@@ -50,8 +56,16 @@ class Author {
     return $this->biographyNote;
   }
 
-  public function birthDate(): ?int {
-    return $this->birthDate;
+  public function birthYear(): ?int {
+    return $this->birthYear;
+  }
+
+  public function birthMonth(): ?int {
+    return $this->birthMonth;
+  }
+
+  public function birthDay(): ?int {
+    return $this->birthDay;
   }
 
   public function priority(): int {

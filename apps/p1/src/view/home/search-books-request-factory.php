@@ -46,18 +46,8 @@ class SearchBooksRequestFactory {
 
   private function resolveSearchCriteria(SearchBooksRequest $latestRequest): SearchBooksRequest {
     $page = $this->resolvePage();
-    if (isset($_POST['book-search-search-btn'])) {
-      return new SearchBooksRequest(
-        $latestRequest->page(),
-        $latestRequest->pageSize(),
-        $_POST['searchBookTitleInput'],
-        $_POST['searchBookDescriptionInput'],
-        $this->parseSelectedTags($_POST['bookSearchTags_valueHolderInput']),
-        $_POST['searchBookAuthorInput'],
-        $_POST['searchBookIsbnInput']
-      );
-    } else if (array_key_exists('searchBookTitleInput', $_GET)) {
-      return new SearchBooksRequest(
+    if (array_key_exists('searchBookTitleInput', $_GET)) {
+      $request = new SearchBooksRequest(
         $latestRequest->page(),
         $latestRequest->pageSize(),
         $_GET['searchBookTitleInput'],
@@ -66,6 +56,10 @@ class SearchBooksRequestFactory {
         $_GET['searchBookAuthorInput'],
         $_GET['searchBookIsbnInput']
       );
+      // reset to the first page if search criteria changed
+      return $request->hasSameSearchCriteria($latestRequest)
+        ? $request
+        : $request->withPage(1);
     } else if ($latestRequest->page() !== $page) {
       return $latestRequest->withPage($page);
     } else {

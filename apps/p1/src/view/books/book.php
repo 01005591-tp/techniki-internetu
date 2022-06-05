@@ -1,8 +1,12 @@
 <?php
 
 use p1\configuration\Configuration;
+use p1\core\domain\book\Author;
+use p1\core\function\Runnable;
 
 require_once "configuration.php";
+require_once "core/domain/book/author.php";
+require_once "core/function/function.php";
 
 $bookController = Configuration::instance()->viewConfiguration()->controllers()->bookController();
 $bookDetails = $bookController->getBookDetails();
@@ -16,6 +20,20 @@ foreach ($bookDetails->bookTags() as $bookTag) {
 if (str_starts_with($tagsString, ',')) {
   $tagsString = substr($tagsString, 1);
 }
+
+class BookDetailsComponentLoader implements Runnable {
+  private Author $author;
+
+  public function __construct(Author $author) {
+    $this->author = $author;
+  }
+
+  function run(): void {
+    $author = $this->author;
+    require "view/books/book-author-details-component.php";
+  }
+}
+
 ?>
 
 
@@ -73,4 +91,13 @@ if (str_starts_with($tagsString, ',')) {
     </div>
 
     <hr/>
+    <p class="h3 mt-2"><?php echo L::main_books_book_piece_details_page_about_the_authors_header; ?></p>
+    <div>
+      <?php
+      foreach ($bookDetails->authors() as $author) {
+        $loader = new BookDetailsComponentLoader($author);
+        $loader->run();
+      }
+      ?>
+    </div>
 </div>

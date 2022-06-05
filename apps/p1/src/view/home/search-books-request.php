@@ -74,6 +74,28 @@ class SearchBooksRequest {
     );
   }
 
+  public function hasSameSearchCriteria(SearchBooksRequest $other): bool {
+    if ($this === $other) {
+      return true;
+    }
+    if ($this->title !== $other->title) {
+      return false;
+    }
+    if ($this->description !== $other->description) {
+      return false;
+    }
+    if ($this->tags !== $other->tags) {
+      return false;
+    }
+    if ($this->author !== $other->author) {
+      return false;
+    }
+    if ($this->isbn !== $other->isbn) {
+      return false;
+    }
+    return true;
+  }
+
   public static function defaultRequest(): SearchBooksRequest {
     return new SearchBooksRequest(
       1,

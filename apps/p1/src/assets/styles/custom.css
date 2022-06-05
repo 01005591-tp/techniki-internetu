@@ -7,15 +7,15 @@ nav.navbar .logged-in-user-email {
     width: 20rem;
 }
 
-#book-title .author {
+#book-title .author, .authors .author {
     color: grey;
 }
 
-#book-title .author.author-1 {
+#book-title .author.author-1, .authors .author.author-1 {
     color: black;
     font-weight: bold;
 }
 
-#book-title .author.author-2 {
+#book-title .author.author-2, .authors .author.author-1 {
     color: black;
 }

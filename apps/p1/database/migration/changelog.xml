@@ -28,4 +28,9 @@
     <include file="2022-06-02/drop-book-tags-audit-columns.xml" relativeToChangelogFile="true"/>
     <include file="2022-06-02/drop-books-tags-name-column.xml" relativeToChangelogFile="true"/>
 
+    <include file="2022-06-05/change-author-birth-date-column.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-05/load-more-books.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-05/load-more-authors.xml" relativeToChangelogFile="true"/>
+    <include file="2022-06-05/update-book-and-authors-descriptions.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

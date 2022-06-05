@@ -26,7 +26,9 @@ class FindAuthorsByBookNameIdQuery {
                     ,A.FIRST_NAME AS A_FIRST_NAME
                     ,A.LAST_NAME AS A_LAST_NAME
                     ,A.BIOGRAPHY_NOTE AS A_BIOGRAPHY_NOTE
-                    ,UNIX_TIMESTAMP(A.BIRTH_DATE) AS A_BIRTH_DATE
+                    ,A.BIRTH_YEAR AS A_BIRTH_YEAR
+                    ,A.BIRTH_MONTH AS A_BIRTH_MONTH
+                    ,A.BIRTH_DAY AS A_BIRTH_DAY
                     ,UNIX_TIMESTAMP(A.CREATION_DATE) AS A_CREATION_DATE
                     ,UNIX_TIMESTAMP(A.UPDATE_DATE) AS A_UPDATE_DATE
                     ,A.UPDATED_BY AS A_UPDATED_BY
@@ -61,7 +63,9 @@ class FindAuthorsByBookNameIdQuery {
         $row['A_FIRST_NAME'],
         $row['A_LAST_NAME'],
         $row['A_BIOGRAPHY_NOTE'],
-        $row['A_BIRTH_DATE'],
+        $row['A_BIRTH_YEAR'],
+        $row['A_BIRTH_MONTH'],
+        $row['A_BIRTH_DAY'],
         $row['BA_PRIORITY'],
         new AuditableObject(
           $row['A_CREATION_DATE'],

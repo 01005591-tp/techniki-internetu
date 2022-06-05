@@ -1,0 +1,64 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        logicalFilePath="2022-06-05/load-more-books.xml"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2022-06-05/load-more-books:insert-publishers"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <loadData tableName="PUBLISHERS"
+                  relativeToChangelogFile="true"
+                  file="more-publishers.csv"
+                  encoding="UTF-8"
+                  separator=";"
+                  quotchar="'">
+            <column header="NAME"
+                    name="NAME"
+                    type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2022-06-05/load-more-books:insert-books"
+               author="tomasz.pazdziurek.stud@pw.edu.pl">
+        <loadData tableName="BOOKS"
+                  relativeToChangelogFile="true"
+                  file="more-books.csv"
+                  encoding="UTF-8"
+                  separator=";"
+                  quotchar="&quot;">
+            <column header="ISBN"
+                    name="ISBN"
+                    type="STRING"/>
+            <column header="TITLE"
+                    name="TITLE"
+                    type="STRING"/>
+            <column header="DESCRIPTION"
+                    name="DESCRIPTION"
+                    type="STRING"/>
+            <column header="LANGUAGE"
+                    name="LANGUAGE"
+                    type="STRING"/>
+            <column header="PUBLISHED_AT"
+                    name="PUBLISHED_AT"
+                    type="DATE"/>
+            <column header="PUBLISHER_ID"
+                    name="PUBLISHER_ID"
+                    type="COMPUTED"/>
+            <column header="PAGES"
+                    name="PAGES"
+                    type="NUMERIC"/>
+            <column header="STATE"
+                    name="STATE"
+                    type="STRING"/>
+            <column header="NAME_ID"
+                    name="NAME_ID"
+                    type="STRING"/>
+            <column header="IMAGE_URI"
+                    name="IMAGE_URI"
+                    type="STRING"/>
+        </loadData>
+    </changeSet>
+
+
+</databaseChangeLog>
