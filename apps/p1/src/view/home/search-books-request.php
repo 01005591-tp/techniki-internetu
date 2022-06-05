@@ -68,7 +68,6 @@ class SearchBooksRequest {
   }
 
   public function withCriteriaCleared(): SearchBooksRequest {
-    echo 'withCriteriaCleared()<br/>';
     return new SearchBooksRequest(
       $this->page,
       $this->pageSize

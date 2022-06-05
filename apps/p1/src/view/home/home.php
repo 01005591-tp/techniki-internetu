@@ -1,10 +1,8 @@
 <?php
 
 use p1\configuration\Configuration;
-use p1\core\domain\book\BookState;
-use p1\core\domain\language\Language;
+use p1\core\domain\book\BookListEntry;
 use p1\core\function\Consumer;
-use p1\core\function\Function2;
 use p1\core\function\Runnable;
 use p1\view\home\HomeController;
 
@@ -25,7 +23,7 @@ $addPagination = new class implements Consumer {
     require "view/pagination/pagination-component.php";
   }
 };
-$searchComponentRunnable = new class($homeController) implements Runnable {
+$searchComponentLoader = new class($homeController) implements Runnable {
   private HomeController $homeController;
 
   public function __construct(HomeController $homeController) {
@@ -38,6 +36,20 @@ $searchComponentRunnable = new class($homeController) implements Runnable {
     require "view/home/search-component.php";
   }
 };
+
+class BookCardComponentLoader implements Runnable {
+  private BookListEntry $book;
+
+  public function __construct(BookListEntry $book) {
+    $this->book = $book;
+  }
+
+  function run(): void {
+    $book = $this->book;
+    require "view/home/book-component.php";
+  }
+}
+
 ?>
 
 <div class="shadow-lg p-2 mb-5 bg-body rounded">
@@ -46,7 +58,7 @@ $searchComponentRunnable = new class($homeController) implements Runnable {
     </div>
 
     <hr/>
-  <?php $searchComponentRunnable->run(); ?>
+  <?php $searchComponentLoader->run(); ?>
     <hr/>
 
   <?php $maybePaginationData->peek($addPagination); ?>
@@ -55,36 +67,12 @@ $searchComponentRunnable = new class($homeController) implements Runnable {
 
     <div class="d-flex flex-wrap justify-content-center">
       <?php
+      if (empty($bookList->books())) {
+        echo '<span class="p-2 h5">' . L::main_home_book_list_get_empty_result . '</span>';
+      }
       foreach ($bookList->books() as $book) {
-        $imgUri = (!is_null($book->imageUri())) ? $book->imageUri() : "/assets/book-icon.svg";
-        $bookStateDisplayName = BookState::of($book->state())
-          ->map(new class implements Function2 {
-            function apply($value) {
-              return $value->displayName();
-            }
-          })
-          ->orElse('');
-        $languageDisplayName = Language::ofOrUnknown($book->language())->displayName();
-        echo '
-        <div id="book-list-cards-container" class="p-2">
-            <div class="card">
-                <a href="/books/' . $book->nameId() . '">
-                    <img src="' . $imgUri . '" class="card-img-top" alt="Book icon">
-                </a>
-                <div class="card-body">
-                    <h5 class="card-title">' . $book->title() . '</h5>
-                    <p class="card-text">
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>ISBN:</strong> ' . $book->isbn() . '</li>
-                        <li class="list-group-item"><strong>' . L::main_home_book_list_entry_language . ':</strong> ' . $languageDisplayName . '</li>
-                        <li class="list-group-item"><strong>' . L::main_home_book_list_entry_state . ':</strong> ' . $bookStateDisplayName . '</li>
-                      </ul>
-                    </p>
-                    <p class="card-text">' . $book->description() . '</p>
-                </div>
-            </div>
-        </div>
-        ';
+        $bookCardComponentLoader = new BookCardComponentLoader($book);
+        $bookCardComponentLoader->run();
       } ?>
     </div>
 

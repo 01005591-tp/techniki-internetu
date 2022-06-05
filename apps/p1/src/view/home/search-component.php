@@ -16,7 +16,7 @@ $setValueIfPresent = new class implements Consumer {
     }
   }
 };
-$loadOptionEntryRunnable = new class($multiselectName, $availableTags, $searchCriteria->tags()) implements Runnable {
+$tagsMultipleSearchLoader = new class($multiselectName, $availableTags, $searchCriteria->tags()) implements Runnable {
   private string $multiselectName;
   private array $availableTags;
   private array $selectedTags;
@@ -91,7 +91,7 @@ $loadOptionEntryRunnable = new class($multiselectName, $availableTags, $searchCr
                 </label>
             </div>
             <div class="form-floating mb-2 mx-2">
-              <?php $loadOptionEntryRunnable->run(); ?>
+              <?php $tagsMultipleSearchLoader->run(); ?>
             </div>
             <div class="form-floating mb-2 mx-2">
                 <input type="text"

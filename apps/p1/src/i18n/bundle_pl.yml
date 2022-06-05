@@ -33,7 +33,7 @@ main:
     signed_out_successfully_msg: "Wylogowano"
   home:
     book_list_header: "Lista książek"
-    book_list_get_empty_result: "Obecnie nie mamy żadnych dostępnych książek. Spróbuj ponownie później."
+    book_list_get_empty_result: "Nie znaleziono książek spełanijących kryteria. Zmień kryteria wyszukiwania lub spróbuj ponownie później."
     book_list_entry:
       state: "Status"
       language: "Język"

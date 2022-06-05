@@ -56,7 +56,7 @@ class FindBookListQueryBuilder {
 
     // like ISBN
     if (!empty($command->isbn())) {
-      $sql = $sql . $this->likeClauseParam('b.ISBN', $command->isbn());
+      $sql = $sql . $this->equalParam('b.ISBN', $command->isbn());
     }
 
     // order by
@@ -80,8 +80,8 @@ class FindBookListQueryBuilder {
       JOIN AUTHORS a ON
         a.ID = ba.AUTHOR_ID
         AND (
-          LOWER(a.FIRST_NAME) LIKE CONCAT('%', '" . $escapedAuthor . "', '%') 
-          OR LOWER(a.LAST_NAME) LIKE CONCAT('%', '" . $escapedAuthor . "', '%')
+          LOWER(a.FIRST_NAME) LIKE CONCAT('%', LOWER('" . $escapedAuthor . "'), '%') 
+          OR LOWER(a.LAST_NAME) LIKE CONCAT('%', LOWER('" . $escapedAuthor . "'), '%')
         )
     ";
   }
@@ -90,6 +90,11 @@ class FindBookListQueryBuilder {
     $escapedParam = $this->mysqli->real_escape_string($paramValue);
     return " and LOWER(" . $columnName . ") LIKE
     CONCAT('%', LOWER('" . $escapedParam . "'), '%')";
+  }
+
+  private function equalParam(string $columnName, string $paramValue): string {
+    $escapedParam = $this->mysqli->real_escape_string($paramValue);
+    return " and LOWER(" . $columnName . ") = LOWER('" . $escapedParam . "')";
   }
 
   private function inClauseParams(array $inClauseParams): string {
