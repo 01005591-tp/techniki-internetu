@@ -19,3 +19,7 @@ nav.navbar .logged-in-user-email {
 #book-title .author.author-2, .authors .author.author-1 {
     color: black;
 }
+
+.min-vw-90 {
+    min-width: 90vw !important;
+}

@@ -17,6 +17,10 @@
     <!-- JQuery Themes 1.12.1 -->
     <link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet"
           crossorigin="anonymous">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
 
     <!-- Custom JS -->
     <script src="/assets/scripts/custom.js"></script>
@@ -47,11 +51,6 @@ $router = new Router($sessionManager, $routingConfiguration);
 $router->navigate();
 ?>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous"></script>
-
 <!-- FontAwesome solid free version -->
 <script src="https://use.fontawesome.com/releases/v6.1.1/js/solid.js"
         integrity="sha384-KPytPVc+hwHwX9HXl4tA7SWJ0Sob6StzjVRoxC4Q4U0JgXujpuVrkBxR0Hsf8A25"
@@ -59,5 +58,10 @@ $router->navigate();
 <script src="https://use.fontawesome.com/releases/v6.1.1/js/fontawesome.js"
         integrity="sha384-9zErGp+biBilRrlpD1l3ExnaqXc8QLITlNpGtb4OL6W1JChl0wwmDNs4U/0UA8L8"
         crossorigin="anonymous"></script>
+
+<script>
+    const popoverTriggers = document.querySelectorAll('[data-bs-toggle="popover"]');
+    const popovers = [...popoverTriggers].map(it => new bootstrap.Popover(it));
+</script>
 </body>
 </html>

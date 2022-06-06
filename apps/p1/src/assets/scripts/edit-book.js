@@ -5,7 +5,7 @@ const DatePickerComponent = (function () {
             ", valueInputId=" + valueInputId + ")");
         this._datePicker = document.getElementById(datePickerInputId);
         this._valueInput = document.getElementById(valueInputId);
-        let self = this;
+        const self = this;
 
         $(this._datePicker).datepicker({
             changeMonth: true,
@@ -36,4 +36,28 @@ const DatePickerComponent = (function () {
     }
 
     return DatePickerComponent;
+}());
+
+const ImagePreviewComponent = (function () {
+    function ImagePreviewComponent(inputId, imageId) {
+        logger.trace("Instantiating ImagePreviewComponent with params " +
+            "(inputId=" + inputId +
+            ", imageId=" + imageId + ")");
+        this._input = document.getElementById(inputId);
+        this._image = document.getElementById(imageId);
+        const self = this;
+
+        $(this._input).on("blur", event => {
+            self.onInputChange(event);
+        });
+
+        this.onInputChange = function (event) {
+            const newValue = this._input.value;
+            console.log(event);
+            logger.trace("ImagePreviewComponent.onInputChange() " + newValue);
+            self._image.src = newValue;
+        }
+    }
+
+    return ImagePreviewComponent;
 }());
