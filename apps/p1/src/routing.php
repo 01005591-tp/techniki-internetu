@@ -7,7 +7,6 @@ require_once "state.php";
 require_once "view/routing/routing-configuration.php";
 require_once "view/navbar/navbar-controller.php";
 
-use p1\config\Config;
 use p1\session\SessionConstants;
 use p1\session\SessionManager;
 use p1\state\State;
@@ -56,8 +55,7 @@ class Router {
         State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::SignOut);
         break;
       default:
-        http_response_code(404);
-        require Config::instance()->rootDir() . '/view/errors/404.php';
+        State::instance()->put(State::ACTIVE_ITEM_KEY, NavbarItem::NotFound404);
         break;
     }
   }

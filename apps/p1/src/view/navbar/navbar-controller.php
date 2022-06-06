@@ -74,6 +74,9 @@ class NavbarController {
       case NavbarItem::BookEdition:
         require "view/books/edition/book-edit.php";
         break;
+      case NavbarItem::NotFound404:
+        require "view/errors/404.php";
+        break;
       default:
         require "view/home/home.php";
     }
@@ -88,4 +91,5 @@ enum NavbarItem {
   case SignOut;
   case BookDetails;
   case BookEdition;
+  case NotFound404;
 }
