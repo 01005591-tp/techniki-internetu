@@ -4,7 +4,7 @@ namespace p1\view;
 
 require_once "core/domain/book/get-book-list-command-handler.php";
 require_once "core/domain/book/get-book-details-command-handler.php";
-
+require_once "core/domain/book/edit/save-book-command-handler.php";
 require_once "core/domain/book/tag/get-all-book-tags-use-case.php";
 
 require_once "core/domain/user/create-user-command-handler.php";
@@ -35,6 +35,9 @@ require_once "view/navbar/navbar-controller.php";
 
 require_once "view/pagination/pagination-service.php";
 
+require_once "view/security/html-sanitizer.php";
+
+use p1\core\domain\book\edit\SaveBookCommandHandler;
 use p1\core\domain\book\GetBookDetailsCommandHandler;
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\GetAllBookTagsUseCase;
@@ -57,6 +60,7 @@ use p1\view\login\signout\SignOutController;
 use p1\view\login\signup\SignUpController;
 use p1\view\navbar\NavbarConfiguration;
 use p1\view\navbar\NavbarController;
+use p1\view\security\HtmlSanitizer;
 
 class ViewConfiguration {
   private ViewControllers $controllers;
@@ -69,9 +73,11 @@ class ViewConfiguration {
                               GetBookListCommandHandler      $getBookListCommandHandler,
                               GetBookDetailsCommandHandler   $getBookDetailsCommandHandler,
                               GetAllBookTagsUseCase          $getAllBookTagsUseCase,
+                              SaveBookCommandHandler         $saveBookCommandHandler,
                               RedirectManager                $redirectManager,
                               SessionManager                 $sessionManager,
-                              PaginationService              $paginationService) {
+                              PaginationService              $paginationService,
+                              HtmlSanitizer                  $htmlSanitizer) {
     $this->sessionManager = $sessionManager;
     $this->alertsConfiguration = new AlertsConfiguration($this->sessionManager);
 
@@ -96,7 +102,10 @@ class ViewConfiguration {
     $bookConfiguration = new BookConfiguration(
       $this->sessionManager,
       $redirectManager,
-      $getBookDetailsCommandHandler
+      $getBookDetailsCommandHandler,
+      $saveBookCommandHandler,
+      $htmlSanitizer,
+      $this->alertService()
     );
 
     $this->controllers = new ViewControllers(

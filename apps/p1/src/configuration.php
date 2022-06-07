@@ -13,6 +13,7 @@ require_once "view/redirect-manager.php";
 require_once "view/view-configuration.php";
 require_once "view/navbar/navbar-controller.php";
 require_once "view/pagination/pagination-service.php";
+require_once "view/security/html-sanitizer.php";
 
 use Exception;
 use p1\core\app\BookConfiguration;
@@ -23,6 +24,7 @@ use p1\session\UserContext;
 use p1\state\State;
 use p1\view\home\PaginationService;
 use p1\view\RedirectManager;
+use p1\view\security\HtmlSanitizer;
 use p1\view\ViewConfiguration;
 
 class Configuration {
@@ -35,6 +37,7 @@ class Configuration {
   private RedirectManager $redirectManager;
   private SessionManager $sessionManager;
   private PaginationService $paginationService;
+  private HtmlSanitizer $htmlSanitizer;
 
   public function __construct() {
     $this->state = State::instance();
@@ -49,6 +52,8 @@ class Configuration {
 
     $this->paginationService = new PaginationService();
 
+    $this->htmlSanitizer = new HtmlSanitizer();
+
     $this->viewConfiguration = new ViewConfiguration(
       $this->state,
       $this->userConfiguration->createUserCommandHandler(),
@@ -56,9 +61,11 @@ class Configuration {
       $this->bookConfiguration->getBookListCommandHandler(),
       $this->bookConfiguration->getBookDetailsCommandHandler(),
       $this->bookConfiguration->getAllBookTagsUseCase(),
+      $this->bookConfiguration->saveBookCommandHandler(),
       $this->redirectManager,
       $this->sessionManager,
-      $this->paginationService
+      $this->paginationService,
+      $this->htmlSanitizer
     );
   }
 

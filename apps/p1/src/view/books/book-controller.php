@@ -13,7 +13,6 @@ require_once "core/domain/failure.php";
 
 require_once "session/session-manager.php";
 
-require_once "view/alerts/alert-service.php";
 require_once "view/redirect-manager.php";
 
 require_once "view/books/book-details-service.php";

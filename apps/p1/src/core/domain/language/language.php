@@ -2,7 +2,11 @@
 
 namespace p1\core\domain\language;
 
+require_once "core/function/option.php";
+
 use L;
+use p1\core\function\FunctionUtils;
+use p1\core\function\Option;
 
 enum Language {
   case en;
@@ -17,13 +21,20 @@ enum Language {
     };
   }
 
-  public static function ofOrUnknown(string $lang): Language {
+  public static function of(?string $lang): Option {
     foreach (Language::cases() as $enum) {
       if ($lang === $enum->name) {
-        return $enum;
+        return Option::of($enum);
       }
     }
-    error_log("Language not found for: " . $lang);
-    return Language::unknown;
+    return Option::none();
+  }
+
+  public static function ofOrUnknown(string $lang): Language {
+    return self::of($lang)
+      ->onEmpty(FunctionUtils::runnableOfClosure(function () use ($lang) {
+        error_log("Language not found for: " . $lang);
+      }))
+      ->orElse(Language::unknown);
   }
 }

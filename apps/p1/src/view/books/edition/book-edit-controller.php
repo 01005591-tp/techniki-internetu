@@ -14,6 +14,7 @@ require_once "core/function/function.php";
 require_once "session/session-manager.php";
 
 require_once "view/books/book-details-service.php";
+require_once "view/books/edition/save-book-details-service.php";
 
 use p1\core\domain\book\BookDetails;
 use p1\core\function\Function2;
@@ -26,17 +27,28 @@ class BookEditController {
   private SessionManager $sessionManager;
   private EmptyBookDetailsFactory $emptyBookDetailsFactory;
   private BookDetailsService $bookDetailsService;
+  private SaveBookDetailsService $saveBookDetailsService;
 
   private BookEditParams $editParams;
-  private BookDetails $bookDetails;
+  private ?BookDetails $bookDetails;
 
   public function __construct(SessionManager          $sessionManager,
                               BookDetailsService      $bookDetailsService,
-                              EmptyBookDetailsFactory $emptyBookDetailsFactory) {
+                              EmptyBookDetailsFactory $emptyBookDetailsFactory,
+                              SaveBookDetailsService  $saveBookDetailsService) {
     $this->sessionManager = $sessionManager;
     $this->bookDetailsService = $bookDetailsService;
     $this->emptyBookDetailsFactory = $emptyBookDetailsFactory;
+    $this->saveBookDetailsService = $saveBookDetailsService;
     $this->editParams = new BookEditParams(BookEditPageMode::CREATE);
+  }
+
+  public function init(): void {
+    if (isset($_POST['saveBtn'])) {
+      $this->bookDetails = $this->saveBookDetailsService->saveBook($_POST);
+    } else if (isset($_POST['cancelBtn'])) {
+      //
+    }
   }
 
   public function loadBookDetails(): BookDetails {

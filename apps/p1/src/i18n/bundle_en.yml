@@ -91,6 +91,8 @@ main:
         image_uri_preview_old_label: "Old"
         tags_label: "Tags"
         tags_popover_instruction: "Comma-separated tag codes"
+        description_label: "About the book"
+        description_popover_instruction: "Can contain HTML tags"
         save_btn_label: "Save"
         cancel_btn_label: "Cancel"
   languages:
@@ -108,5 +110,23 @@ main:
     login_request:
       invalid_email: "Invalid email address."
       email_or_password_invalid: "Invalid email address or password."
+    save_book_request:
+      id_is_not_numeric: "ID must be a positive integer. Got {id}."
+      id_is_negative: "ID must be a positive integer. Got {id}."
+      isbn_is_empty: "ISBN is empty."
+      isbn_invalid_format: "ISBN has invalid format. Got {isbn}."
+      state_empty: "State is empty."
+      state_invalid: "Invalid state. Got {state}."
+      language_invalid: "Invalid language. Got {language}."
+      published_at_invalid: "Invalid published at date. Got {date}."
+      page_count_format_invalid: "Invalid page count format. Got {pageCount}."
+      page_count_negative: "Page count must be a positive integer. Got {pageCount}."
+      invalid_tags_format_msg: "Invalid tags format. Please, provide comma-separated tags, consisting of letters, digits and '-' character. Got {tags}."
+      title_empty: "Title is empty."
+      name_id_empty: "Link name is empty."
+      name_id_invalid_format: "Link name has invalid format. Link name must consist of letters and numbers only with '-' symbol in between. Got {nameId}."
+      image_uri_invalid: "Image URL is invalid. Got {imageUri}."
+    save_book_result:
+      optimistic_lock_msg: "Data have been modified concurrently. Please edit the data and try again."
     global:
       global_error_message: "Something went wrong. Please try again."

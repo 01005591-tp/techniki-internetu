@@ -21,15 +21,22 @@ $languages = Language::cases();
 $bookStates = BookState::cases();
 ?>
 
+<input hidden
+       id="editBookVersionInput"
+       name="version"
+       aria-label="Book version"
+       value="<?php echo $bookDetails->book()->version(); ?>"
+>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
             <label for="editBookIdInput"><?php echo L::main_books_book_piece_edit_page_id_label; ?></label>
             <input type="text" class="form-control"
                    id="editBookIdInput"
+                   name="id"
                    placeholder="<?php echo L::main_books_book_piece_edit_page_id_label; ?>"
                    value="<?php echo $bookDetails->book()->id(); ?>"
-                   disabled>
+                   readonly>
         </div>
         <div class="col-md-2">
             <label for="editBookIsbnInput"><?php echo L::main_books_book_piece_edit_page_isbn_label; ?></label>
@@ -44,7 +51,7 @@ $bookStates = BookState::cases();
               <?php echo L::main_books_book_piece_edit_page_state_label; ?>
             </label>
             <select id="editBookLanguageSelect"
-                    name="language"
+                    name="state"
                     class="form-select form-control"
                     aria-label="<?php echo L::main_books_book_piece_edit_page_state_label; ?>">
               <?php
@@ -130,7 +137,8 @@ $bookStates = BookState::cases();
             <textarea type="text" class="form-control h-auto"
                       id="editBookTitleInput"
                       name="title"
-                      placeholder="<?php echo L::main_books_book_piece_edit_page_title_label; ?>"><?php echo $bookDetails->book()->title(); ?></textarea>
+                      placeholder="<?php echo L::main_books_book_piece_edit_page_title_label; ?>"
+            ><?php echo $bookDetails->book()->title(); ?></textarea>
         </div>
     </div>
     <div class="row">
@@ -141,7 +149,8 @@ $bookStates = BookState::cases();
             <textarea type="text" class="form-control h-auto"
                       id="editBookNameIdInput"
                       name="nameId"
-                      placeholder="<?php echo L::main_books_book_piece_edit_page_name_id_label; ?>"><?php echo $bookDetails->book()->nameId(); ?></textarea>
+                      placeholder="<?php echo L::main_books_book_piece_edit_page_name_id_label; ?>"
+            ><?php echo $bookDetails->book()->nameId(); ?></textarea>
         </div>
     </div>
     <div class="row">
@@ -190,10 +199,31 @@ $bookStates = BookState::cases();
             <textarea type="text" class="form-control h-auto"
                       id="editBookImageUriInput"
                       name="imageUri"
-                      placeholder="<?php echo L::main_books_book_piece_edit_page_image_uri_label; ?>"><?php echo $bookDetails->book()->imageUri(); ?></textarea>
+                      placeholder="<?php echo L::main_books_book_piece_edit_page_image_uri_label; ?>"
+            ><?php echo $bookDetails->book()->imageUri(); ?></textarea>
         </div>
         <script>
             let editBookImagePreviewComponent = new ImagePreviewComponent('editBookImageUriInput', 'editBookImagePreviewImage');
         </script>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-inline-block"
+                 tabindex="0"
+                 data-bs-toggle="popover"
+                 data-bs-trigger="hover focus"
+                 data-bs-content="<?php echo L::main_books_book_piece_edit_page_description_popover_instruction; ?>"
+            >
+                <label for="editBookDescriptionInput">
+                  <?php echo L::main_books_book_piece_edit_page_description_label; ?>
+                    <i class="fa-solid fa-circle-info"></i>
+                </label>
+            </div>
+            <textarea type="text" class="form-control h-auto"
+                      id="editBookDescriptionInput"
+                      name="description"
+                      placeholder="<?php echo L::main_books_book_piece_edit_page_description_label; ?>"
+            ><?php echo $bookDetails->book()->description(); ?></textarea>
+        </div>
     </div>
 </div>

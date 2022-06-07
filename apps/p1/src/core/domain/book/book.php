@@ -101,4 +101,60 @@ class Book {
   public function version(): ?int {
     return $this->version;
   }
+
+  public function withIsbn(?string $isbn): Book {
+    return new Book(
+      $this->id, $this->nameId, $isbn, $this->title, $this->description, $this->language, $this->publishedAt,
+      $this->publisherId, $this->pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withState(BookState $state): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $this->description, $this->language, $this->publishedAt,
+      $this->publisherId, $this->pages, $state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withLanguage(Language $language): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $this->description, $language, $this->publishedAt,
+      $this->publisherId, $this->pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withPublishedAt(?int $publishedAt): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $this->description, $this->language, $publishedAt,
+      $this->publisherId, $this->pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withPages(?int $pages): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $this->description, $this->language, $this->publishedAt,
+      $this->publisherId, $pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withTitle(string $title): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $title, $this->description, $this->language, $this->publishedAt,
+      $this->publisherId, $this->pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withImageUri(?string $imageUri): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $this->description, $this->language, $this->publishedAt,
+      $this->publisherId, $this->pages, $this->state, $imageUri, $this->auditableObject, $this->version
+    );
+  }
+
+  public function withDescription(?string $description): Book {
+    return new Book(
+      $this->id, $this->nameId, $this->isbn, $this->title, $description, $this->language, $this->publishedAt,
+      $this->publisherId, $this->pages, $this->state, $this->imageUri, $this->auditableObject, $this->version
+    );
+  }
 }

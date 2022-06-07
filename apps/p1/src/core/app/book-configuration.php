@@ -25,6 +25,8 @@ require_once "core/domain/book/get-book-list-command-handler.php";
 require_once "core/domain/book/book-details-repository.php";
 require_once "core/domain/book/get-book-details-command-handler.php";
 
+require_once "core/domain/book/edit/save-book-command-handler.php";
+
 require_once "core/domain/book/tag/book-tags-repository.php";
 require_once "core/domain/book/tag/get-all-book-tags-use-case.php";
 
@@ -43,6 +45,7 @@ use p1\core\database\DatabaseConfiguration;
 use p1\core\database\DatabaseConnection;
 use p1\core\domain\book\BookDetailsRepository;
 use p1\core\domain\book\BookListRepository;
+use p1\core\domain\book\edit\SaveBookCommandHandler;
 use p1\core\domain\book\GetBookDetailsCommandHandler;
 use p1\core\domain\book\GetBookListCommandHandler;
 use p1\core\domain\book\tag\BookTagsRepository;
@@ -55,6 +58,7 @@ class BookConfiguration {
 
   private BookDetailsRepository $bookDetailsRepository;
   private GetBookDetailsCommandHandler $getBookDetailsCommandHandler;
+  private SaveBookCommandHandler $saveBookCommandHandler;
 
   private BookTagsRepository $bookTagsRepository;
   private GetAllBookTagsUseCase $getAllBookTagsUseCase;
@@ -87,6 +91,8 @@ class BookConfiguration {
     $findAllBookTagsQuery = new FindAllBookTagsQuery($this->databaseConnection->connection());
     $this->bookTagsRepository = new BookTagsDbRepository($findAllBookTagsQuery);
     $this->getAllBookTagsUseCase = new GetAllBookTagsUseCase($this->bookTagsRepository);
+
+    $this->saveBookCommandHandler = new SaveBookCommandHandler();
   }
 
   public function getBookListCommandHandler(): GetBookListCommandHandler {
@@ -99,5 +105,9 @@ class BookConfiguration {
 
   public function getAllBookTagsUseCase(): GetAllBookTagsUseCase {
     return $this->getAllBookTagsUseCase;
+  }
+
+  public function saveBookCommandHandler(): SaveBookCommandHandler {
+    return $this->saveBookCommandHandler;
   }
 }

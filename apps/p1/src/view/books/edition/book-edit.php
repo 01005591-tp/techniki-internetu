@@ -7,6 +7,7 @@ use p1\configuration\Configuration;
 use p1\core\function\Runnable;
 
 $bookEditController = Configuration::instance()->viewConfiguration()->controllers()->bookEditController();
+$bookEditController->init();
 $bookDetails = $bookEditController->loadBookDetails();
 
 

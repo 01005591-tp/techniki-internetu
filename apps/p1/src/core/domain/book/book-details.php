@@ -50,4 +50,16 @@ class BookDetails {
   public function bookAuthors(): array {
     return $this->bookAuthors;
   }
+
+  public function withBook(Book $book): BookDetails {
+    return new BookDetails(
+      $book, $this->publisher, $this->authors, $this->bookPieces, $this->bookTags, $this->bookAuthors
+    );
+  }
+
+  public function withTags(array $bookTags): BookDetails {
+    return new BookDetails(
+      $this->book, $this->publisher, $this->authors, $this->bookPieces, $bookTags, $this->bookAuthors
+    );
+  }
 }

@@ -39,6 +39,22 @@ abstract class Option {
     return $this;
   }
 
+  public function onEmpty(Runnable $runnable): Option {
+    if ($this->isNone()) {
+      $runnable->run();
+    }
+    return $this;
+  }
+
+  public function filter(Predicate $predicate): Option {
+    if ($this->isNone()) {
+      return $this;
+    }
+    return $predicate->test($this->get())
+      ? $this
+      : Option::none();
+  }
+
   public function orElse($other) {
     return $this->isDefined()
       ? $this->get()
