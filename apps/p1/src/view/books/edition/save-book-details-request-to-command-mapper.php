@@ -29,6 +29,7 @@ use p1\core\domain\Failure;
 use p1\core\domain\language\Language;
 use p1\core\function\Either;
 use p1\core\function\FunctionUtils;
+use p1\session\UserContext;
 use p1\view\security\HtmlSanitizer;
 
 class SaveBookDetailsRequestToCommandMapper {
@@ -45,7 +46,7 @@ class SaveBookDetailsRequestToCommandMapper {
     $this->tagsParser = $tagsParser;
   }
 
-  public function toCommand(array $post): Either {
+  public function toCommand(array $post, UserContext $userContext): Either {
     return $this->parseId($post)
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseIsbn($builder, $post)))
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseState($builder, $post)))
@@ -57,7 +58,8 @@ class SaveBookDetailsRequestToCommandMapper {
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseNameId($builder, $post)))
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseImageUri($builder, $post)))
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseDescription($builder, $post)))
-      ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseVersion($builder, $post)));
+      ->flatMapRight(FunctionUtils::function2OfClosure(fn($builder) => $this->parseVersion($builder, $post)))
+      ->mapRight(FunctionUtils::function2OfClosure(fn($builder) => $builder->updatedBy($userContext->userEmail())));
   }
 
   private function parseId(array $post): Either {
@@ -265,12 +267,12 @@ class SaveBookDetailsRequestToCommandMapper {
   private function parseVersion(SaveBookCommandBuilderDescription $builder, array $post): Either {
     if (!array_key_exists('version', $post)) {
       error_log("SaveBookDetailsRequestToCommandMapper.parseVersion() Version is not submitted");
-      return Either::ofLeft(SaveBookDetailsRequestFailure::ofSaveFailure(L::main_errors_global_global_error_message, $post));
+      return Either::ofRight($builder->version(1));
     }
     $maybeVersion = $post['version'];
     if (empty($maybeVersion)) {
       error_log("SaveBookDetailsRequestToCommandMapper.parseVersion() Version is empty");
-      return Either::ofLeft(SaveBookDetailsRequestFailure::ofSaveFailure(L::main_errors_global_global_error_message, $post));
+      return Either::ofRight($builder->version(1));
     }
     if (!preg_match(self::POSITIVE_INTEGER_REGEX, $maybeVersion)) {
       error_log("SaveBookDetailsRequestToCommandMapper.parseVersion() Version is in invalid format: " . $maybeVersion);

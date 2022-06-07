@@ -7,6 +7,12 @@ require_once "core/database/book/find-book-by-name-id-query.php";
 require_once "core/database/book/find-book-pieces-by-book-name-id-query.php";
 require_once "core/database/book/find-book-tags-by-book-name-id-query.php";
 require_once "core/database/book/find-publisher-by-book-name-id-query.php";
+require_once "core/database/book/find-book-by-id-query.php";
+require_once "core/database/book/insert-book-statement.php";
+require_once "core/database/book/update-book-statement.php";
+
+require_once "core/database/transaction/transaction.php";
+require_once "core/database/transaction/transaction-manager.php";
 
 require_once "core/domain/book/author.php";
 require_once "core/domain/book/book.php";
@@ -22,15 +28,20 @@ require_once "core/domain/book/get-book-details-command.php";
 require_once "core/function/either.php";
 require_once "core/function/function.php";
 
+use L;
+use p1\core\database\transaction\Transaction;
+use p1\core\database\transaction\TransactionManager;
 use p1\core\domain\book\Book;
 use p1\core\domain\book\BookDetails;
 use p1\core\domain\book\BookDetailsRepository;
 use p1\core\domain\book\BookPieces;
+use p1\core\domain\book\edit\SaveBookCommand;
 use p1\core\domain\book\GetBookDetailsCommand;
 use p1\core\domain\book\Publisher;
-use p1\core\function\Function2;
+use p1\core\domain\Failure;
+use p1\core\function\Either;
+use p1\core\function\FunctionUtils;
 use p1\core\function\Option;
-use p1\core\function\Supplier;
 
 class BookDetailsDbRepository implements BookDetailsRepository {
   private FindBookByNameIdQuery $findBookByNameIdQuery;
@@ -39,146 +50,141 @@ class BookDetailsDbRepository implements BookDetailsRepository {
   private FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery;
   private FindBookTagsByBookNameIdQuery $findBookTagsByBookNameIdQuery;
 
+  private FindBookByIdQuery $findBookByIdQuery;
+  private InsertBookStatement $insertBookStatement;
+  private UpdateBookStatement $updateBookStatement;
+  private UpdateBookTagsStatement $updateBookTagsStatement;
+
+  private TransactionManager $transactionManager;
+
   public function __construct(FindBookByNameIdQuery           $findBookByNameIdQuery,
                               FindPublisherByBookNameIdQuery  $findPublisherByBookNameIdQuery,
                               FindAuthorsByBookNameIdQuery    $findAuthorsByBookNameIdQuery,
                               FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery,
-                              FindBookTagsByBookNameIdQuery   $findBookTagsByBookNameIdQuery) {
+                              FindBookTagsByBookNameIdQuery   $findBookTagsByBookNameIdQuery,
+                              FindBookByIdQuery               $findBookByIdQuery,
+                              InsertBookStatement             $insertBookStatement,
+                              UpdateBookStatement             $updateBookStatement,
+                              UpdateBookTagsStatement         $updateBookTagsStatement,
+                              TransactionManager              $transactionManager) {
     $this->findBookByNameIdQuery = $findBookByNameIdQuery;
     $this->findPublisherByBookNameIdQuery = $findPublisherByBookNameIdQuery;
     $this->findAuthorsByBookNameIdQuery = $findAuthorsByBookNameIdQuery;
     $this->findBookPiecesByBookNameIdQuery = $findBookPiecesByBookNameIdQuery;
     $this->findBookTagsByBookNameIdQuery = $findBookTagsByBookNameIdQuery;
+    $this->findBookByIdQuery = $findBookByIdQuery;
+    $this->insertBookStatement = $insertBookStatement;
+    $this->updateBookStatement = $updateBookStatement;
+    $this->updateBookTagsStatement = $updateBookTagsStatement;
+    $this->transactionManager = $transactionManager;
   }
 
   function findBookDetails(GetBookDetailsCommand $command): Option {
     return $this->findBookByNameIdQuery->query($command->nameId())
-      ->map(new class implements Function2 {
-        function apply($value): BookDetailsBuilderBook {
-          return new BookDetailsBuilderBook($value);
-        }
-      })
+      ->map(FunctionUtils::function2OfClosure(
+        fn($value) => new BookDetailsBuilderBook($value)
+      ))
       // TODO: queries bellow could be run simultaneously
-      ->map(new BookDetailsFindPublisherFunction(
-        $command,
-        $this->findPublisherByBookNameIdQuery
+      ->map(FunctionUtils::function2OfClosure(
+        fn($builder) => $this->findPublisherByBookNameIdQuery->query($command->nameId())
+          ->fold(
+            FunctionUtils::supplierOfClosure(fn() => $builder->noPublisher()),
+            FunctionUtils::function2OfClosure(
+              fn($publisher) => $builder->publisher($publisher)
+            )
+          )
       ))
-      ->map(new BookDetailsFindAuthorsFunction(
-        $command,
-        $this->findAuthorsByBookNameIdQuery
+      ->map(FunctionUtils::function2OfClosure(
+        fn($builder) => $this->findAuthors($builder, $command)
       ))
-      ->map(new BookDetailsFindBookPiecesFunction(
-        $command,
-        $this->findBookPiecesByBookNameIdQuery
+      ->map(FunctionUtils::function2OfClosure(
+        fn($builder) => $builder->bookPieces(
+          $this->findBookPiecesByBookNameIdQuery->query($command->nameId())
+        )
       ))
-      ->map(new BookDetailsFindTagsFunction(
-        $command,
-        $this->findBookTagsByBookNameIdQuery
+      ->map(FunctionUtils::function2OfClosure(
+        fn($builder) => $builder->bookTags(
+          $this->findBookTagsByBookNameIdQuery->query($command->nameId())
+        )
       ))
-      ->fold(new class implements Supplier {
-        function supply(): Option {
-          return Option::none();
-        }
-      }, new class implements Function2 {
-        function apply($value) {
-          return Option::of($value);
-        }
-      });
-  }
-}
-
-class BookDetailsFindPublisherFunction implements Function2 {
-
-  private GetBookDetailsCommand $command;
-  private FindPublisherByBookNameIdQuery $findPublisherByBookNameIdQuery;
-
-  public function __construct(GetBookDetailsCommand          $command,
-                              FindPublisherByBookNameIdQuery $findPublisherByBookNameIdQuery) {
-    $this->command = $command;
-    $this->findPublisherByBookNameIdQuery = $findPublisherByBookNameIdQuery;
-  }
-
-  function apply($value): BookDetailsBuilderPublisher {
-    return $this->findPublisherByBookNameIdQuery->query($this->command->nameId())
       ->fold(
-        new BookDetailsBuilderBookNoPublisherSupplier($value),
-        new BookDetailsBuilderBookWithPublisherFunction($value)
+        FunctionUtils::supplierOfClosure(fn() => Option::none()),
+        FunctionUtils::function2OfClosure(fn($value) => Option::of($value))
       );
   }
-}
 
-class BookDetailsBuilderBookNoPublisherSupplier implements Supplier {
-  private BookDetailsBuilderBook $builder;
-
-  public function __construct(BookDetailsBuilderBook $builder) {
-    $this->builder = $builder;
+  private function findAuthors(BookDetailsBuilderPublisher $builder,
+                               GetBookDetailsCommand       $command): BookDetailsBuilderAuthors {
+    $bookAuthorsView = $this->findAuthorsByBookNameIdQuery->query($command->nameId());
+    return $builder->authors($bookAuthorsView->authors(), $bookAuthorsView->bookAuthors());
   }
 
-  function supply(): BookDetailsBuilderPublisher {
-    return $this->builder->noPublisher();
-  }
-}
-
-class BookDetailsBuilderBookWithPublisherFunction implements Function2 {
-  private BookDetailsBuilderBook $builder;
-
-  public function __construct(BookDetailsBuilderBook $builder) {
-    $this->builder = $builder;
-  }
-
-  function apply($value): BookDetailsBuilderPublisher {
-    return $this->builder->publisher($value);
-  }
-}
-
-class BookDetailsFindAuthorsFunction implements Function2 {
-  private GetBookDetailsCommand $command;
-  private FindAuthorsByBookNameIdQuery $findAuthorsByBookNameIdQuery;
-
-  public function __construct(GetBookDetailsCommand        $command,
-                              FindAuthorsByBookNameIdQuery $findAuthorsByBookNameIdQuery) {
-    $this->command = $command;
-    $this->findAuthorsByBookNameIdQuery = $findAuthorsByBookNameIdQuery;
+  function save(SaveBookCommand $command): Either {
+    return $this->insertOrUpdate($command)
+      ->execute($this->transactionManager)
+      ->transform(FunctionUtils::function2OfClosure(
+        fn($cause) => $this->wrapThrowableError($cause)
+      ))
+      ->flatMapRight(FunctionUtils::function2OfClosure(
+        fn($success) => $this->findBookDetails(new GetBookDetailsCommand($command->nameId()))
+          ->fold(FunctionUtils::supplierOfClosure(
+            fn() => Either::ofLeft(Failure::of(L::main_errors_global_global_error_message))
+          ),
+            FunctionUtils::function2OfClosure(
+              fn($details) => Either::ofRight($details)
+            )
+          )
+      ));
   }
 
-  function apply($value): BookDetailsBuilderAuthors {
-    $bookAuthorsView = $this->findAuthorsByBookNameIdQuery->query($this->command->nameId());
-    return $value->authors($bookAuthorsView->authors(), $bookAuthorsView->bookAuthors());
-  }
-}
-
-class BookDetailsFindBookPiecesFunction implements Function2 {
-  private GetBookDetailsCommand $command;
-  private FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery;
-
-  public function __construct(GetBookDetailsCommand           $command,
-                              FindBookPiecesByBookNameIdQuery $findBookPiecesByBookNameIdQuery) {
-    $this->command = $command;
-    $this->findBookPiecesByBookNameIdQuery = $findBookPiecesByBookNameIdQuery;
-  }
-
-  function apply($value): BookDetailsBuilderPieces {
-    $bookPieces = $this->findBookPiecesByBookNameIdQuery->query($this->command->nameId());
-    return $value->bookPieces($bookPieces);
-  }
-}
-
-class BookDetailsFindTagsFunction implements Function2 {
-  private GetBookDetailsCommand $command;
-  private FindBookTagsByBookNameIdQuery $findBookTagsByBookNameIdQuery;
-
-  public function __construct(GetBookDetailsCommand         $command,
-                              FindBookTagsByBookNameIdQuery $findBookTagsByBookNameIdQuery) {
-    $this->command = $command;
-    $this->findBookTagsByBookNameIdQuery = $findBookTagsByBookNameIdQuery;
+  private function insertOrUpdate(SaveBookCommand $command): Transaction {
+    if (empty($command->id())) {
+      return Transaction::of(
+        fn() => $this->insertBook($command)
+          ->flatMapRight(FunctionUtils::function2OfClosure(
+            fn($result) => $this->updateBookTagsStatement->execute($command)
+          ))
+      );
+    } else {
+      return Transaction::of(fn() => $this->findBookByIdQuery->query($command->id())
+        ->fold(
+          FunctionUtils::supplierOfClosure(fn() => $this->insertBook($command)),
+          FunctionUtils::function2OfClosure(fn($book) => $this->updateBook($command))
+        )
+        ->flatMapRight(FunctionUtils::function2OfClosure(
+          fn($result) => $this->updateBookTagsStatement->execute($command)
+        ))
+      );
+    }
   }
 
-  function apply($value) {
-    $tags = $this->findBookTagsByBookNameIdQuery->query($this->command->nameId());
-    return $value->bookTags($tags);
+  private function insertBook(SaveBookCommand $command): Either {
+    return $this->insertBookStatement->execute($command)
+      ->flatMapRight(FunctionUtils::function2OfClosure(
+        fn($result) => $this->findBookDetails(new GetBookDetailsCommand($command->nameId()))
+          ->fold(
+            FunctionUtils::supplierOfClosure(fn() => Either::ofLeft(Failure::of(L::main_errors_global_global_error_message))),
+            FunctionUtils::function2OfClosure(fn($details) => Either::ofRight($details))
+          )
+      ));
+  }
+
+  private function updateBook(SaveBookCommand $command): Either {
+    return $this->updateBookStatement->execute($command);
+  }
+
+  private function wrapThrowableError(Either $eitherWithThrowable): Either {
+    return $eitherWithThrowable
+      ->peekLeft(FunctionUtils::consumerOfClosure(
+        fn($cause) => error_log(strval($cause))
+      ))
+      ->mapLeft(FunctionUtils::function2OfClosure(
+        fn($cause) => Failure::of($cause->getMessage())
+      ));
   }
 }
 
+// Fluent Builders
 class BookDetailsBuilderBook {
   private Book $book;
 

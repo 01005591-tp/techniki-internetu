@@ -66,6 +66,10 @@ abstract class Either {
       : $ifLeft->apply($this->left());
   }
 
+  public function transform(Function2 $transformer) {
+    return $transformer->apply($this);
+  }
+
   public function then(Runnable $runnable): Either {
     $runnable->run();
     return $this;

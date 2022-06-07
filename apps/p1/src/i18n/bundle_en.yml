@@ -95,6 +95,7 @@ main:
         description_popover_instruction: "Can contain HTML tags"
         save_btn_label: "Save"
         cancel_btn_label: "Cancel"
+        save_success_msg: "Changes saved successfully"
   languages:
     en: "English"
     pl: "Polish"

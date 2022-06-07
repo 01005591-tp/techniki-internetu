@@ -22,6 +22,7 @@ class SaveBookCommand {
   private ?string $imageUri;
   private ?string $description;
   private int $version;
+  private ?string $updatedBy;
 
   public function __construct(?string            $id,
                               ?string            $isbn,
@@ -34,7 +35,8 @@ class SaveBookCommand {
                               ?string            $nameId,
                               ?string            $imageUri,
                               ?string            $description,
-                              int                $version) {
+                              int                $version,
+                              ?string            $updatedBy) {
     $this->id = $id;
     $this->isbn = $isbn;
     $this->state = $state;
@@ -47,6 +49,7 @@ class SaveBookCommand {
     $this->imageUri = $imageUri;
     $this->description = $description;
     $this->version = $version;
+    $this->updatedBy = $updatedBy;
   }
 
   public function id(): ?string {
@@ -95,6 +98,10 @@ class SaveBookCommand {
 
   public function version(): int {
     return $this->version;
+  }
+
+  public function updatedBy(): ?string {
+    return $this->updatedBy;
   }
 
   public static function builder(): SaveBookCommandBuilder {
@@ -409,10 +416,49 @@ class SaveBookCommandBuilderDescription {
     $this->description = $description;
   }
 
-  public function version(int $version): SaveBookCommand {
-    return new SaveBookCommand(
+  public function version(int $version): SaveBookCommandBuilderVersion {
+    return new SaveBookCommandBuilderVersion(
       $this->id, $this->isbn, $this->state, $this->language, $this->publishedAt, $this->pageCount, $this->tags,
       $this->title, $this->nameId, $this->imageUri, $this->description, $version
+    );
+  }
+}
+
+class SaveBookCommandBuilderVersion {
+  private ?string $id;
+  private ?string $isbn;
+  private BookState $state;
+  private ?Language $language;
+  private ?DateTimeImmutable $publishedAt;
+  private ?int $pageCount;
+  private array $tags;
+  private string $title;
+  private string $nameId;
+  private ?string $imageUri;
+  private ?string $description;
+  private int $version;
+
+  public function __construct(?string            $id, ?string $isbn, BookState $state, ?Language $language,
+                              ?DateTimeImmutable $publishedAt, ?int $pageCount, array $tags, string $title,
+                              string             $nameId, ?string $imageUri, ?string $description, int $version) {
+    $this->id = $id;
+    $this->isbn = $isbn;
+    $this->state = $state;
+    $this->language = $language;
+    $this->publishedAt = $publishedAt;
+    $this->pageCount = $pageCount;
+    $this->tags = $tags;
+    $this->title = $title;
+    $this->nameId = $nameId;
+    $this->imageUri = $imageUri;
+    $this->description = $description;
+    $this->version = $version;
+  }
+
+  public function updatedBy(?string $updatedBy): SaveBookCommand {
+    return new SaveBookCommand(
+      $this->id, $this->isbn, $this->state, $this->language, $this->publishedAt, $this->pageCount, $this->tags,
+      $this->title, $this->nameId, $this->imageUri, $this->description, $this->version, $updatedBy
     );
   }
 }

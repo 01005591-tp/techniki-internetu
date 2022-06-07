@@ -95,6 +95,7 @@ main:
         description_popover_instruction: "Może zawierać tagi HTML"
         save_btn_label: "Zapisz"
         cancel_btn_label: "Anuluj"
+        save_success_msg: "Pomyślnie zapisano zmiany"
   languages:
     en: "angielski"
     pl: "polski"

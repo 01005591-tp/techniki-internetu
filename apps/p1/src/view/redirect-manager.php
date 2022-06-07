@@ -22,12 +22,25 @@ class RedirectManager {
   public function redirectTo404NotFoundPage(): RedirectTo404NotFoundPageRunnable {
     return $this->redirectTo404NotFoundPageRunnable;
   }
+
+  public function redirectToBookEditionPage(string $nameId): void {
+    $this->redirectTo('/books/' . $nameId . '/edition');
+  }
+
+  private function redirectTo(string $page): void {
+    if (headers_sent()) {
+      echo('<script type="text/javascript">window.location=\'' . $page . '\';</script>');
+    } else {
+      header("Location: " . $page);
+    }
+    exit();
+  }
 }
 
 class RedirectToMainPageRunnable implements Runnable {
   function run(): void {
     if (headers_sent()) {
-      echo('<script type="text/javascript">window.location\'/\';</script>');
+      echo('<script type="text/javascript">window.location=\'/\';</script>');
     } else {
       header("Location: /");
     }
@@ -38,7 +51,7 @@ class RedirectToMainPageRunnable implements Runnable {
 class RedirectTo404NotFoundPageRunnable implements Runnable {
   function run(): void {
     if (headers_sent()) {
-      echo('<script type="text/javascript">window.location\'/404-not-found\';</script>');
+      echo('<script type="text/javascript">window.location=\'/404-not-found\';</script>');
     } else {
       header("Location: /404-not-found");
     }

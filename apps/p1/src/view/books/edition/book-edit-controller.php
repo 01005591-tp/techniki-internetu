@@ -45,7 +45,7 @@ class BookEditController {
 
   public function init(): void {
     if (isset($_POST['saveBtn'])) {
-      $this->bookDetails = $this->saveBookDetailsService->saveBook($_POST);
+      $this->bookDetails = $this->saveBookDetailsService->saveBook($_POST);;
     } else if (isset($_POST['cancelBtn'])) {
       //
     }

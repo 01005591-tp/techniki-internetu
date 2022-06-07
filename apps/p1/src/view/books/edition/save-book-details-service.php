@@ -21,6 +21,8 @@ require_once "view/books/edition/save-book-details-request-to-command-mapper.php
 use L;
 use p1\core\domain\book\BookDetails;
 use p1\core\domain\book\edit\SaveBookCommandHandler;
+use p1\core\domain\book\edit\SaveBookError;
+use p1\core\domain\error\OptimisticLockError;
 use p1\core\domain\Failure;
 use p1\core\function\Either;
 use p1\core\function\FunctionIdentity;
@@ -57,33 +59,61 @@ class SaveBookDetailsService {
   }
 
   public function saveBook(array $post): ?BookDetails {
-    return $this->bookDetailsRequestToCommandMapper->toCommand($post)
+    return $this->bookDetailsRequestToCommandMapper->toCommand($post, $this->sessionManager->userContext())
       ->flatMapRight(FunctionUtils::function2OfClosure(fn($command) => $this->saveBookCommandHandler->save($command)))
+      ->peekRight(FunctionUtils::consumerOfClosure(
+        fn($savedDetails) => $this->alertService->success(L::main_books_book_piece_edit_page_save_success_msg)
+      ))
+      ->peekRight(FunctionUtils::consumerOfClosure(
+        fn($savedDetails) => $this->sessionManager->get(SessionConstants::BOOK_DETAILS_BOOK_NAME_ID)
+          ->filter(FunctionUtils::predicateOfClosure(
+            fn($oldNameId) => $oldNameId !== $savedDetails->book()->nameId()
+          ))
+          ->peek(FunctionUtils::consumerOfClosure(
+            fn($oldNameId) => $this->redirectManager->redirectToBookEditionPage($savedDetails->book()->nameId())
+          ))
+      ))
       ->fold(
         FunctionUtils::function2OfClosure(fn($failure) => $this->handleFailure($failure)),
-        FunctionUtils::function2OfClosure(fn($savedDetails) => $savedDetails)
+        FunctionIdentity::instance()
       );
   }
 
   private function handleFailure(Failure $failure): ?BookDetails {
     // if-else pattern match instance type
     if (is_a($failure, 'p1\core\domain\book\edit\SaveBookError')) {
-      error_log("SaveBookDetailsService.handleFailure() SaveBookError: " . $failure->message());
-      $this->alertService->error($failure->message());
-      return $this->saveBookDetailsMergeMapper->mergeBookDetailsWithCommand($this->getBookDetails(), $failure->command());
+      return $this->handleSaveBookError($failure);
     } else if (is_a($failure, 'p1\view\books\edition\SaveBookDetailsRequestFailure')) {
-      error_log("SaveBookDetailsService.handleFailure() SaveBookDetailsRequestFailure: " . $failure->message());
-      $this->alertService->error($failure->message());
-      return $this->saveBookDetailsMergeMapper->mergeBookDetailsWithRequest($this->getBookDetails(), $failure->request());
+      return $this->handleSaveBookDetailsRequestFailure($failure);
     } else if (is_a($failure, 'p1\core\domain\error\OptimisticLockError')) {
-      error_log("SaveBookDetailsService.handleFailure() OptimisticLockError: " . $failure->message());
-      $this->alertService->error(L::main_errors_save_book_result_optimistic_lock_msg);
-      return $this->getBookDetails();
+      return $this->handleOptimisticLockError($failure);
     } else {
       error_log("SaveBookDetailsService.handleFailure() unexpected error: " . $failure->message());
       $this->redirectManager->redirectTo404NotFoundPage()->run();
       return null;
     }
+  }
+
+  private function handleSaveBookError(SaveBookError $failure): ?BookDetails {
+    if (is_a($failure->cause(), 'p1\core\domain\error\OptimisticLockError')) {
+      return $this->handleOptimisticLockError($failure->cause());
+    } else {
+      error_log("SaveBookDetailsService.handleFailure() SaveBookError: " . $failure->message());
+      $this->alertService->error($failure->message());
+      return $this->saveBookDetailsMergeMapper->mergeBookDetailsWithCommand($this->getBookDetails(), $failure->command());
+    }
+  }
+
+  private function handleSaveBookDetailsRequestFailure(SaveBookDetailsRequestFailure $failure): ?BookDetails {
+    error_log("SaveBookDetailsService.handleFailure() SaveBookDetailsRequestFailure: " . $failure->message());
+    $this->alertService->error($failure->message());
+    return $this->saveBookDetailsMergeMapper->mergeBookDetailsWithRequest($this->getBookDetails(), $failure->request());
+  }
+
+  private function handleOptimisticLockError(OptimisticLockError $error): ?BookDetails {
+    error_log("SaveBookDetailsService.handleOptimisticLockError() OptimisticLockError: " . $error->message());
+    $this->alertService->error(L::main_errors_save_book_result_optimistic_lock_msg);
+    return $this->getBookDetails();
   }
 
   private function getBookDetails(): BookDetails {
