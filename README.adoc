@@ -16,6 +16,13 @@ Worth noting files and directories are listed above:
 │       ├── database
 │           ├── liquibase
 │           ├── migration
+│       ├── src
+│           ├── assets
+│           ├── core
+│           ├── exceptions
+│           ├── i18n
+│           ├── session
+│           ├── view
 ├── infra
 │   └── k8s
 │       ├── my-sql
