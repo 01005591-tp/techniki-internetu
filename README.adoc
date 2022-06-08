@@ -43,6 +43,35 @@ Contains liquibase CLI tool used for data migration.
 
 Contains migration scripts, mysql JDBC connector as well as `liquibase.properties` file, which contains database URL and credentials.
 
+==== apps/p1/src
+
+Here the application source code can be found.
+It's separated into:
+
+===== assets
+
+Images, icons, CSS and JavaScript files.
+
+===== core
+
+Core business logic, including database connection and queries.
+
+===== exceptions
+
+Common exceptions.
+
+===== i18n
+
+Internationalization loader component and bundle_xx.yml files containing localized messages and labels.
+
+===== session
+
+Sesssion manager - entry point for $_SESSION in the entire project.
+
+===== view
+
+HTML / PHP view components with their supporting controllers.
+
 ==== infra
 
 This directory contains infrastructure description for MySQL and PHP-FPM (with Nginx) deployments.
