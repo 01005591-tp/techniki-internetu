@@ -98,4 +98,9 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
+# Archives
+*.tar
+*.tar.gz
+*.tgz
+
 # End of https://www.toptal.com/developers/gitignore/api/composer,phpstorm+all
