@@ -14,19 +14,29 @@ Worth noting files and directories are listed above:
 ├── apps
 │   └── p1
 │       ├── database
-│           ├── liquibase
-│           ├── migration
-│       ├── src
+│       │   ├── liquibase
+│       │   └── migration
+│       └── src
 │           ├── assets
 │           ├── core
 │           ├── exceptions
 │           ├── i18n
 │           ├── session
-│           ├── view
+│           └── view
+├── docs
 ├── infra
 │   └── k8s
 │       ├── my-sql
+│       │   └── kustomize
+│       │       ├── base
+│       │       └── overlays
+│       │           └── local
 │       └── php-fpm
+│           ├── build
+│           └── kustomize
+│               ├── base
+│               └── overlays
+│                   └── local
 ├── Makefile
 ----
 
