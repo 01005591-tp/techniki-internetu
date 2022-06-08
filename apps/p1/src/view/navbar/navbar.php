@@ -34,7 +34,7 @@ $loggedInUserComponentsSmall = function () use ($navbarController): void {
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-md-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img src="/assets/book-icon_small.png" alt="Library"/>
+            <img src="/assets/book-icon_small.png" alt="Library logo"/>
         </a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
