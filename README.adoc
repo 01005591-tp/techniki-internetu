@@ -7,7 +7,7 @@ link:https://www.mysql.com/[MySQL] and link:https://www.php.net/manual/en/instal
 
 === Project structure
 
-Worth noting files and directories are listed above:
+Worth noting files and directories are listed below:
 
 [source,text]
 ----
